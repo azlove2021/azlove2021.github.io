@@ -307,6 +307,44 @@ html:not([data-theme="dark"]) .app-sub{color:var(--accent)}
   margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
 .pcard-foot span{font-size:12px;color:var(--fg3)}
 
+/* ---------- 最近更新（时间戳精确到秒） ---------- */
+.stamp-badge{
+  font-size:12.5px;color:var(--fg2);padding:5px 12px;border-radius:999px;
+  background:var(--card);border:1px solid var(--line);white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+.timeline{
+  display:flex;flex-direction:column;gap:1px;
+  padding:6px 18px;border-radius:var(--radius);
+  background:var(--card);border:1px solid var(--line);
+  backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
+  box-shadow:var(--shadow-sm);
+}
+.tl-item{
+  display:grid;grid-template-columns:13px 172px 1fr;gap:14px;align-items:baseline;
+  padding:11px 0;border-bottom:1px dashed var(--line);
+}
+.tl-item:last-child{border-bottom:0}
+.tl-dot{
+  width:7px;height:7px;border-radius:50%;background:var(--accent);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 16%,transparent);
+  transform:translateY(-1px);
+}
+.tl-time{
+  font-size:12.5px;color:var(--fg3);white-space:nowrap;
+  font-variant-numeric:tabular-nums;letter-spacing:.01em;
+}
+.tl-what{font-size:13.5px;color:var(--fg2);line-height:1.6}
+.tl-item:first-child .tl-dot{background:var(--ok);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 18%,transparent)}
+.tl-item:first-child .tl-what{color:var(--fg);font-weight:500}
+@media (max-width:640px){
+  .tl-item{grid-template-columns:13px 1fr;gap:6px 10px}
+  .tl-time{grid-column:2}
+  .tl-what{grid-column:2}
+  .tl-dot{grid-row:1 / span 2}
+}
+
 /* ---------- 关于 ---------- */
 .about{
   margin:44px 0 0;padding:34px;border-radius:22px;
@@ -427,7 +465,7 @@ html:not([data-theme="dark"]) .app-sub{color:var(--accent)}
       <span class="brand-avatar">A</span>
       <span class="brand-text">
         <b>应用集</b>
-        <span>6 个应用 · 2 篇文章</span>
+        <span>6 个应用 · 3 篇文章</span>
       </span>
     </a>
     <nav class="menu">

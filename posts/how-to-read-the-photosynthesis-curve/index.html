@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>这张图怎么看 —— 光合 / 呼吸曲线读图指南 · azlove 的教学工具箱</title>
+<meta name="description" content="配套课件那张「速率—光强」图究竟该怎么看。三条线里只有一条是测得到的，另外两条是它的解释 —— 这件事先钉住，后面全顺。">
+<meta name="theme-color" content="#f5f6fb">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%233b82f6'/><stop offset='.55' stop-color='%238b5cf6'/><stop offset='1' stop-color='%23ec4899'/></linearGradient></defs><rect width='100' height='100' rx='24' fill='url(%23g)'/><text x='50' y='69' font-size='52' text-anchor='middle' fill='%23fff' font-family='sans-serif' font-weight='700'>A</text></svg>">
+<style>
+/* ===========================================================
+   应用集 · 共享样式
+   默认浅色（白天）主题，右上角可切深色。
+   构建时整份内联进每个页面 —— 站点保持零外链、可离线打开。
+   =========================================================== */
+
+:root{
+  --bg:#f5f6fb;
+  --surface:#ffffff;
+  --card:rgba(255,255,255,.74);
+  --card-hi:rgba(255,255,255,.94);
+  --line:rgba(18,21,40,.10);
+  --line-hi:rgba(18,21,40,.20);
+  --fg:#12152a;
+  --fg2:rgba(18,21,40,.68);
+  --fg3:rgba(18,21,40,.44);
+  --accent:#2563eb;
+  --accent-soft:rgba(37,99,235,.10);
+  --pink:#ec4899;
+  --ok:#10b981;
+  --g1:rgba(59,130,246,.18);
+  --g2:rgba(236,72,153,.14);
+  --g3:rgba(16,185,129,.12);
+  --grid:rgba(18,21,40,.032);
+  --shadow-sm:0 2px 10px -4px rgba(18,21,40,.10);
+  --shadow:0 16px 40px -18px rgba(18,21,40,.20);
+  --shadow-lg:0 28px 70px -30px rgba(18,21,40,.28);
+  --radius:18px;
+}
+
+html[data-theme="dark"]{
+  --bg:#08080e;
+  --surface:#12121c;
+  --card:rgba(30,30,50,.62);
+  --card-hi:rgba(44,44,70,.82);
+  --line:rgba(255,255,255,.13);
+  --line-hi:rgba(255,255,255,.28);
+  --fg:#f6f7fb;
+  --fg2:rgba(235,235,245,.72);
+  --fg3:rgba(235,235,245,.46);
+  --accent:#7aa8ff;
+  --accent-soft:rgba(122,168,255,.16);
+  --pink:#f9a8d4;
+  --ok:#34d399;
+  --g1:rgba(91,207,250,.30);
+  --g2:rgba(245,171,185,.24);
+  --g3:rgba(167,139,250,.20);
+  --grid:rgba(255,255,255,.035);
+  --shadow-sm:0 2px 10px -4px rgba(0,0,0,.6);
+  --shadow:0 18px 44px -20px rgba(0,0,0,.85);
+  --shadow-lg:0 30px 80px -34px rgba(0,0,0,.95);
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0; min-height:100vh; color:var(--fg); background:var(--bg);
+  font:15px/1.7 -apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC",
+       "HarmonyOS Sans SC","Microsoft YaHei",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  transition:background .4s ease,color .4s ease;
+}
+
+/* ---------- 背景：光晕 + 细网格，让页面不空 ---------- */
+body::before{
+  content:""; position:fixed; inset:0; z-index:-3; pointer-events:none;
+  background:
+    radial-gradient(58% 48% at 6% -4%,var(--g1) 0%,transparent 68%),
+    radial-gradient(52% 42% at 98% 6%,var(--g2) 0%,transparent 68%),
+    radial-gradient(46% 40% at 50% 104%,var(--g3) 0%,transparent 70%),
+    var(--bg);
+  transition:background .4s ease;
+}
+body::after{
+  content:""; position:fixed; inset:0; z-index:-2; pointer-events:none;
+  background-image:
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:46px 46px;
+  -webkit-mask-image:radial-gradient(ellipse 78% 62% at 50% 28%,#000 10%,transparent 78%);
+  mask-image:radial-gradient(ellipse 78% 62% at 50% 28%,#000 10%,transparent 78%);
+  transition:background-image .4s ease;
+}
+
+.wrap{max-width:1140px;margin:0 auto;padding:0 26px}
+
+/* ---------- 顶栏 ---------- */
+.nav{
+  position:sticky; top:0; z-index:50;
+  background:color-mix(in srgb,var(--bg) 78%,transparent);
+  backdrop-filter:blur(22px) saturate(180%);
+  -webkit-backdrop-filter:blur(22px) saturate(180%);
+  border-bottom:1px solid var(--line);
+}
+.nav-in{max-width:1140px;margin:0 auto;padding:13px 26px;
+  display:flex;align-items:center;gap:22px}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:inherit;flex:0 0 auto}
+.brand-avatar{
+  width:38px;height:38px;border-radius:11px;display:grid;place-items:center;
+  font-weight:800;font-size:17px;color:#fff;letter-spacing:-.02em;
+  background:linear-gradient(140deg,#3b82f6,#8b5cf6 55%,#ec4899);
+  box-shadow:0 6px 18px -8px rgba(59,130,246,.7);
+}
+.brand-text{display:flex;flex-direction:column;line-height:1.25}
+.brand-text b{font-size:15px;font-weight:650;letter-spacing:-.01em}
+.brand-text span{font-size:11.5px;color:var(--fg3)}
+
+.menu{display:flex;gap:4px;margin-left:8px;flex:1}
+.menu a{
+  padding:7px 14px;border-radius:10px;text-decoration:none;color:var(--fg2);
+  font-size:14px;font-weight:500;transition:.2s;
+}
+.menu a:hover{color:var(--fg);background:var(--accent-soft)}
+.menu a.on{color:var(--accent);background:var(--accent-soft);font-weight:600}
+
+.nav-actions{display:flex;align-items:center;gap:9px;flex:0 0 auto}
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 15px;border-radius:10px;border:1px solid var(--line);
+  background:var(--surface);color:var(--fg);font-size:13.5px;font-weight:500;
+  text-decoration:none;cursor:pointer;transition:.2s;white-space:nowrap;
+}
+.btn:hover{border-color:var(--line-hi);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.btn-primary{background:var(--accent);border-color:transparent;color:#fff}
+.btn-primary:hover{filter:brightness(1.08)}
+.btn svg{width:15px;height:15px;flex:0 0 auto}
+.icon-btn{width:38px;height:38px;padding:0;justify-content:center;border-radius:11px}
+.icon-btn svg{width:17px;height:17px}
+
+/* ---------- Hero ---------- */
+.hero{padding:64px 0 52px;display:grid;grid-template-columns:1.35fr .95fr;
+  gap:44px;align-items:center}
+.hero-kicker{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:12.5px;color:var(--fg2);padding:5px 13px;border-radius:999px;
+  background:var(--card);border:1px solid var(--line);margin-bottom:18px;
+  backdrop-filter:blur(14px);
+}
+.hero-kicker i{width:6px;height:6px;border-radius:50%;background:var(--ok);
+  display:inline-block;box-shadow:0 0 0 3px rgba(16,185,129,.18)}
+.hero h1{
+  margin:0 0 16px;font-size:clamp(32px,4vw,46px);line-height:1.15;
+  font-weight:800;letter-spacing:-.035em;
+}
+.hero h1 em{
+  font-style:normal;
+  background:linear-gradient(100deg,#2563eb,#8b5cf6 45%,#ec4899);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero p{margin:0 0 26px;font-size:16px;color:var(--fg2);max-width:44ch}
+.hero-btns{display:flex;gap:11px;flex-wrap:wrap}
+.hero-btns .btn{padding:11px 20px;font-size:14.5px;border-radius:12px}
+
+/* 名片卡 */
+.idcard{
+  padding:26px;border-radius:22px;position:relative;overflow:hidden;
+  background:var(--card);border:1px solid var(--line);
+  backdrop-filter:blur(28px) saturate(180%);
+  -webkit-backdrop-filter:blur(28px) saturate(180%);
+  box-shadow:var(--shadow);
+}
+.idcard::before{
+  content:"";position:absolute;top:-40%;right:-30%;width:220px;height:220px;
+  border-radius:50%;background:radial-gradient(circle,var(--g1),transparent 70%);
+}
+.idcard-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;position:relative}
+.idcard-face{
+  width:56px;height:56px;border-radius:16px;display:grid;place-items:center;
+  font-size:24px;font-weight:800;color:#fff;
+  background:linear-gradient(140deg,#3b82f6,#8b5cf6 55%,#ec4899);
+  box-shadow:0 10px 26px -12px rgba(99,102,241,.85);
+}
+.idcard-head b{display:block;font-size:16px;font-weight:650}
+.idcard-head span{font-size:12.5px;color:var(--fg3)}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;position:relative}
+.stat{
+  padding:13px 15px;border-radius:13px;
+  background:color-mix(in srgb,var(--surface) 70%,transparent);
+  border:1px solid var(--line);
+}
+.stat b{display:block;font-size:22px;font-weight:750;letter-spacing:-.03em;line-height:1.2}
+.stat span{font-size:11.5px;color:var(--fg3)}
+.idcard-foot{
+  margin-top:16px;padding-top:14px;border-top:1px solid var(--line);
+  font-size:12.5px;color:var(--fg3);display:flex;align-items:center;gap:7px;
+  position:relative;
+}
+
+/* ---------- 区块标题 ---------- */
+.sec{padding:20px 0 8px}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;
+  gap:18px;margin-bottom:22px;flex-wrap:wrap}
+.sec-head h2{
+  margin:0;font-size:22px;font-weight:750;letter-spacing:-.025em;
+  display:flex;align-items:center;gap:10px;
+}
+.sec-head h2::before{
+  content:"";width:4px;height:19px;border-radius:2px;
+  background:linear-gradient(180deg,#2563eb,#ec4899);
+}
+.sec-head p{margin:5px 0 0;font-size:13.5px;color:var(--fg3)}
+.sec-more{font-size:13.5px;color:var(--accent);text-decoration:none;font-weight:500;
+  display:inline-flex;align-items:center;gap:4px}
+.sec-more:hover{gap:8px}
+
+/* ---------- 应用卡片 ---------- */
+.apps{display:grid;gap:15px;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));
+  margin-bottom:18px}
+.app{
+  display:flex;flex-direction:column;gap:0;padding:20px;text-decoration:none;color:inherit;
+  border-radius:var(--radius);border:1px solid var(--line);background:var(--card);
+  backdrop-filter:blur(22px) saturate(180%);
+  -webkit-backdrop-filter:blur(22px) saturate(180%);
+  box-shadow:var(--shadow-sm);
+  transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s,border-color .3s,background .3s;
+}
+.app:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--line-hi);
+  background:var(--card-hi)}
+.app:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.app-top{display:flex;align-items:center;gap:13px;margin-bottom:13px;flex:0 0 auto}
+.app-body{display:flex;flex-direction:column;min-width:0}
+.app-ic{
+  flex:0 0 44px;height:44px;border-radius:13px;display:grid;place-items:center;
+  color:var(--accent-d);background:var(--accent-soft-d);
+  border:1px solid color-mix(in srgb,var(--accent-d) 18%,transparent);
+}
+html:not([data-theme="dark"]) .app-ic{
+  color:var(--accent);background:var(--accent-soft);
+  border-color:color-mix(in srgb,var(--accent) 18%,transparent);
+}
+.app-ic svg{width:21px;height:21px}
+.app-t{font-weight:660;font-size:16px;letter-spacing:-.012em;line-height:1.3}
+.app-sub{font-size:12.5px;font-weight:500;margin-top:2px;
+  color:var(--accent-d)}
+html:not([data-theme="dark"]) .app-sub{color:var(--accent)}
+.app-d{font-size:13px;color:var(--fg2);line-height:1.62;flex:1;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.app-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+
+/* '更多应用'占位卡：把网格最后一行的空位填满 */
+.app-more{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:9px;padding:20px;text-align:center;text-decoration:none;color:inherit;
+  border-radius:var(--radius);border:1px dashed var(--line-hi);
+  background:color-mix(in srgb,var(--surface) 42%,transparent);
+  transition:.26s;
+}
+.app-more:hover{border-color:var(--accent);background:var(--accent-soft);transform:translateY(-3px)}
+.app-more-ic{
+  width:42px;height:42px;border-radius:12px;display:grid;place-items:center;
+  background:var(--accent-soft);color:var(--accent);
+}
+.app-more-ic svg{width:20px;height:20px}
+.app-more b{font-size:14.5px;font-weight:600}
+.app-more span{font-size:12px;color:var(--fg3);line-height:1.5}
+.tag{
+  font-size:11px;color:var(--fg3);border:1px solid var(--line);
+  border-radius:999px;padding:1.5px 9px;white-space:nowrap;
+  background:color-mix(in srgb,var(--surface) 60%,transparent);
+}
+
+/* ---------- 文章列表 ---------- */
+/* 首页用两列，避免只有两三篇时右侧大片空白 */
+.posts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+.post{
+  display:flex;flex-direction:column;gap:9px;
+  padding:19px 20px;text-decoration:none;color:inherit;border-radius:14px;
+  border:1px solid transparent;transition:.24s;
+}
+.post:hover{background:var(--card);border-color:var(--line);box-shadow:var(--shadow-sm)}
+.post-date{
+  font-size:12px;color:var(--fg3);
+  font-variant-numeric:tabular-nums;letter-spacing:.01em;
+}
+.post-body{min-width:0;display:flex;flex-direction:column;gap:6px}
+.post-t{font-size:15.5px;font-weight:640;letter-spacing:-.015em;line-height:1.42}
+.post-s{font-size:13px;color:var(--fg2);line-height:1.6;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.post-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}
+.post-arrow{display:none}
+
+/* 文章卡片式（文章列表页用） */
+.post-cards{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(330px,1fr))}
+.pcard{
+  display:flex;flex-direction:column;padding:24px;text-decoration:none;color:inherit;
+  border-radius:var(--radius);border:1px solid var(--line);background:var(--card);
+  backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);
+  box-shadow:var(--shadow-sm);transition:.3s cubic-bezier(.16,1,.3,1);
+}
+.pcard:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--line-hi);
+  background:var(--card-hi)}
+.pcard-date{font-size:12px;color:var(--fg3);margin-bottom:10px;font-variant-numeric:tabular-nums}
+.pcard-t{font-size:17.5px;font-weight:660;letter-spacing:-.018em;line-height:1.38;margin-bottom:9px}
+.pcard-s{font-size:13.5px;color:var(--fg2);line-height:1.65;flex:1;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.pcard-foot{display:flex;align-items:center;justify-content:space-between;
+  margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.pcard-foot span{font-size:12px;color:var(--fg3)}
+
+/* ---------- 最近更新（时间戳精确到秒） ---------- */
+.stamp-badge{
+  font-size:12.5px;color:var(--fg2);padding:5px 12px;border-radius:999px;
+  background:var(--card);border:1px solid var(--line);white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+.timeline{
+  display:flex;flex-direction:column;gap:1px;
+  padding:6px 18px;border-radius:var(--radius);
+  background:var(--card);border:1px solid var(--line);
+  backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
+  box-shadow:var(--shadow-sm);
+}
+.tl-item{
+  display:grid;grid-template-columns:13px 172px 1fr;gap:14px;align-items:baseline;
+  padding:11px 0;border-bottom:1px dashed var(--line);
+}
+.tl-item:last-child{border-bottom:0}
+.tl-dot{
+  width:7px;height:7px;border-radius:50%;background:var(--accent);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 16%,transparent);
+  transform:translateY(-1px);
+}
+.tl-time{
+  font-size:12.5px;color:var(--fg3);white-space:nowrap;
+  font-variant-numeric:tabular-nums;letter-spacing:.01em;
+}
+.tl-what{font-size:13.5px;color:var(--fg2);line-height:1.6}
+.tl-item:first-child .tl-dot{background:var(--ok);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 18%,transparent)}
+.tl-item:first-child .tl-what{color:var(--fg);font-weight:500}
+@media (max-width:640px){
+  .tl-item{grid-template-columns:13px 1fr;gap:6px 10px}
+  .tl-time{grid-column:2}
+  .tl-what{grid-column:2}
+  .tl-dot{grid-row:1 / span 2}
+}
+
+/* ---------- 关于 ---------- */
+.about{
+  margin:44px 0 0;padding:34px;border-radius:22px;
+  background:var(--card);border:1px solid var(--line);
+  backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);
+  box-shadow:var(--shadow-sm);
+  display:grid;grid-template-columns:1.4fr 1fr;gap:36px;
+}
+.about h3{margin:0 0 12px;font-size:18px;font-weight:700;letter-spacing:-.02em}
+.about p{margin:0 0 12px;font-size:14px;color:var(--fg2);line-height:1.75}
+.about-list{display:flex;flex-direction:column;gap:11px}
+.about-item{display:flex;gap:11px;font-size:13.5px;color:var(--fg2);line-height:1.6}
+.about-item i{
+  flex:0 0 22px;height:22px;border-radius:7px;display:grid;place-items:center;
+  background:var(--accent-soft);color:var(--accent);font-size:12px;font-style:normal;
+  font-weight:700;
+}
+
+/* ---------- 页脚 ---------- */
+.foot{
+  margin-top:56px;padding:34px 0 44px;border-top:1px solid var(--line);
+}
+.foot-in{max-width:1140px;margin:0 auto;padding:0 26px;
+  display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+.foot-l{font-size:12.5px;color:var(--fg3);line-height:1.8}
+.foot-r{display:flex;gap:16px;flex-wrap:wrap}
+.foot-r a{font-size:13px;color:var(--fg2);text-decoration:none}
+.foot-r a:hover{color:var(--accent)}
+
+/* ---------- 文章详情页 ---------- */
+.article{max-width:740px;margin:0 auto;padding:52px 0 40px}
+.article-back{font-size:13px;color:var(--fg3);text-decoration:none;
+  display:inline-flex;align-items:center;gap:5px;margin-bottom:22px}
+.article-back:hover{color:var(--accent)}
+.article h1{margin:0 0 16px;font-size:clamp(27px,3.4vw,36px);line-height:1.25;
+  font-weight:780;letter-spacing:-.03em}
+.article-meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  padding-bottom:26px;margin-bottom:32px;border-bottom:1px solid var(--line);
+  font-size:12.5px;color:var(--fg3)}
+.article-body{font-size:15.5px;line-height:1.85;color:var(--fg)}
+.article-body h2{margin:38px 0 14px;font-size:21px;font-weight:720;letter-spacing:-.02em}
+.article-body h3{margin:30px 0 11px;font-size:17.5px;font-weight:680}
+.article-body h4{margin:24px 0 9px;font-size:15.5px;font-weight:660}
+.article-body p{margin:0 0 17px}
+.article-body ul,.article-body ol{margin:0 0 17px;padding-left:22px}
+.article-body li{margin-bottom:7px}
+.article-body a{color:var(--accent);text-decoration:none;border-bottom:1px solid
+  color-mix(in srgb,var(--accent) 35%,transparent)}
+.article-body a:hover{border-bottom-color:var(--accent)}
+.article-body code{
+  font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  font-size:.89em;padding:2px 6px;border-radius:6px;
+  background:color-mix(in srgb,var(--fg) 7%,transparent);
+}
+.article-body pre{
+  margin:0 0 20px;padding:16px 18px;border-radius:12px;overflow-x:auto;
+  background:color-mix(in srgb,var(--fg) 5%,transparent);
+  border:1px solid var(--line);
+}
+.article-body pre code{padding:0;background:none;font-size:13px;line-height:1.7}
+.article-body blockquote{
+  margin:0 0 18px;padding:14px 18px;border-left:3px solid var(--accent);
+  border-radius:0 10px 10px 0;background:var(--accent-soft);
+}
+.article-body blockquote p{margin:0;font-size:14.5px;color:var(--fg2)}
+.article-body hr{margin:32px 0;border:0;border-top:1px solid var(--line)}
+.article-body img{max-width:100%;border-radius:12px;margin:6px 0 18px}
+.tbl{overflow-x:auto;margin:0 0 20px}
+.tbl table{border-collapse:collapse;width:100%;font-size:13.5px}
+.tbl th,.tbl td{padding:9px 13px;border:1px solid var(--line);text-align:left}
+.tbl th{background:color-mix(in srgb,var(--fg) 4%,transparent);font-weight:640;font-size:13px}
+.article-foot{
+  margin-top:44px;padding-top:22px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  font-size:13px;color:var(--fg3);
+}
+
+/* ---------- 空状态 ---------- */
+.empty{
+  padding:56px 20px;text-align:center;border-radius:var(--radius);
+  border:1px dashed var(--line-hi);color:var(--fg3);font-size:14px;
+  background:color-mix(in srgb,var(--surface) 50%,transparent);
+}
+.empty b{display:block;font-size:15px;color:var(--fg2);margin-bottom:6px;font-weight:600}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;gap:34px;padding:44px 0 38px}
+  .about{grid-template-columns:1fr;gap:26px}
+  .menu{display:none}
+  .posts{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .wrap,.nav-in,.foot-in{padding-left:17px;padding-right:17px}
+  .hero{padding:34px 0 30px}
+  .hero h1{font-size:29px}
+  .apps{grid-template-columns:1fr}
+  .post{padding:16px 14px}
+  .brand-text span{display:none}
+  .nav-actions .btn span{display:none}
+  .nav-actions .btn{padding:8px 11px}
+  .article{padding:34px 0 30px}
+  .article-body{font-size:15px}
+  .foot-in{flex-direction:column;align-items:flex-start;gap:14px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+  html{scroll-behavior:auto}
+}
+
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="../../index.html">
+      <span class="brand-avatar">A</span>
+      <span class="brand-text">
+        <b>应用集</b>
+        <span>6 个应用 · 3 篇文章</span>
+      </span>
+    </a>
+    <nav class="menu">
+      <a href="../../index.html">应用</a>
+      <a href="../../posts/" class="on">文章</a>
+      <a href="../../index.html#about">关于</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn" href="https://github.com/azlove2021/azlove2021.github.io" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49v-1.7c-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.5-1.11-1.5-.91-.63.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.34 1.12 2.91.86.09-.66.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05a9.4 9.4 0 0 1 5 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.93-2.35 4.8-4.58 5.05.36.32.68.94.68 1.9v2.82c0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z"/></svg>
+        <span>GitHub</span>
+      </a>
+      <button class="btn icon-btn" id="themeBtn" aria-label="切换主题" title="切换白天 / 夜间">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+             stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor" stroke="none"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <article class="article">
+    <a class="article-back" href="../../posts/">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      全部文章
+    </a>
+    <h1>这张图怎么看 —— 光合 / 呼吸曲线读图指南</h1>
+    <div class="article-meta">
+      <span>2026-10-28</span>
+      <span>·</span>
+      <span>5832 字</span>
+      <span>·</span>
+      <span>约 15 分钟</span>
+      <span class="tag">高中生物</span><span class="tag">读图</span><span class="tag">光合作用</span><span class="tag">图表专题</span>
+    </div>
+    <div class="article-body">
+<h1>这张图怎么看 —— 光合 / 呼吸曲线读图指南</h1>
+<blockquote><p>配套课件：<code>photosynthesis-teaching.html</code>（双击即可，断网可用） 适用：高中生物「光合作用与细胞呼吸」第二课时，以及高三一轮复习的图表专题 本文所有数字都取自课件里同一个模型（25 ℃、400 ppm CO₂、21% O₂、整株）</p></blockquote>
+<hr>
+<h2>一、先记住一句话</h2>
+<blockquote><p><strong>这张图上只有一条线是"测得到"的——蓝色实线（净光合）。另外两条都是它的解释，不是它的同伴。</strong></p></blockquote>
+<p>学生看图出问题，九成不是数学问题，是没弄清"哪条是真的、哪条是算的"。把这句话先钉住，后面全顺。</p>
+<hr>
+<h2>二、图上到底画了什么</h2>
+<h3>2.1 三条主线（必须分清）</h3>
+<div class="tbl"><table><thead><tr><th>线</th><th>长什么样</th><th>它是什么</th><th>怎么来的</th><th>能不能直接测</th></tr></thead><tbody><tr><td><strong>净光合</strong></td><td>深蓝→浅蓝<strong>实线</strong>，带一点辉光</td><td>箱子里 CO₂ 的<strong>净变化</strong>：造出来的减掉烧掉的</td><td>就是传感器读数</td><td>✅ <strong>唯一能直接测的</strong></td></tr><tr><td><strong>总光合</strong></td><td>绿色<strong>虚线</strong>（短划）</td><td>叶绿体<strong>一共造了</strong>多少有机物</td><td>净光合 <strong>＋</strong> 呼吸，算出来的</td><td>❌ 永远测不到，只能算</td></tr><tr><td><strong>呼吸</strong></td><td>琥珀色<strong>水平虚线</strong>，右端标「呼吸 2.1（只随温度变）」</td><td>植物<strong>一共烧了</strong>多少有机物</td><td>由温度决定，暗处测一次即可</td><td>✅ 间接可测（暗处读数）</td></tr></tbody></table></div>
+<p>关键关系只有一条：</p>
+<pre><code>净光合 ＝ 总光合 − 呼吸</code></pre>
+<p>而呼吸在这张"速率—光强"图上<strong>是一条水平线</strong>，所以：</p>
+<pre><code>任意光强下，绿色虚线与蓝色实线的垂直间距 ＝ 呼吸 ＝ 2.1（25 ℃）</code></pre>
+<p>这个间距<strong>从头到尾一样宽</strong>。这是全图最重要的一件事，第四节会反复用它。线上没画箭头（原因见 5.2），讲的时候用手指或激光笔在两条线之间平移一遍，比画箭头更有说服力。</p>
+<p>还有一个很好用的"三线同点"：琥珀色水平虚线会在 I ≈ 43 处<strong>穿过绿色虚线</strong>，而那里正是蓝色实线<strong>穿过零线</strong>的地方——<strong>光补偿点</strong>。三个现象同一个横坐标，说的是同一件事：此刻<strong>总光合刚好等于呼吸</strong>，所以净值恰好为零。</p>
+<h3>2.2 辅助元素（认得就行，别当主角）</h3>
+<div class="tbl"><table><thead><tr><th>元素</th><th>含义</th><th>学生最容易误会成</th></tr></thead><tbody><tr><td><strong>浅蓝细虚线 + "15℃ / 35℃"</strong></td><td>温度对照的"鬼影线"，只有在你切温度时才显形</td><td>以为是别的植物的曲线 → 其实是<strong>同一株</strong>在别的温度下</td></tr><tr><td><strong>红色圆点 + "光补偿点"</strong></td><td>净光合正好等于 0 的那个光强</td><td>以为植物"停止光合了" → 是两笔账<strong>刚好扯平</strong></td></tr><tr><td><strong>绿色圆点 + "光饱和点"</strong></td><td>再加光也基本不再增益的位置</td><td>以为到这里光合"满了、到顶了" → 是<strong>瓶颈换了人</strong></td></tr><tr><td><strong>空心圆 + 序号</strong></td><td>你自己点「记录此刻」存下的实测点</td><td>以为是程序画的花纹 → 这是"曲线是测出来的"的证据</td></tr><tr><td><strong>灰色空心圆</strong></td><td>在<strong>别的条件</strong>（换过温度 / 口径 / 浓度）下测得的点</td><td>以为图算错了 → 条件变了点就不该跟着动，这才对</td></tr><tr><td><strong>实心蓝点 / 红点</strong></td><td>当前工作点（你正拖到的那个光强）</td><td>——</td></tr><tr><td><strong>浅红底纹（零线以下）</strong></td><td>"净消耗"区：放出的比吸进去的多</td><td>以为"这里没有光合" → 有光合，只是不够花</td></tr><tr><td><strong>右上角"加光不再增益"</strong></td><td>饱和点右侧那一段的注脚</td><td>——</td></tr></tbody></table></div>
+<hr>
+<h2>三、为什么必然长这样（一句话模型）</h2>
+<p>光反应那一步是"按光量子收费"的，光越强，单位时间收到的能量越多，所以曲线起步是<strong>接近直线的陡坡</strong>；但暗反应的处理能力（酶的量、CO₂ 的供应）是有限的，于是曲线<strong>越走越平</strong>，最后贴着一条水平的天花板。</p>
+<p>课件里用的是教材图表常用的<strong>直角双曲线</strong>，不是随手画的样条——所以"陡坡—拐弯—贴顶"这三段的形状是自洽的，学生拿尺子量斜率也能量出"越来越小"。</p>
+<p>而呼吸这一项<strong>根本不进这条公式</strong>：它只跟温度走（Q₁₀＝2，温度每升 10 ℃ 翻一倍），光强从头到尾不参与计算。这是模型的设计，不是简化失误。</p>
+<hr>
+<h2>四、随光强增加，一段一段看</h2>
+<p>下面用默认条件（25 ℃、整株、400 ppm）走一遍。你可以把课件的光强滑杆从 0 拖到 2000，对着看。</p>
+<h3>段一 · 暗处到微光（I = 0 → 约 40）</h3>
+<ul><li>总光合（绿虚线）<strong>从 0 起步</strong>：没有光，光反应停，整条链子断掉，一个有机物都造不出来。</li><li>呼吸（琥珀水平线）<strong>照样在 2.1</strong>：它烧的是现成的有机物，不看光。</li><li>所以净光合是 <strong>−2.15</strong>，蓝实线落在零线<strong>下方</strong>，箱内 CO₂ 在<strong>上升</strong>。</li></ul>
+<blockquote><p>学生常问："没光它还呼吸？"——把灯关掉，读数不是变成 0，而是变成 −2.1。负号本身就是呼吸存在的证据。</p></blockquote>
+<h3>段二 · 光补偿点（I ≈ 43）</h3>
+<ul><li>蓝实线<strong>穿过零线</strong>，红点标出位置。</li><li>此刻总光合 ≈ 呼吸 ≈ 2.1，两笔账<strong>刚好扯平</strong>，箱内读数<strong>一动不动</strong>。</li><li>植物忙得很，只是进出相等。</li></ul>
+<blockquote><p>这是全图最容易被误讲的一处：<strong>"读数不动"≠"生理停止"</strong>。此刻光合速率和呼吸速率都接近 2，谁都没停。</p></blockquote>
+<h3>段三 · 上升段（I ≈ 43 → 约 1200）</h3>
+<ul><li>蓝实线<strong>快速上升</strong>，斜率一路变小（这是"越来越吃力"的图形语言）。</li><li>绿虚线始终在蓝实线<strong>上方</strong>，两条线的间距<strong>一直是 2.1</strong>——你可以拿手指比一下，从头到尾没变宽过。</li><li>这一段的限制因素是<strong>光</strong>：加光就增产，投入产出比最高。</li></ul>
+<h3>段四 · 饱和点之后（I ≳ 1270）</h3>
+<ul><li>蓝实线<strong>几乎水平</strong>。从 1300 拖到 2000，净光合只从 22.7 涨到 23.4，涨了不到 3%。</li><li>绿虚线同样贴顶。间距还是 2.1。</li><li>限制因素<strong>换人了</strong>：不再是光，而是暗反应的酶和 CO₂ 供应。多加的光用不上，只会变成热。</li></ul>
+<blockquote><p>注意：呼吸<strong>没有变大也没有变小</strong>，还是 2.1。这一点在这一段最好讲——因为"光合已经加不上去了，呼吸还在照常扣钱"，这正是净光合封顶的直接原因。</p></blockquote>
+<h3>速查表（25 ℃、整株，可直接抄到黑板上）</h3>
+<div class="tbl"><table><thead><tr><th>光强 μmol·m⁻²·s⁻¹</th><th>总光合</th><th>净光合</th><th>呼吸</th><th>读法</th></tr></thead><tbody><tr><td>0</td><td>0.0</td><td>−2.15</td><td>2.15</td><td>只花钱不挣钱</td></tr><tr><td>20</td><td>1.0</td><td>−1.15</td><td>2.15</td><td>开始造了，还不够花</td></tr><tr><td><strong>43</strong></td><td><strong>2.1</strong></td><td><strong>0.0</strong></td><td>2.15</td><td><strong>光补偿点</strong>，收支平衡</td></tr><tr><td>100</td><td>4.9</td><td>2.7</td><td>2.15</td><td>净积累开始</td></tr><tr><td>400</td><td>17.0</td><td>14.8</td><td>2.15</td><td>陡坡段，加光最划算</td></tr><tr><td>800</td><td>23.2</td><td>21.0</td><td>2.15</td><td>拐弯处</td></tr><tr><td><strong>1270</strong></td><td><strong>24.8</strong></td><td><strong>22.7</strong></td><td>2.15</td><td><strong>光饱和点</strong>，开始贴顶</td></tr><tr><td>2000</td><td>25.5</td><td>23.4</td><td>2.15</td><td>再加光基本无用</td></tr></tbody></table></div>
+<p>三个温度下的临界点对比（同一株、整株）：</p>
+<div class="tbl"><table><thead><tr><th>温度</th><th>呼吸</th><th>光补偿点</th><th>光饱和点</th><th>最大净光合</th></tr></thead><tbody><tr><td>15 ℃</td><td>1.07</td><td>≈ 22</td><td>≈ 850</td><td>16.1</td></tr><tr><td><strong>25 ℃</strong></td><td><strong>2.15</strong></td><td><strong>≈ 43</strong></td><td><strong>≈ 1270</strong></td><td><strong>23.4</strong></td></tr><tr><td>35 ℃</td><td>4.30</td><td>≈ 88</td><td>≈ 1150</td><td>18.8</td></tr></tbody></table></div>
+<p>这张小表本身就够讲一节课：</p>
+<ul><li><strong>温度升 → 呼吸涨 → 补偿点右移</strong>（要更多光才追得平）。补偿点由呼吸决定，呼吸由温度决定。</li><li><strong>35 ℃ 的饱和点反而比 25 ℃ 靠左</strong>，因为光合酶已经过了最适温（28 ℃），处理上限降下来了。这是"高温使光合下降"的图形证据，也是高考常设的陷阱。</li></ul>
+<hr>
+<h2>五、这张图有没有错</h2>
+<p>分三层说，越往后越值得讲。</p>
+<h3>5.1 模型本身：没错</h3>
+<ul><li>光强为 0 时总光合 = 0、呼吸 ≠ 0 ✔</li><li>呼吸只随温度变、与光强无关 ✔（Q₁₀＝2）</li><li>净光合 = 总光合 − 呼吸，处处成立 ✔</li><li>补偿点由呼吸与初始斜率共同决定，随温度右移 ✔</li><li>饱和点之后曲线贴顶，限制因素转移 ✔</li></ul>
+<h3>5.2 但<strong>画法</strong>上曾经有一处真缺陷（已修）</h3>
+<p>你截图那一版里，图上<strong>没有把呼吸画成一条线</strong>，只在你当前停留的那个光强处，画了一小段"两条曲线之间的间距"，旁边写"呼吸"两个字。</p>
+<p>结果就是：<strong>这段标注随着你拖光强一路往上跑</strong>。学生（和听课的老师）看到的是一个跟着光强往上移动的琥珀色标记，理所当然地读成"呼吸随着光强增加而增加"——<strong>这是纯粹的图形误导，不是模型算错</strong>。</p>
+<p>中间还试过两版改进，都没成，一并说清楚，免得以后又绕回去：</p>
+<ul><li><strong>改成双向箭头</strong>：2.1 在这根纵轴（−8 到 30）上只有约 11 像素，而工作点的圆点直径就有 12 像素，箭头和"呼吸"两个字被圆点整个吃掉，放大八倍才看得见一个像素点。</li><li><strong>改成两曲线之间的淡色带子</strong>：理论上最直观（带宽＝呼吸），但 11 像素宽的带子压在带辉光的粗蓝线上，投影时根本看不出"等宽"。</li></ul>
+<p>最后采用的做法只有两件，都经得起投影：</p>
+<ol><li>加了一条<strong>贯穿全图的琥珀色水平虚线</strong>，右端直接写「呼吸 2.1（只随温度变）」。平的事实一眼可见。</li><li>撤掉了工作点旁那段间距标注——呼吸的数值由这条线说，"总光合 − 呼吸 = 净光合"由右栏的三量对账说，图上不再重复第三遍。</li></ol>
+<blockquote><p>顺带说一句：这个"看图看出来的错误"，本身就是这节课最好的教学点。一个学生能指着图说"这里不对"，说明他在用模型检验图形，而不是背图形。</p></blockquote>
+<h3>5.3 五个常见误读，逐条对</h3>
+<div class="tbl"><table><thead><tr><th>误读</th><th>错在哪</th><th>一句话纠正</th></tr></thead><tbody><tr><td>① 呼吸随光强增加</td><td>把"随光强移动的标注"当成了曲线</td><td>呼吸是水平线；只看温度</td></tr><tr><td>② 净光合就是"光合作用的量"</td><td>净是差值，漏掉了被当场烧掉的那份</td><td>净 = 总 − 呼吸；总才是"造了多少"</td></tr><tr><td>③ 绿虚线是测出来的</td><td>没有任何仪器能直接测总光合</td><td>总光合永远是净光合加回去算的</td></tr><tr><td>④ 零线以下没有光合</td><td>负号只说明支出大于收入</td><td>I = 20 时总光合已有 1.0</td></tr><tr><td>⑤ 两条曲线是两个独立过程</td><td>它们共用同一个 gross</td><td>绿线往下平移 2.1 就是蓝线</td></tr></tbody></table></div>
+<p>第 ⑤ 条值得在黑板画一次：<strong>把绿虚线整体往下推 2.1，正好落在蓝实线上</strong>。图形上一推，比讲十句都管用。</p>
+<hr>
+<h2>六、四个可调条件，各带动什么</h2>
+<p>课件能改的不只光强。每改一个，图上动的部分完全不同——这正好是"控制变量"的现场演示。</p>
+<div class="tbl"><table><thead><tr><th>调什么</th><th>呼吸线</th><th>绿虚线（总光合）</th><th>蓝实线（净光合）</th><th>补偿点</th><th>一句话</th></tr></thead><tbody><tr><td><strong>光强</strong></td><td>不动</td><td>沿曲线走</td><td>沿曲线走</td><td>不动</td><td>只改"走多远"，不改"路在哪"</td></tr><tr><td><strong>温度</strong></td><td><strong>整条上下移</strong></td><td>天花板的<strong>高度</strong>变</td><td>整体<strong>平移</strong></td><td><strong>左右移</strong></td><td>呼吸变，两线的间距就变</td></tr><tr><td><strong>CO₂ 浓度</strong></td><td>不动</td><td>天花板变高/变低</td><td>同步变</td><td>略移</td><td>直接改"处理能力"</td></tr><tr><td><strong>口径（整株/叶片）</strong></td><td>小幅下移</td><td><strong>完全不动</strong></td><td>整体上移</td><td>略左移</td><td>只减掉根茎那份呼吸</td></tr></tbody></table></div>
+<p>口径那一条要专门强调：<strong>总光合曲线不随口径变，变的是呼吸那一份</strong>。整株与叶片在 I = 800 处的净光合差 0.47，就是根和茎的呼吸（只花钱不挣钱）。课件右栏有一行分解说明会实时显示这个差值。</p>
+<hr>
+<h2>七、做题时怎么落到这张图上</h2>
+<p>题干出现这些词，直接对应图上的位置：</p>
+<div class="tbl"><table><thead><tr><th>题干说法</th><th>图上位置</th></tr></thead><tbody><tr><td>"净光合速率" / "表观光合速率" / "CO₂ 吸收速率"</td><td><strong>蓝实线</strong>的读数</td></tr><tr><td>"总光合速率" / "真光合速率" / "CO₂ 固定速率" / "有机物制造速率"</td><td><strong>绿虚线</strong>的读数</td></tr><tr><td>"开始积累有机物" / "不再向外释放 CO₂"</td><td><strong>光补偿点</strong>（蓝线穿零）</td></tr><tr><td>"光合速率不再随光强增加而增大"</td><td><strong>光饱和点</strong>右侧</td></tr><tr><td>"黑暗中的 CO₂ 释放量"</td><td><strong>呼吸</strong>（= 零线到蓝线起点的距离）</td></tr><tr><td>"植物"（未指明部位）</td><td><strong>整株</strong>；写"叶片"才是叶片</td></tr></tbody></table></div>
+<p>两条最容易失分的规则：</p>
+<ol><li><strong>先圈主语</strong>（植物 / 叶片），再看问的是净还是总。</li><li><strong>总光合永远要"加回去"</strong>：题目只给净值和暗处读数时，答案 = 净值 + 暗处读数。</li></ol>
+<hr>
+<h2>八、课件里的两个新东西</h2>
+<h3>8.1 语音讲解（离线）</h3>
+<p>顶栏「讲解」按钮，或按 <strong>V</strong> 开关。开启后：</p>
+<ul><li>切题（← →）、点「记录此刻」、展开化学式抽屉，都会<strong>自动读对应那一段</strong>，不用再点播放。</li><li>底部会出现一条<strong>字幕</strong>，后排听不清也能看。</li><li>按 <strong>Esc</strong> 立刻掐掉当前这句（读错、被打断时用）。</li><li>用的是系统自带的语音合成，<strong>不联网</strong>。机器上没装中文语音包时，会自动降级成<strong>只出字幕</strong>，并如实告诉你——不会假装能读。</li></ul>
+<h3>8.2 呼吸水平线</h3>
+<p>就是 5.2 里说的那处改动。上课时可以直接指着那条琥珀色水平线问一句：</p>
+<blockquote><p>"这条线为什么是平的？"</p></blockquote>
+<p>这个问题答对了，这一节的核心就过了。</p>
+<p>紧接着还可以追问第二个——它比第一个更狠：</p>
+<blockquote><p>"那这条线为什么在左边跑到绿色虚线<strong>上面</strong>去了？"</p></blockquote>
+<p>因为 I 很小的时候总光合还不到 2.1，呼吸照旧扣 2.1，所以净值是负的。<strong>这正是补偿点之前"入不敷出"的图形解释</strong>，也是"负号不等于没有光合"最直接的证据。</p>
+<hr>
+<h2>九、板书三行</h2>
+<pre><code>净光合 = 总光合 − 呼吸          ← 一切换算的根
+呼吸是水平线（只看温度）         ← 本图最容易错的地方
+补偿点看呼吸，饱和点看酶         ← 两个临界点各归谁管</code></pre>
+<hr>
+<h2>附：模型参数（教师备课参考，不必讲给学生）</h2>
+<div class="tbl"><table><thead><tr><th>参数</th><th>取值</th><th>说明</th></tr></thead><tbody><tr><td>初始斜率 α</td><td>0.050</td><td>低光段的表观量子效率</td></tr><tr><td>最大总光合（25 ℃）</td><td>27.0</td><td>光饱和时的天花板</td></tr><tr><td>凸度 θ</td><td>0.90</td><td>直角双曲线的弯曲程度</td></tr><tr><td>呼吸（25 ℃，整株）</td><td>2.15</td><td>叶片口径取 78%，即 1.68</td></tr><tr><td>Q₁₀</td><td>2.0</td><td>温度每升 10 ℃ 呼吸翻倍</td></tr><tr><td>光合最适温</td><td>28 ℃</td><td>高斯型温度响应，σ = 14</td></tr><tr><td>CO₂ 半饱和</td><td>340 ppm</td><td>米氏型响应，基准 400 ppm</td></tr><tr><td>O₂ 抑制</td><td>每超 1% 降 0.62%</td><td>光呼吸的粗略折算</td></tr><tr><td>饱和判定</td><td>达 94% 天花板</td><td>定在曲线已明显压平处</td></tr></tbody></table></div>
+<blockquote><p>说明：这是一套<strong>教学可信</strong>的参数，形态与趋势对齐教材，量级对齐真实叶片，但<strong>不是</strong>某篇文献的实测拟合值。课堂上不要用它去对答案的具体小数。</p></blockquote>
+    </div>
+    <div class="article-foot">
+      <span>写于 2026-10-28</span>
+      <a href="../../posts/">← 回文章列表</a>
+    </div>
+  </article>
+</main>
+
+<footer class="foot">
+  <div class="foot-in">
+    <div class="foot-l">
+      共 6 个应用 · 生成于 2026-10-28<br>
+      所有应用都是单个 HTML 文件，数据保存在浏览器本地，换设备或清缓存即重置。
+    </div>
+    <div class="foot-r">
+      <a href="../../index.html">应用</a>
+      <a href="../../posts/">文章</a>
+      <a href="../../index.html#about">关于</a>
+      <a href="https://github.com/azlove2021/azlove2021.github.io" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var KEY='portal-theme', root=document.documentElement;
+  var btn=document.getElementById('themeBtn');
+  function apply(t){
+    root.setAttribute('data-theme',t);
+    var m=document.querySelector('meta[name="theme-color"]');
+    if(m) m.setAttribute('content', t==='dark' ? '#08080e' : '#f5f6fb');
+    if(btn) btn.setAttribute('aria-label', t==='dark' ? '切换到白天模式' : '切换到夜间模式');
+  }
+  var saved=null;
+  try{ saved=localStorage.getItem(KEY); }catch(e){}
+  if(saved==='light'||saved==='dark') apply(saved);
+  if(btn) btn.addEventListener('click',function(){
+    var next=root.getAttribute('data-theme')==='dark'?'light':'dark';
+    apply(next);
+    try{ localStorage.setItem(KEY,next); }catch(e){}
+  });
+})();
+</script>
+</body>
+</html>

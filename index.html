@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>应用集 · azlove 的教学工具箱</title>
-<meta name="description" content="6 个离线可用的网页应用 + 2 篇教学与技术随笔。点开即用，数据留在你自己的浏览器里。">
+<meta name="description" content="6 个离线可用的网页应用 + 3 篇教学与技术随笔。点开即用，数据留在你自己的浏览器里。">
 <meta name="theme-color" content="#f5f6fb">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%233b82f6'/><stop offset='.55' stop-color='%238b5cf6'/><stop offset='1' stop-color='%23ec4899'/></linearGradient></defs><rect width='100' height='100' rx='24' fill='url(%23g)'/><text x='50' y='69' font-size='52' text-anchor='middle' fill='%23fff' font-family='sans-serif' font-weight='700'>A</text></svg>">
 <style>
@@ -307,6 +307,44 @@ html:not([data-theme="dark"]) .app-sub{color:var(--accent)}
   margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
 .pcard-foot span{font-size:12px;color:var(--fg3)}
 
+/* ---------- 最近更新（时间戳精确到秒） ---------- */
+.stamp-badge{
+  font-size:12.5px;color:var(--fg2);padding:5px 12px;border-radius:999px;
+  background:var(--card);border:1px solid var(--line);white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+.timeline{
+  display:flex;flex-direction:column;gap:1px;
+  padding:6px 18px;border-radius:var(--radius);
+  background:var(--card);border:1px solid var(--line);
+  backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
+  box-shadow:var(--shadow-sm);
+}
+.tl-item{
+  display:grid;grid-template-columns:13px 172px 1fr;gap:14px;align-items:baseline;
+  padding:11px 0;border-bottom:1px dashed var(--line);
+}
+.tl-item:last-child{border-bottom:0}
+.tl-dot{
+  width:7px;height:7px;border-radius:50%;background:var(--accent);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 16%,transparent);
+  transform:translateY(-1px);
+}
+.tl-time{
+  font-size:12.5px;color:var(--fg3);white-space:nowrap;
+  font-variant-numeric:tabular-nums;letter-spacing:.01em;
+}
+.tl-what{font-size:13.5px;color:var(--fg2);line-height:1.6}
+.tl-item:first-child .tl-dot{background:var(--ok);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 18%,transparent)}
+.tl-item:first-child .tl-what{color:var(--fg);font-weight:500}
+@media (max-width:640px){
+  .tl-item{grid-template-columns:13px 1fr;gap:6px 10px}
+  .tl-time{grid-column:2}
+  .tl-what{grid-column:2}
+  .tl-dot{grid-row:1 / span 2}
+}
+
 /* ---------- 关于 ---------- */
 .about{
   margin:44px 0 0;padding:34px;border-radius:22px;
@@ -427,7 +465,7 @@ html:not([data-theme="dark"]) .app-sub{color:var(--accent)}
       <span class="brand-avatar">A</span>
       <span class="brand-text">
         <b>应用集</b>
-        <span>6 个应用 · 2 篇文章</span>
+        <span>6 个应用 · 3 篇文章</span>
       </span>
     </a>
     <nav class="menu">
@@ -455,7 +493,7 @@ html:not([data-theme="dark"]) .app-sub{color:var(--accent)}
 
   <section class="hero">
     <div>
-      <span class="hero-kicker"><i></i>持续更新中 · 最后更新 2026-10-28</span>
+      <span class="hero-kicker"><i></i>持续更新中 · 最后更新 2026-10-28 23:36:07</span>
       <h1>把课件做成<br><em>一个文件</em>的人</h1>
       <p>离线网页应用与教学随笔。每个应用都是单个 HTML，双击就用、断网也能跑，数据全留在你自己的浏览器里。</p>
       <div class="hero-btns">
@@ -482,7 +520,7 @@ html:not([data-theme="dark"]) .app-sub{color:var(--accent)}
       </div>
       <div class="stat-grid">
         <div class="stat"><b>6</b><span>个离线应用</span></div>
-        <div class="stat"><b>2</b><span>篇文章</span></div>
+        <div class="stat"><b>3</b><span>篇文章</span></div>
         <div class="stat"><b>100%</b><span>零外链</span></div>
         <div class="stat"><b>0</b><span>个追踪脚本</span></div>
       </div>
@@ -614,6 +652,15 @@ html:not([data-theme="dark"]) .app-sub{color:var(--accent)}
         </span>
         <span class="post-arrow">→</span>
       </a>
+      <a class="post" href="posts/how-to-read-the-photosynthesis-curve/">
+        <span class="post-date">2026-10-28</span>
+        <span class="post-body">
+          <span class="post-t">这张图怎么看 —— 光合 / 呼吸曲线读图指南</span>
+          <span class="post-s">配套课件那张「速率—光强」图究竟该怎么看。三条线里只有一条是测得到的，另外两条是它的解释 —— 这件事先钉住，后面全顺。</span>
+          <span class="post-meta"><span class="tag">高中生物</span><span class="tag">读图</span><span class="tag">光合作用</span></span>
+        </span>
+        <span class="post-arrow">→</span>
+      </a>
       <a class="post" href="posts/why-single-file/">
         <span class="post-date">2026-10-26</span>
         <span class="post-body">
@@ -624,6 +671,17 @@ html:not([data-theme="dark"]) .app-sub{color:var(--accent)}
         <span class="post-arrow">→</span>
       </a>
     </div>
+  </section>
+
+  <section class="sec" id="changelog" style="margin-top:44px">
+    <div class="sec-head">
+      <div>
+        <h2>最近更新</h2>
+        <p>每次改动都记了时间戳，精确到秒</p>
+      </div>
+      <span class="stamp-badge">最后更新 2026-10-28 23:36:07</span>
+    </div>
+<div class="empty"><b>还没有更新记录</b>发布一次之后这里会记下时间戳（精确到秒）</div>
   </section>
 
   <section class="about" id="about">
