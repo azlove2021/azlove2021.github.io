@@ -96,14 +96,19 @@ h1{margin:0 0 9px;font-size:34px;line-height:1.2;font-weight:800;letter-spacing:
 
 .ic{
   flex:0 0 44px;height:44px;border-radius:13px;display:grid;place-items:center;
-  color:var(--accent);background:var(--accent-soft);
-  border:1px solid color-mix(in srgb,var(--accent) 22%,transparent);
+  color:var(--accent-d);background:var(--accent-soft-d);
+  border:1px solid color-mix(in srgb,var(--accent-d) 20%,transparent);
 }
 .ic svg{width:22px;height:22px}
+html[data-theme="light"] .ic{
+  color:var(--accent);background:var(--accent-soft);
+  border-color:color-mix(in srgb,var(--accent) 20%,transparent);
+}
 
 .body{min-width:0;display:flex;flex-direction:column;gap:4px}
 .t{font-weight:650;font-size:16px;letter-spacing:-.01em}
-.sub{font-size:12.5px;color:var(--accent);font-weight:500}
+.sub{font-size:12.5px;color:var(--accent-d);font-weight:500}
+html[data-theme="light"] .sub{color:var(--accent)}
 .d{font-size:13px;color:var(--fg2);line-height:1.58;
    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
@@ -151,7 +156,7 @@ footer a:hover{color:var(--fg);border-color:var(--line-hi)}
   </header>
 
   <nav class="grid">
-    <a class="card" href="apps/photosynthesis/index.html" style="--accent:#1D9E75;--accent-soft:#E4F3EE">
+    <a class="card" href="apps/photosynthesis/index.html" style="--accent:#1D9E75;--accent-soft:#E2F2ED;--accent-d:#BBE2D6;--accent-soft-d:#113330">
       <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.5 15.5 6 22c6.5 1 12-3 13-9 .4-2.4-.2-4-2-5Z"/><path d="M9 22c1.5-4 4-7.5 8-10"/></svg></span>
       <span class="body">
         <span class="t">光合作用与呼吸作用</span>
@@ -160,7 +165,7 @@ footer a:hover{color:var(--fg);border-color:var(--line-hi)}
         <span class="tags"><span class="tag">高中生物</span><span class="tag">3D</span><span class="tag">交互</span><span class="tag">公开课</span></span>
       </span>
     </a>
-    <a class="card" href="apps/beer-fermentation/index.html" style="--accent:#BA7517;--accent-soft:#F7EEE3">
+    <a class="card" href="apps/beer-fermentation/index.html" style="--accent:#BA7517;--accent-soft:#F6EDE1;--accent-d:#EAD6B9;--accent-soft-d:#3A2818">
       <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3h4M11 3v6l-5.5 9.5A2 2 0 0 0 7.2 21h9.6a2 2 0 0 0 1.7-2.5L13 9V3"/><path d="M8 15h8"/></svg></span>
       <span class="body">
         <span class="t">啤酒发酵工厂</span>
@@ -169,7 +174,7 @@ footer a:hover{color:var(--fg);border-color:var(--line-hi)}
         <span class="tags"><span class="tag">3D</span><span class="tag">工艺流程</span><span class="tag">课件</span></span>
       </span>
     </a>
-    <a class="card" href="apps/teacher-workbench/index.html" style="--accent:#378ADD;--accent-soft:#E7F1FB">
+    <a class="card" href="apps/teacher-workbench/index.html" style="--accent:#378ADD;--accent-soft:#E5F0FB;--accent-d:#C3DCF5;--accent-soft-d:#182E4B">
       <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M12 17v4M8 21h8"/></svg></span>
       <span class="body">
         <span class="t">班主任工作台</span>
@@ -178,7 +183,7 @@ footer a:hover{color:var(--fg);border-color:var(--line-hi)}
         <span class="tags"><span class="tag">班级管理</span><span class="tag">单文件应用</span><span class="tag">离线可用</span></span>
       </span>
     </a>
-    <a class="card" href="apps/score-query/index.html" style="--accent:#7F77DD;--accent-soft:#F0EFFB">
+    <a class="card" href="apps/score-query/index.html" style="--accent:#7F77DD;--accent-soft:#EEEDFB;--accent-d:#D9D6F5;--accent-soft-d:#2B294B">
       <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6"/><path d="m20 20-3.5-3.5"/></svg></span>
       <span class="body">
         <span class="t">查分系统</span>
@@ -187,7 +192,7 @@ footer a:hover{color:var(--fg);border-color:var(--line-hi)}
         <span class="tags"><span class="tag">查分</span><span class="tag">自助服务</span></span>
       </span>
     </a>
-    <a class="card" href="apps/gaokao-subject/index.html" style="--accent:#D4537E;--accent-soft:#FAEAF0">
+    <a class="card" href="apps/gaokao-subject/index.html" style="--accent:#D4537E;--accent-soft:#F9E9EE;--accent-d:#F2CBD8;--accent-soft-d:#411F33">
       <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5Z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v3H6.5A2.5 2.5 0 0 1 4 20.5Z"/></svg></span>
       <span class="body">
         <span class="t">贵州新高考选科指南</span>
@@ -196,7 +201,7 @@ footer a:hover{color:var(--fg);border-color:var(--line-hi)}
         <span class="tags"><span class="tag">高考</span><span class="tag">选科</span><span class="tag">家长向</span></span>
       </span>
     </a>
-    <a class="card" href="apps/iso-city/index.html" style="--accent:#5F5E5A;--accent-soft:#ECECEB">
+    <a class="card" href="apps/iso-city/index.html" style="--accent:#5F5E5A;--accent-soft:#EAEAEA;--accent-d:#CFCFCE;--accent-soft-d:#222229">
       <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V9l4-3v15M14 21V11l4-3v13M5 13h4M14 15h4"/></svg></span>
       <span class="body">
         <span class="t">ISO-CITY 98</span>
@@ -205,7 +210,7 @@ footer a:hover{color:var(--fg);border-color:var(--line-hi)}
         <span class="tags"><span class="tag">游戏</span><span class="tag">像素风</span><span class="tag">等距</span></span>
       </span>
     </a>
-    <a class="card" href="apps/dsh-replica/index.html" style="--accent:#0F6E56;--accent-soft:#E2EEEB">
+    <a class="card" href="apps/dsh-replica/index.html" style="--accent:#0F6E56;--accent-soft:#E0ECE9;--accent-d:#B7D4CC;--accent-soft-d:#0E2628">
       <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 17-5-5 5-5M15 7l5 5-5 5"/></svg></span>
       <span class="body">
         <span class="t">DeepSeek Harness 复刻</span>
