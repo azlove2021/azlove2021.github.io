@@ -1,261 +1,691 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="dark">
+<html lang="zh-CN" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>应用集 · azlove</title>
-<meta name="description" content="7 个纯静态网页应用。点开即用，断网也能跑，数据留在你自己的浏览器里。">
-<meta name="theme-color" content="#0d0d18">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%235bcffa'/><text x='50' y='68' font-size='54' text-anchor='middle' fill='%230d0d18' font-family='sans-serif' font-weight='700'>A</text></svg>">
+<title>应用集 · azlove 的教学工具箱</title>
+<meta name="description" content="7 个离线可用的网页应用 + 2 篇教学与技术随笔。点开即用，数据留在你自己的浏览器里。">
+<meta name="theme-color" content="#f5f6fb">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%233b82f6'/><stop offset='.55' stop-color='%238b5cf6'/><stop offset='1' stop-color='%23ec4899'/></linearGradient></defs><rect width='100' height='100' rx='24' fill='url(%23g)'/><text x='50' y='69' font-size='52' text-anchor='middle' fill='%23fff' font-family='sans-serif' font-weight='700'>A</text></svg>">
 <style>
+/* ===========================================================
+   应用集 · 共享样式
+   默认浅色（白天）主题，右上角可切深色。
+   构建时整份内联进每个页面 —— 站点保持零外链、可离线打开。
+   =========================================================== */
+
 :root{
-  --bg:#08080e; --bg2:#04040a;
-  --card:rgba(30,30,50,.62); --card-hi:rgba(42,42,68,.78);
-  --line:rgba(255,255,255,.13); --line-hi:rgba(255,255,255,.26);
-  --fg:#f7f7fb; --fg2:rgba(235,235,245,.70); --fg3:rgba(235,235,245,.44);
-  --g1:rgba(91,207,250,.34); --g2:rgba(245,171,185,.28); --g3:rgba(167,139,250,.20);
-  --shadow:0 20px 50px -22px rgba(0,0,0,.9);
+  --bg:#f5f6fb;
+  --surface:#ffffff;
+  --card:rgba(255,255,255,.74);
+  --card-hi:rgba(255,255,255,.94);
+  --line:rgba(18,21,40,.10);
+  --line-hi:rgba(18,21,40,.20);
+  --fg:#12152a;
+  --fg2:rgba(18,21,40,.68);
+  --fg3:rgba(18,21,40,.44);
+  --accent:#2563eb;
+  --accent-soft:rgba(37,99,235,.10);
+  --pink:#ec4899;
+  --ok:#10b981;
+  --g1:rgba(59,130,246,.18);
+  --g2:rgba(236,72,153,.14);
+  --g3:rgba(16,185,129,.12);
+  --grid:rgba(18,21,40,.032);
+  --shadow-sm:0 2px 10px -4px rgba(18,21,40,.10);
+  --shadow:0 16px 40px -18px rgba(18,21,40,.20);
+  --shadow-lg:0 28px 70px -30px rgba(18,21,40,.28);
+  --radius:18px;
 }
-html[data-theme="light"]{
-  --bg:#f2f3fa; --bg2:#fafbff;
-  --card:rgba(255,255,255,.66); --card-hi:rgba(255,255,255,.9);
-  --line:rgba(20,20,40,.11); --line-hi:rgba(20,20,40,.22);
-  --fg:#15151f; --fg2:rgba(30,30,50,.64); --fg3:rgba(30,30,50,.42);
-  --g1:rgba(91,207,250,.34); --g2:rgba(245,171,185,.30); --g3:rgba(167,139,250,.22);
-  --shadow:0 18px 46px -26px rgba(45,55,110,.30);
+
+html[data-theme="dark"]{
+  --bg:#08080e;
+  --surface:#12121c;
+  --card:rgba(30,30,50,.62);
+  --card-hi:rgba(44,44,70,.82);
+  --line:rgba(255,255,255,.13);
+  --line-hi:rgba(255,255,255,.28);
+  --fg:#f6f7fb;
+  --fg2:rgba(235,235,245,.72);
+  --fg3:rgba(235,235,245,.46);
+  --accent:#7aa8ff;
+  --accent-soft:rgba(122,168,255,.16);
+  --pink:#f9a8d4;
+  --ok:#34d399;
+  --g1:rgba(91,207,250,.30);
+  --g2:rgba(245,171,185,.24);
+  --g3:rgba(167,139,250,.20);
+  --grid:rgba(255,255,255,.035);
+  --shadow-sm:0 2px 10px -4px rgba(0,0,0,.6);
+  --shadow:0 18px 44px -20px rgba(0,0,0,.85);
+  --shadow-lg:0 30px 80px -34px rgba(0,0,0,.95);
 }
+
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 body{
   margin:0; min-height:100vh; color:var(--fg); background:var(--bg);
-  font:15px/1.65 -apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC",
+  font:15px/1.7 -apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC",
        "HarmonyOS Sans SC","Microsoft YaHei",system-ui,sans-serif;
   -webkit-font-smoothing:antialiased; overflow-x:hidden;
-  transition:background .5s ease,color .5s ease;
+  transition:background .4s ease,color .4s ease;
 }
-.bg{position:fixed;inset:0;z-index:-1;pointer-events:none;
+
+/* ---------- 背景：光晕 + 细网格，让页面不空 ---------- */
+body::before{
+  content:""; position:fixed; inset:0; z-index:-3; pointer-events:none;
   background:
-    radial-gradient(ellipse 62% 52% at 4% 0%,var(--g1) 0%,transparent 72%),
-    radial-gradient(ellipse 62% 52% at 98% 100%,var(--g2) 0%,transparent 72%),
-    radial-gradient(ellipse 44% 36% at 84% 4%,var(--g3) 0%,transparent 72%),
-    linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);
-  transition:background .5s ease;}
-/* 中央压一层暗，让光晕只在四周透出，卡片区更沉、对比更清楚 */
-.bg::after{content:"";position:absolute;inset:0;
-  background:radial-gradient(ellipse 78% 68% at 50% 42%,transparent 0%,var(--bg2) 100%);
-  opacity:.42;}
-html[data-theme="light"] .bg::after{opacity:.16}
-
-.wrap{max-width:960px;margin:0 auto;padding:52px 24px 80px}
-
-.theme-btn{
-  position:fixed;top:20px;right:20px;z-index:20;
-  width:44px;height:44px;border-radius:50%;cursor:pointer;
-  display:grid;place-items:center;color:var(--fg);
-  background:var(--card);border:1px solid var(--line);
-  backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
-  transition:.3s cubic-bezier(.16,1,.3,1);
+    radial-gradient(58% 48% at 6% -4%,var(--g1) 0%,transparent 68%),
+    radial-gradient(52% 42% at 98% 6%,var(--g2) 0%,transparent 68%),
+    radial-gradient(46% 40% at 50% 104%,var(--g3) 0%,transparent 70%),
+    var(--bg);
+  transition:background .4s ease;
 }
-.theme-btn:hover{border-color:var(--line-hi);transform:scale(1.06)}
-.theme-btn:active{transform:scale(.96)}
-.theme-btn svg{width:19px;height:19px}
-
-.profile{margin-bottom:46px}
-.avatar{
-  width:78px;height:78px;border-radius:22px;display:grid;place-items:center;
-  margin-bottom:20px;position:relative;
-  background:linear-gradient(145deg,rgba(91,207,250,.28),rgba(245,171,185,.24));
-  border:1px solid var(--line);
-  box-shadow:0 0 32px -6px var(--g1),0 0 60px -18px var(--g2);
-  font-size:30px;font-weight:800;letter-spacing:-.03em;
-  color:var(--fg);
-  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+body::after{
+  content:""; position:fixed; inset:0; z-index:-2; pointer-events:none;
+  background-image:
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:46px 46px;
+  -webkit-mask-image:radial-gradient(ellipse 78% 62% at 50% 28%,#000 10%,transparent 78%);
+  mask-image:radial-gradient(ellipse 78% 62% at 50% 28%,#000 10%,transparent 78%);
+  transition:background-image .4s ease;
 }
-h1{margin:0 0 9px;font-size:34px;line-height:1.2;font-weight:800;letter-spacing:-.03em}
-.lede{margin:0;font-size:15px;color:var(--fg2);max-width:46ch}
-.pills{display:flex;flex-wrap:wrap;gap:9px;margin-top:19px}
-.pill{
+
+.wrap{max-width:1140px;margin:0 auto;padding:0 26px}
+
+/* ---------- 顶栏 ---------- */
+.nav{
+  position:sticky; top:0; z-index:50;
+  background:color-mix(in srgb,var(--bg) 78%,transparent);
+  backdrop-filter:blur(22px) saturate(180%);
+  -webkit-backdrop-filter:blur(22px) saturate(180%);
+  border-bottom:1px solid var(--line);
+}
+.nav-in{max-width:1140px;margin:0 auto;padding:13px 26px;
+  display:flex;align-items:center;gap:22px}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:inherit;flex:0 0 auto}
+.brand-avatar{
+  width:38px;height:38px;border-radius:11px;display:grid;place-items:center;
+  font-weight:800;font-size:17px;color:#fff;letter-spacing:-.02em;
+  background:linear-gradient(140deg,#3b82f6,#8b5cf6 55%,#ec4899);
+  box-shadow:0 6px 18px -8px rgba(59,130,246,.7);
+}
+.brand-text{display:flex;flex-direction:column;line-height:1.25}
+.brand-text b{font-size:15px;font-weight:650;letter-spacing:-.01em}
+.brand-text span{font-size:11.5px;color:var(--fg3)}
+
+.menu{display:flex;gap:4px;margin-left:8px;flex:1}
+.menu a{
+  padding:7px 14px;border-radius:10px;text-decoration:none;color:var(--fg2);
+  font-size:14px;font-weight:500;transition:.2s;
+}
+.menu a:hover{color:var(--fg);background:var(--accent-soft)}
+.menu a.on{color:var(--accent);background:var(--accent-soft);font-weight:600}
+
+.nav-actions{display:flex;align-items:center;gap:9px;flex:0 0 auto}
+.btn{
   display:inline-flex;align-items:center;gap:6px;
-  font-size:13px;color:var(--fg2);padding:5px 13px;border-radius:999px;
+  padding:8px 15px;border-radius:10px;border:1px solid var(--line);
+  background:var(--surface);color:var(--fg);font-size:13.5px;font-weight:500;
+  text-decoration:none;cursor:pointer;transition:.2s;white-space:nowrap;
+}
+.btn:hover{border-color:var(--line-hi);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.btn-primary{background:var(--accent);border-color:transparent;color:#fff}
+.btn-primary:hover{filter:brightness(1.08)}
+.btn svg{width:15px;height:15px;flex:0 0 auto}
+.icon-btn{width:38px;height:38px;padding:0;justify-content:center;border-radius:11px}
+.icon-btn svg{width:17px;height:17px}
+
+/* ---------- Hero ---------- */
+.hero{padding:64px 0 52px;display:grid;grid-template-columns:1.35fr .95fr;
+  gap:44px;align-items:center}
+.hero-kicker{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:12.5px;color:var(--fg2);padding:5px 13px;border-radius:999px;
+  background:var(--card);border:1px solid var(--line);margin-bottom:18px;
+  backdrop-filter:blur(14px);
+}
+.hero-kicker i{width:6px;height:6px;border-radius:50%;background:var(--ok);
+  display:inline-block;box-shadow:0 0 0 3px rgba(16,185,129,.18)}
+.hero h1{
+  margin:0 0 16px;font-size:clamp(32px,4vw,46px);line-height:1.15;
+  font-weight:800;letter-spacing:-.035em;
+}
+.hero h1 em{
+  font-style:normal;
+  background:linear-gradient(100deg,#2563eb,#8b5cf6 45%,#ec4899);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero p{margin:0 0 26px;font-size:16px;color:var(--fg2);max-width:44ch}
+.hero-btns{display:flex;gap:11px;flex-wrap:wrap}
+.hero-btns .btn{padding:11px 20px;font-size:14.5px;border-radius:12px}
+
+/* 名片卡 */
+.idcard{
+  padding:26px;border-radius:22px;position:relative;overflow:hidden;
   background:var(--card);border:1px solid var(--line);
-  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  backdrop-filter:blur(28px) saturate(180%);
+  -webkit-backdrop-filter:blur(28px) saturate(180%);
+  box-shadow:var(--shadow);
 }
-.pill b{color:var(--fg);font-weight:600}
-.dot{width:6px;height:6px;border-radius:50%;background:#34c759;flex:0 0 auto}
-
-.grid{display:grid;gap:15px;grid-template-columns:repeat(auto-fill,minmax(296px,1fr))}
-
-.card{
-  display:flex;gap:15px;padding:20px;text-decoration:none;color:inherit;
-  border-radius:20px;border:1px solid var(--line);
-  background:var(--card);
-  backdrop-filter:blur(30px) saturate(180%);
-  -webkit-backdrop-filter:blur(30px) saturate(180%);
-  box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.07);
-  transition:transform .34s cubic-bezier(.16,1,.3,1),
-             border-color .34s ease, background .34s ease;
+.idcard::before{
+  content:"";position:absolute;top:-40%;right:-30%;width:220px;height:220px;
+  border-radius:50%;background:radial-gradient(circle,var(--g1),transparent 70%);
 }
-html[data-theme="light"] .card{box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.9)}
-.card:hover{transform:translateY(-4px);border-color:var(--line-hi);background:var(--card-hi)}
-.card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-.card:active{transform:translateY(-1px)}
+.idcard-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;position:relative}
+.idcard-face{
+  width:56px;height:56px;border-radius:16px;display:grid;place-items:center;
+  font-size:24px;font-weight:800;color:#fff;
+  background:linear-gradient(140deg,#3b82f6,#8b5cf6 55%,#ec4899);
+  box-shadow:0 10px 26px -12px rgba(99,102,241,.85);
+}
+.idcard-head b{display:block;font-size:16px;font-weight:650}
+.idcard-head span{font-size:12.5px;color:var(--fg3)}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;position:relative}
+.stat{
+  padding:13px 15px;border-radius:13px;
+  background:color-mix(in srgb,var(--surface) 70%,transparent);
+  border:1px solid var(--line);
+}
+.stat b{display:block;font-size:22px;font-weight:750;letter-spacing:-.03em;line-height:1.2}
+.stat span{font-size:11.5px;color:var(--fg3)}
+.idcard-foot{
+  margin-top:16px;padding-top:14px;border-top:1px solid var(--line);
+  font-size:12.5px;color:var(--fg3);display:flex;align-items:center;gap:7px;
+  position:relative;
+}
 
-.ic{
+/* ---------- 区块标题 ---------- */
+.sec{padding:20px 0 8px}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;
+  gap:18px;margin-bottom:22px;flex-wrap:wrap}
+.sec-head h2{
+  margin:0;font-size:22px;font-weight:750;letter-spacing:-.025em;
+  display:flex;align-items:center;gap:10px;
+}
+.sec-head h2::before{
+  content:"";width:4px;height:19px;border-radius:2px;
+  background:linear-gradient(180deg,#2563eb,#ec4899);
+}
+.sec-head p{margin:5px 0 0;font-size:13.5px;color:var(--fg3)}
+.sec-more{font-size:13.5px;color:var(--accent);text-decoration:none;font-weight:500;
+  display:inline-flex;align-items:center;gap:4px}
+.sec-more:hover{gap:8px}
+
+/* ---------- 应用卡片 ---------- */
+.apps{display:grid;gap:15px;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));
+  margin-bottom:18px}
+.app{
+  display:flex;flex-direction:column;gap:0;padding:20px;text-decoration:none;color:inherit;
+  border-radius:var(--radius);border:1px solid var(--line);background:var(--card);
+  backdrop-filter:blur(22px) saturate(180%);
+  -webkit-backdrop-filter:blur(22px) saturate(180%);
+  box-shadow:var(--shadow-sm);
+  transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s,border-color .3s,background .3s;
+}
+.app:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--line-hi);
+  background:var(--card-hi)}
+.app:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.app-top{display:flex;align-items:center;gap:13px;margin-bottom:13px;flex:0 0 auto}
+.app-body{display:flex;flex-direction:column;min-width:0}
+.app-ic{
   flex:0 0 44px;height:44px;border-radius:13px;display:grid;place-items:center;
   color:var(--accent-d);background:var(--accent-soft-d);
-  border:1px solid color-mix(in srgb,var(--accent-d) 20%,transparent);
+  border:1px solid color-mix(in srgb,var(--accent-d) 18%,transparent);
 }
-.ic svg{width:22px;height:22px}
-html[data-theme="light"] .ic{
+html:not([data-theme="dark"]) .app-ic{
   color:var(--accent);background:var(--accent-soft);
-  border-color:color-mix(in srgb,var(--accent) 20%,transparent);
+  border-color:color-mix(in srgb,var(--accent) 18%,transparent);
+}
+.app-ic svg{width:21px;height:21px}
+.app-t{font-weight:660;font-size:16px;letter-spacing:-.012em;line-height:1.3}
+.app-sub{font-size:12.5px;font-weight:500;margin-top:2px;
+  color:var(--accent-d)}
+html:not([data-theme="dark"]) .app-sub{color:var(--accent)}
+.app-d{font-size:13px;color:var(--fg2);line-height:1.62;flex:1;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.app-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+
+/* '更多应用'占位卡：把网格最后一行的空位填满 */
+.app-more{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:9px;padding:20px;text-align:center;text-decoration:none;color:inherit;
+  border-radius:var(--radius);border:1px dashed var(--line-hi);
+  background:color-mix(in srgb,var(--surface) 42%,transparent);
+  transition:.26s;
+}
+.app-more:hover{border-color:var(--accent);background:var(--accent-soft);transform:translateY(-3px)}
+.app-more-ic{
+  width:42px;height:42px;border-radius:12px;display:grid;place-items:center;
+  background:var(--accent-soft);color:var(--accent);
+}
+.app-more-ic svg{width:20px;height:20px}
+.app-more b{font-size:14.5px;font-weight:600}
+.app-more span{font-size:12px;color:var(--fg3);line-height:1.5}
+.tag{
+  font-size:11px;color:var(--fg3);border:1px solid var(--line);
+  border-radius:999px;padding:1.5px 9px;white-space:nowrap;
+  background:color-mix(in srgb,var(--surface) 60%,transparent);
 }
 
-.body{min-width:0;display:flex;flex-direction:column;gap:4px}
-.t{font-weight:650;font-size:16px;letter-spacing:-.01em}
-.sub{font-size:12.5px;color:var(--accent-d);font-weight:500}
-html[data-theme="light"] .sub{color:var(--accent)}
-.d{font-size:13px;color:var(--fg2);line-height:1.58;
-   display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
-.tag{font-size:11px;color:var(--fg3);border:1px solid var(--line);
-     border-radius:999px;padding:1px 9px;white-space:nowrap}
+/* ---------- 文章列表 ---------- */
+/* 首页用两列，避免只有两三篇时右侧大片空白 */
+.posts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+.post{
+  display:flex;flex-direction:column;gap:9px;
+  padding:19px 20px;text-decoration:none;color:inherit;border-radius:14px;
+  border:1px solid transparent;transition:.24s;
+}
+.post:hover{background:var(--card);border-color:var(--line);box-shadow:var(--shadow-sm)}
+.post-date{
+  font-size:12px;color:var(--fg3);
+  font-variant-numeric:tabular-nums;letter-spacing:.01em;
+}
+.post-body{min-width:0;display:flex;flex-direction:column;gap:6px}
+.post-t{font-size:15.5px;font-weight:640;letter-spacing:-.015em;line-height:1.42}
+.post-s{font-size:13px;color:var(--fg2);line-height:1.6;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.post-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}
+.post-arrow{display:none}
 
-footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--line);
-       color:var(--fg3);font-size:12.5px;line-height:1.75}
-footer a{color:var(--fg2);text-decoration:none;border-bottom:1px solid var(--line)}
-footer a:hover{color:var(--fg);border-color:var(--line-hi)}
+/* 文章卡片式（文章列表页用） */
+.post-cards{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(330px,1fr))}
+.pcard{
+  display:flex;flex-direction:column;padding:24px;text-decoration:none;color:inherit;
+  border-radius:var(--radius);border:1px solid var(--line);background:var(--card);
+  backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);
+  box-shadow:var(--shadow-sm);transition:.3s cubic-bezier(.16,1,.3,1);
+}
+.pcard:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--line-hi);
+  background:var(--card-hi)}
+.pcard-date{font-size:12px;color:var(--fg3);margin-bottom:10px;font-variant-numeric:tabular-nums}
+.pcard-t{font-size:17.5px;font-weight:660;letter-spacing:-.018em;line-height:1.38;margin-bottom:9px}
+.pcard-s{font-size:13.5px;color:var(--fg2);line-height:1.65;flex:1;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.pcard-foot{display:flex;align-items:center;justify-content:space-between;
+  margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.pcard-foot span{font-size:12px;color:var(--fg3)}
 
+/* ---------- 关于 ---------- */
+.about{
+  margin:44px 0 0;padding:34px;border-radius:22px;
+  background:var(--card);border:1px solid var(--line);
+  backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);
+  box-shadow:var(--shadow-sm);
+  display:grid;grid-template-columns:1.4fr 1fr;gap:36px;
+}
+.about h3{margin:0 0 12px;font-size:18px;font-weight:700;letter-spacing:-.02em}
+.about p{margin:0 0 12px;font-size:14px;color:var(--fg2);line-height:1.75}
+.about-list{display:flex;flex-direction:column;gap:11px}
+.about-item{display:flex;gap:11px;font-size:13.5px;color:var(--fg2);line-height:1.6}
+.about-item i{
+  flex:0 0 22px;height:22px;border-radius:7px;display:grid;place-items:center;
+  background:var(--accent-soft);color:var(--accent);font-size:12px;font-style:normal;
+  font-weight:700;
+}
+
+/* ---------- 页脚 ---------- */
+.foot{
+  margin-top:56px;padding:34px 0 44px;border-top:1px solid var(--line);
+}
+.foot-in{max-width:1140px;margin:0 auto;padding:0 26px;
+  display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+.foot-l{font-size:12.5px;color:var(--fg3);line-height:1.8}
+.foot-r{display:flex;gap:16px;flex-wrap:wrap}
+.foot-r a{font-size:13px;color:var(--fg2);text-decoration:none}
+.foot-r a:hover{color:var(--accent)}
+
+/* ---------- 文章详情页 ---------- */
+.article{max-width:740px;margin:0 auto;padding:52px 0 40px}
+.article-back{font-size:13px;color:var(--fg3);text-decoration:none;
+  display:inline-flex;align-items:center;gap:5px;margin-bottom:22px}
+.article-back:hover{color:var(--accent)}
+.article h1{margin:0 0 16px;font-size:clamp(27px,3.4vw,36px);line-height:1.25;
+  font-weight:780;letter-spacing:-.03em}
+.article-meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  padding-bottom:26px;margin-bottom:32px;border-bottom:1px solid var(--line);
+  font-size:12.5px;color:var(--fg3)}
+.article-body{font-size:15.5px;line-height:1.85;color:var(--fg)}
+.article-body h2{margin:38px 0 14px;font-size:21px;font-weight:720;letter-spacing:-.02em}
+.article-body h3{margin:30px 0 11px;font-size:17.5px;font-weight:680}
+.article-body h4{margin:24px 0 9px;font-size:15.5px;font-weight:660}
+.article-body p{margin:0 0 17px}
+.article-body ul,.article-body ol{margin:0 0 17px;padding-left:22px}
+.article-body li{margin-bottom:7px}
+.article-body a{color:var(--accent);text-decoration:none;border-bottom:1px solid
+  color-mix(in srgb,var(--accent) 35%,transparent)}
+.article-body a:hover{border-bottom-color:var(--accent)}
+.article-body code{
+  font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  font-size:.89em;padding:2px 6px;border-radius:6px;
+  background:color-mix(in srgb,var(--fg) 7%,transparent);
+}
+.article-body pre{
+  margin:0 0 20px;padding:16px 18px;border-radius:12px;overflow-x:auto;
+  background:color-mix(in srgb,var(--fg) 5%,transparent);
+  border:1px solid var(--line);
+}
+.article-body pre code{padding:0;background:none;font-size:13px;line-height:1.7}
+.article-body blockquote{
+  margin:0 0 18px;padding:14px 18px;border-left:3px solid var(--accent);
+  border-radius:0 10px 10px 0;background:var(--accent-soft);
+}
+.article-body blockquote p{margin:0;font-size:14.5px;color:var(--fg2)}
+.article-body hr{margin:32px 0;border:0;border-top:1px solid var(--line)}
+.article-body img{max-width:100%;border-radius:12px;margin:6px 0 18px}
+.tbl{overflow-x:auto;margin:0 0 20px}
+.tbl table{border-collapse:collapse;width:100%;font-size:13.5px}
+.tbl th,.tbl td{padding:9px 13px;border:1px solid var(--line);text-align:left}
+.tbl th{background:color-mix(in srgb,var(--fg) 4%,transparent);font-weight:640;font-size:13px}
+.article-foot{
+  margin-top:44px;padding-top:22px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  font-size:13px;color:var(--fg3);
+}
+
+/* ---------- 空状态 ---------- */
+.empty{
+  padding:56px 20px;text-align:center;border-radius:var(--radius);
+  border:1px dashed var(--line-hi);color:var(--fg3);font-size:14px;
+  background:color-mix(in srgb,var(--surface) 50%,transparent);
+}
+.empty b{display:block;font-size:15px;color:var(--fg2);margin-bottom:6px;font-weight:600}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;gap:34px;padding:44px 0 38px}
+  .about{grid-template-columns:1fr;gap:26px}
+  .menu{display:none}
+  .posts{grid-template-columns:1fr}
+}
 @media (max-width:640px){
-  .wrap{padding:38px 18px 60px}
-  h1{font-size:26px}
-  .avatar{width:66px;height:66px;border-radius:19px;font-size:25px}
-  .grid{grid-template-columns:1fr}
-  .theme-btn{top:14px;right:14px;width:40px;height:40px}
+  .wrap,.nav-in,.foot-in{padding-left:17px;padding-right:17px}
+  .hero{padding:34px 0 30px}
+  .hero h1{font-size:29px}
+  .apps{grid-template-columns:1fr}
+  .post{padding:16px 14px}
+  .brand-text span{display:none}
+  .nav-actions .btn span{display:none}
+  .nav-actions .btn{padding:8px 11px}
+  .article{padding:34px 0 30px}
+  .article-body{font-size:15px}
+  .foot-in{flex-direction:column;align-items:flex-start;gap:14px}
 }
 @media (prefers-reduced-motion:reduce){
   *{transition:none!important;animation:none!important}
+  html{scroll-behavior:auto}
 }
+
 </style>
 </head>
 <body>
-<div class="bg"></div>
 
-<button class="theme-btn" id="themeBtn" aria-label="切换深浅色" title="切换深浅色">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
-       stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="9"></circle>
-    <path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor" stroke="none"></path>
-  </svg>
-</button>
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="index.html">
+      <span class="brand-avatar">A</span>
+      <span class="brand-text">
+        <b>应用集</b>
+        <span>7 个应用 · 2 篇文章</span>
+      </span>
+    </a>
+    <nav class="menu">
+      <a href="index.html" class="on">应用</a>
+      <a href="posts/">文章</a>
+      <a href="index.html#about">关于</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn" href="https://github.com/azlove2021/azlove2021.github.io" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49v-1.7c-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.5-1.11-1.5-.91-.63.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.34 1.12 2.91.86.09-.66.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05a9.4 9.4 0 0 1 5 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.93-2.35 4.8-4.58 5.05.36.32.68.94.68 1.9v2.82c0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z"/></svg>
+        <span>GitHub</span>
+      </a>
+      <button class="btn icon-btn" id="themeBtn" aria-label="切换主题" title="切换白天 / 夜间">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+             stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor" stroke="none"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
 
 <main class="wrap">
-  <header class="profile">
-    <div class="avatar" aria-hidden="true">A</div>
-    <h1>应用集</h1>
-    <p class="lede">纯静态网页应用合集。点开即用，断网也能跑；数据都留在你自己的浏览器里，不上传任何服务器。</p>
-    <div class="pills">
-      <span class="pill"><span class="dot"></span><b>7</b> 个应用</span>
-      <span class="pill">更新于 <b>2026-10-28</b></span>
-      <span class="pill">零外链 · 零追踪 · 免注册</span>
+
+  <section class="hero">
+    <div>
+      <span class="hero-kicker"><i></i>持续更新中 · 最后更新 2026-10-28</span>
+      <h1>把课件做成<br><em>一个文件</em>的人</h1>
+      <p>离线网页应用与教学随笔。每个应用都是单个 HTML，双击就用、断网也能跑，数据全留在你自己的浏览器里。</p>
+      <div class="hero-btns">
+        <a class="btn btn-primary" href="#apps">
+          浏览应用
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a class="btn" href="posts/">
+          读文章
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        </a>
+      </div>
     </div>
-  </header>
 
-  <nav class="grid">
-    <a class="card" href="apps/photosynthesis/index.html" style="--accent:#1D9E75;--accent-soft:#E2F2ED;--accent-d:#BBE2D6;--accent-soft-d:#113330">
-      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.5 15.5 6 22c6.5 1 12-3 13-9 .4-2.4-.2-4-2-5Z"/><path d="M9 22c1.5-4 4-7.5 8-10"/></svg></span>
-      <span class="body">
-        <span class="t">光合作用与呼吸作用</span>
-        <span class="sub">总光合 / 净光合 · 交互式教学演示</span>
-        <span class="d">一株植物上的交互式教学演示。把总光合、呼吸、净光合三条流量放到同一株植物、同一时刻、同一个密闭同化箱里，用可测量的方式讲清楚「净光合是测出来的，总光合是推出来的」。</span>
-        <span class="tags"><span class="tag">高中生物</span><span class="tag">3D</span><span class="tag">交互</span><span class="tag">公开课</span></span>
-      </span>
-    </a>
-    <a class="card" href="apps/beer-fermentation/index.html" style="--accent:#BA7517;--accent-soft:#F6EDE1;--accent-d:#EAD6B9;--accent-soft-d:#3A2818">
-      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3h4M11 3v6l-5.5 9.5A2 2 0 0 0 7.2 21h9.6a2 2 0 0 0 1.7-2.5L13 9V3"/><path d="M8 15h8"/></svg></span>
-      <span class="body">
-        <span class="t">啤酒发酵工厂</span>
-        <span class="sub">3D 生产流程课件</span>
-        <span class="d">以等距 3D 场景讲清麦芽糖化、煮沸、发酵、过滤、灌装的完整工艺链，每一步可暂停、可剖切、可看实时数据。</span>
-        <span class="tags"><span class="tag">3D</span><span class="tag">工艺流程</span><span class="tag">课件</span></span>
-      </span>
-    </a>
-    <a class="card" href="apps/teacher-workbench/index.html" style="--accent:#378ADD;--accent-soft:#E5F0FB;--accent-d:#C3DCF5;--accent-soft-d:#182E4B">
-      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M12 17v4M8 21h8"/></svg></span>
-      <span class="body">
-        <span class="t">班主任工作台</span>
-        <span class="sub">数据不出本机的班级管理台</span>
-        <span class="d">23 个模块覆盖学生、成绩、座位、课表、班委、班费、公告、家长联系、谈话、违纪、值日与安全。数据全部存在浏览器本地，不上传任何服务器。</span>
-        <span class="tags"><span class="tag">班级管理</span><span class="tag">单文件应用</span><span class="tag">离线可用</span></span>
-      </span>
-    </a>
-    <a class="card" href="apps/score-query/index.html" style="--accent:#7F77DD;--accent-soft:#EEEDFB;--accent-d:#D9D6F5;--accent-soft-d:#2B294B">
-      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6"/><path d="m20 20-3.5-3.5"/></svg></span>
-      <span class="body">
-        <span class="t">查分系统</span>
-        <span class="sub">成绩自助查询</span>
-        <span class="d">输入姓名与考号即可自助查分，含各科成绩与班级排名。数据内嵌在页面内，查询全程在本地完成，不上传服务器。</span>
-        <span class="tags"><span class="tag">查分</span><span class="tag">自助服务</span></span>
-      </span>
-    </a>
-    <a class="card" href="apps/gaokao-subject/index.html" style="--accent:#D4537E;--accent-soft:#F9E9EE;--accent-d:#F2CBD8;--accent-soft-d:#411F33">
-      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5Z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v3H6.5A2.5 2.5 0 0 1 4 20.5Z"/></svg></span>
-      <span class="body">
-        <span class="t">贵州新高考选科指南</span>
-        <span class="sub">3+1+2 选科 · 家长版</span>
-        <span class="d">面向贵州新高考 3+1+2 的选科指南：专业覆盖、学科组合优势、可报院校范围逐条说清楚，附可打印长图。</span>
-        <span class="tags"><span class="tag">高考</span><span class="tag">选科</span><span class="tag">家长向</span></span>
-      </span>
-    </a>
-    <a class="card" href="apps/iso-city/index.html" style="--accent:#5F5E5A;--accent-soft:#EAEAEA;--accent-d:#CFCFCE;--accent-soft-d:#222229">
-      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V9l4-3v15M14 21V11l4-3v13M5 13h4M14 15h4"/></svg></span>
-      <span class="body">
-        <span class="t">ISO-CITY 98</span>
-        <span class="sub">复古等距城市建造沙盒</span>
-        <span class="d">1998 年 DOS 风格等距像素城市建造沙盒，完整预渲染单文件，浏览器直接开玩，支持存档与回放。</span>
-        <span class="tags"><span class="tag">游戏</span><span class="tag">像素风</span><span class="tag">等距</span></span>
-      </span>
-    </a>
-    <a class="card" href="apps/dsh-replica/index.html" style="--accent:#0F6E56;--accent-soft:#E0ECE9;--accent-d:#B7D4CC;--accent-soft-d:#0E2628">
-      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 17-5-5 5-5M15 7l5 5-5 5"/></svg></span>
-      <span class="body">
-        <span class="t">DeepSeek Harness 复刻</span>
-        <span class="sub">DSH 产品形态网页复刻</span>
-        <span class="d">零依赖单文件网页，复刻 DeepSeek Harness 的产品形态与交互逻辑，用于研究与演示。</span>
-        <span class="tags"><span class="tag">复刻</span><span class="tag">研究</span><span class="tag">单文件</span></span>
-      </span>
-    </a>
-  </nav>
+    <aside class="idcard">
+      <div class="idcard-head">
+        <div class="idcard-face">A</div>
+        <div>
+          <b>azlove</b>
+          <span>高中生物教师 · 爱折腾工具</span>
+        </div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat"><b>7</b><span>个离线应用</span></div>
+        <div class="stat"><b>2</b><span>篇文章</span></div>
+        <div class="stat"><b>100%</b><span>零外链</span></div>
+        <div class="stat"><b>0</b><span>个追踪脚本</span></div>
+      </div>
+      <div class="idcard-foot">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>
+        免注册 · 免安装 · 数据不出本机
+      </div>
+    </aside>
+  </section>
 
-  <footer>
-    <div>共 7 个应用 · 生成于 2026-10-28</div>
-    <div style="margin-top:6px">所有应用都是单个 HTML 文件，数据保存在访问者浏览器本地（localStorage），换浏览器或清缓存即重置。</div>
-    <div style="margin-top:6px">源码在 <a href="https://github.com/azlove2021/azlove2021.github.io" rel="noopener">GitHub</a>。</div>
-  </footer>
+  <section class="sec" id="apps">
+    <div class="sec-head">
+      <div>
+        <h2>应用</h2>
+        <p>点开就能用，不需要安装任何东西</p>
+      </div>
+      <a class="sec-more" href="posts/">
+        看文章
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </a>
+    </div>
+    <div class="apps">
+      <a class="app" href="apps/photosynthesis/index.html" style="--accent:#1D9E75;--accent-soft:#E8F5F1;--accent-d:#B2DED0;--accent-soft-d:#0D2C27">
+        <div class="app-top">
+          <span class="app-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.5 15.5 6 22c6.5 1 12-3 13-9 .4-2.4-.2-4-2-5Z"/><path d="M9 22c1.5-4 4-7.5 8-10"/></svg></span>
+          <div>
+            <div class="app-t">光合作用与呼吸作用</div>
+            <div class="app-sub">总光合 / 净光合 · 交互式教学演示</div>
+          </div>
+        </div>
+        <div class="app-d">一株植物上的交互式教学演示。把总光合、呼吸、净光合三条流量放到同一株植物、同一时刻、同一个密闭同化箱里，用可测量的方式讲清楚「净光合是测出来的，总光合是推出来的」。</div>
+        <div class="app-tags"><span class="tag">高中生物</span><span class="tag">3D</span><span class="tag">交互</span><span class="tag">公开课</span></div>
+      </a>
+      <a class="app" href="apps/beer-fermentation/index.html" style="--accent:#BA7517;--accent-soft:#F8F1E8;--accent-d:#E8D0B0;--accent-soft-d:#332210">
+        <div class="app-top">
+          <span class="app-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3h4M11 3v6l-5.5 9.5A2 2 0 0 0 7.2 21h9.6a2 2 0 0 0 1.7-2.5L13 9V3"/><path d="M8 15h8"/></svg></span>
+          <div>
+            <div class="app-t">啤酒发酵工厂</div>
+            <div class="app-sub">3D 生产流程课件</div>
+          </div>
+        </div>
+        <div class="app-d">以等距 3D 场景讲清麦芽糖化、煮沸、发酵、过滤、灌装的完整工艺链，每一步可暂停、可剖切、可看实时数据。</div>
+        <div class="app-tags"><span class="tag">3D</span><span class="tag">工艺流程</span><span class="tag">课件</span></div>
+      </a>
+      <a class="app" href="apps/teacher-workbench/index.html" style="--accent:#378ADD;--accent-soft:#EBF3FC;--accent-d:#BBD7F3;--accent-soft-d:#132740">
+        <div class="app-top">
+          <span class="app-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M12 17v4M8 21h8"/></svg></span>
+          <div>
+            <div class="app-t">班主任工作台</div>
+            <div class="app-sub">数据不出本机的班级管理台</div>
+          </div>
+        </div>
+        <div class="app-d">23 个模块覆盖学生、成绩、座位、课表、班委、班费、公告、家长联系、谈话、违纪、值日与安全。数据全部存在浏览器本地，不上传任何服务器。</div>
+        <div class="app-tags"><span class="tag">班级管理</span><span class="tag">单文件应用</span><span class="tag">离线可用</span></div>
+      </a>
+      <a class="app" href="apps/score-query/index.html" style="--accent:#7F77DD;--accent-soft:#F2F1FC;--accent-d:#D3D1F3;--accent-soft-d:#252340">
+        <div class="app-top">
+          <span class="app-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6"/><path d="m20 20-3.5-3.5"/></svg></span>
+          <div>
+            <div class="app-t">查分系统</div>
+            <div class="app-sub">成绩自助查询</div>
+          </div>
+        </div>
+        <div class="app-d">输入姓名与考号即可自助查分，含各科成绩与班级排名。数据内嵌在页面内，查询全程在本地完成，不上传服务器。</div>
+        <div class="app-tags"><span class="tag">查分</span><span class="tag">自助服务</span></div>
+      </a>
+      <a class="app" href="apps/gaokao-subject/index.html" style="--accent:#D4537E;--accent-soft:#FBEEF2;--accent-d:#F0C5D3;--accent-soft-d:#391A29">
+        <div class="app-top">
+          <span class="app-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5Z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v3H6.5A2.5 2.5 0 0 1 4 20.5Z"/></svg></span>
+          <div>
+            <div class="app-t">贵州新高考选科指南</div>
+            <div class="app-sub">3+1+2 选科 · 家长版</div>
+          </div>
+        </div>
+        <div class="app-d">面向贵州新高考 3+1+2 的选科指南：专业覆盖、学科组合优势、可报院校范围逐条说清楚，附可打印长图。</div>
+        <div class="app-tags"><span class="tag">高考</span><span class="tag">选科</span><span class="tag">家长向</span></div>
+      </a>
+      <a class="app" href="apps/iso-city/index.html" style="--accent:#5F5E5A;--accent-soft:#EFEFEE;--accent-d:#C9C8C7;--accent-soft-d:#1D1D20">
+        <div class="app-top">
+          <span class="app-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V9l4-3v15M14 21V11l4-3v13M5 13h4M14 15h4"/></svg></span>
+          <div>
+            <div class="app-t">ISO-CITY 98</div>
+            <div class="app-sub">复古等距城市建造沙盒</div>
+          </div>
+        </div>
+        <div class="app-d">1998 年 DOS 风格等距像素城市建造沙盒，完整预渲染单文件，浏览器直接开玩，支持存档与回放。</div>
+        <div class="app-tags"><span class="tag">游戏</span><span class="tag">像素风</span><span class="tag">等距</span></div>
+      </a>
+      <a class="app" href="apps/dsh-replica/index.html" style="--accent:#0F6E56;--accent-soft:#E7F0EE;--accent-d:#ADCEC6;--accent-soft-d:#0A201F">
+        <div class="app-top">
+          <span class="app-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 17-5-5 5-5M15 7l5 5-5 5"/></svg></span>
+          <div>
+            <div class="app-t">DeepSeek Harness 复刻</div>
+            <div class="app-sub">DSH 产品形态网页复刻</div>
+          </div>
+        </div>
+        <div class="app-d">零依赖单文件网页，复刻 DeepSeek Harness 的产品形态与交互逻辑，用于研究与演示。</div>
+        <div class="app-tags"><span class="tag">复刻</span><span class="tag">研究</span><span class="tag">单文件</span></div>
+      </a>
+      <a class="app-more" href="https://github.com/azlove2021/azlove2021.github.io" target="_blank" rel="noopener">
+        <span class="app-more-ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+        </span>
+        <b>还有更多</b>
+        <span>源码都在 GitHub 上，<br>新的应用会陆续加进来</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec" id="posts" style="margin-top:44px">
+    <div class="sec-head">
+      <div>
+        <h2>最近文章</h2>
+        <p>教学设计的思考，以及一些技术上的取舍</p>
+      </div>
+      <a class="sec-more" href="posts/">
+        全部文章
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </a>
+    </div>
+    <div class="posts">
+      <a class="post" href="posts/photosynthesis-design/">
+        <span class="post-date">2026-10-28</span>
+        <span class="post-body">
+          <span class="post-t">「净光合是测出来的，总光合是推出来的」</span>
+          <span class="post-s">学生最常混的三个点：净光合等于光合强度、白天只光合晚上才呼吸、总光合能直接测。课件就是围着这三个坎设计的。</span>
+          <span class="post-meta"><span class="tag">高中生物</span><span class="tag">教学设计</span><span class="tag">光合作用</span></span>
+        </span>
+        <span class="post-arrow">→</span>
+      </a>
+      <a class="post" href="posts/why-single-file/">
+        <span class="post-date">2026-10-26</span>
+        <span class="post-body">
+          <span class="post-t">为什么我把课件做成单文件 HTML</span>
+          <span class="post-s">做一个能双击打开、断网可跑、拷进 U 盘就能带走的课件，比做一个&quot;功能更全&quot;的在线平台更实用。</span>
+          <span class="post-meta"><span class="tag">教学工具</span><span class="tag">离线优先</span><span class="tag">技术随笔</span></span>
+        </span>
+        <span class="post-arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="about" id="about">
+    <div>
+      <h3>关于这个站</h3>
+      <p>我是高中生物老师，平时会给课堂做一些交互式的演示工具。做久了发现，最实用的形态不是在线平台，而是<strong>一个能双击打开的 HTML 文件</strong>——教室网络不稳定，投影电脑也不一定装了什么软件。</p>
+      <p>这里放的就是这些工具，以及做它们时的一些想法。</p>
+    </div>
+    <div class="about-list">
+      <div class="about-item"><i>1</i><span>所有应用都是单文件，断网可用，可拷进 U 盘带走</span></div>
+      <div class="about-item"><i>2</i><span>数据存在浏览器本地（localStorage），不上传任何服务器</span></div>
+      <div class="about-item"><i>3</i><span>没有账号系统，没有统计脚本，没有广告</span></div>
+      <div class="about-item"><i>4</i><span>源码在 GitHub 上，欢迎提意见</span></div>
+    </div>
+  </section>
+
 </main>
 
+<footer class="foot">
+  <div class="foot-in">
+    <div class="foot-l">
+      共 7 个应用 · 生成于 2026-10-28<br>
+      所有应用都是单个 HTML 文件，数据保存在浏览器本地，换设备或清缓存即重置。
+    </div>
+    <div class="foot-r">
+      <a href="index.html">应用</a>
+      <a href="posts/">文章</a>
+      <a href="index.html#about">关于</a>
+      <a href="https://github.com/azlove2021/azlove2021.github.io" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</footer>
+
 <script>
-(function () {
-  var KEY = 'portal-theme';
-  var root = document.documentElement;
-  var btn = document.getElementById('themeBtn');
-
-  function apply(t) {
-    root.setAttribute('data-theme', t);
-    var m = document.querySelector('meta[name="theme-color"]');
-    if (m) m.setAttribute('content', t === 'light' ? '#f2f3fa' : '#0d0d18');
+(function(){
+  var KEY='portal-theme', root=document.documentElement;
+  var btn=document.getElementById('themeBtn');
+  function apply(t){
+    root.setAttribute('data-theme',t);
+    var m=document.querySelector('meta[name="theme-color"]');
+    if(m) m.setAttribute('content', t==='dark' ? '#08080e' : '#f5f6fb');
+    if(btn) btn.setAttribute('aria-label', t==='dark' ? '切换到白天模式' : '切换到夜间模式');
   }
-
-  var saved = null;
-  try { saved = localStorage.getItem(KEY); } catch (e) {}
-  // 只有用户手动切过才覆盖。没切过就保持 HTML 上的初始值（默认 dark）。
-  // 这里不能无条件 apply('dark')，否则会把模板预设的浅色也一并盖掉。
-  if (saved === 'light' || saved === 'dark') apply(saved);
-
-  btn.addEventListener('click', function () {
-    var next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  var saved=null;
+  try{ saved=localStorage.getItem(KEY); }catch(e){}
+  if(saved==='light'||saved==='dark') apply(saved);
+  if(btn) btn.addEventListener('click',function(){
+    var next=root.getAttribute('data-theme')==='dark'?'light':'dark';
     apply(next);
-    try { localStorage.setItem(KEY, next); } catch (e) {}
+    try{ localStorage.setItem(KEY,next); }catch(e){}
   });
 })();
 </script>
