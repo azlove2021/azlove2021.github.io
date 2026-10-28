@@ -13,7 +13,7 @@
   --card:rgba(30,30,50,.62); --card-hi:rgba(42,42,68,.78);
   --line:rgba(255,255,255,.13); --line-hi:rgba(255,255,255,.26);
   --fg:#f7f7fb; --fg2:rgba(235,235,245,.70); --fg3:rgba(235,235,245,.44);
-  --g1:rgba(91,207,250,.20); --g2:rgba(245,171,185,.16); --g3:rgba(167,139,250,.12);
+  --g1:rgba(91,207,250,.34); --g2:rgba(245,171,185,.28); --g3:rgba(167,139,250,.20);
   --shadow:0 20px 50px -22px rgba(0,0,0,.9);
 }
 html[data-theme="light"]{
@@ -35,16 +35,16 @@ body{
 }
 .bg{position:fixed;inset:0;z-index:-1;pointer-events:none;
   background:
-    radial-gradient(ellipse 55% 45% at 6% 2%,var(--g1) 0%,transparent 70%),
-    radial-gradient(ellipse 55% 45% at 96% 96%,var(--g2) 0%,transparent 70%),
-    radial-gradient(ellipse 40% 32% at 82% 6%,var(--g3) 0%,transparent 70%),
+    radial-gradient(ellipse 62% 52% at 4% 0%,var(--g1) 0%,transparent 72%),
+    radial-gradient(ellipse 62% 52% at 98% 100%,var(--g2) 0%,transparent 72%),
+    radial-gradient(ellipse 44% 36% at 84% 4%,var(--g3) 0%,transparent 72%),
     linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);
   transition:background .5s ease;}
 /* 中央压一层暗，让光晕只在四周透出，卡片区更沉、对比更清楚 */
 .bg::after{content:"";position:absolute;inset:0;
-  background:radial-gradient(ellipse 70% 60% at 50% 45%,transparent 0%,var(--bg2) 100%);
-  opacity:.55;}
-html[data-theme="light"] .bg::after{opacity:.18}
+  background:radial-gradient(ellipse 78% 68% at 50% 42%,transparent 0%,var(--bg2) 100%);
+  opacity:.42;}
+html[data-theme="light"] .bg::after{opacity:.16}
 
 .wrap{max-width:960px;margin:0 auto;padding:52px 24px 80px}
 
@@ -91,10 +91,11 @@ h1{margin:0 0 9px;font-size:34px;line-height:1.2;font-weight:800;letter-spacing:
   background:var(--card);
   backdrop-filter:blur(30px) saturate(180%);
   -webkit-backdrop-filter:blur(30px) saturate(180%);
-  box-shadow:var(--shadow);
+  box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.07);
   transition:transform .34s cubic-bezier(.16,1,.3,1),
              border-color .34s ease, background .34s ease;
 }
+html[data-theme="light"] .card{box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.9)}
 .card:hover{transform:translateY(-4px);border-color:var(--line-hi);background:var(--card-hi)}
 .card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .card:active{transform:translateY(-1px)}
