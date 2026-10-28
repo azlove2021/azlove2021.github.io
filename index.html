@@ -6,59 +6,71 @@
 <title>应用集 · azlove 的教学工具箱</title>
 <meta name="description" content="6 个离线可用的网页应用 + 3 篇教学与技术随笔。点开即用，数据留在你自己的浏览器里。">
 <meta name="theme-color" content="#f5f6fb">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%233b82f6'/><stop offset='.55' stop-color='%238b5cf6'/><stop offset='1' stop-color='%23ec4899'/></linearGradient></defs><rect width='100' height='100' rx='24' fill='url(%23g)'/><text x='50' y='69' font-size='52' text-anchor='middle' fill='%23fff' font-family='sans-serif' font-weight='700'>A</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%231e7361'/><stop offset='.55' stop-color='%232b9c88'/><stop offset='1' stop-color='%2348b8a8'/></linearGradient></defs><rect width='100' height='100' rx='24' fill='url(%23g)'/><text x='50' y='69' font-size='52' text-anchor='middle' fill='%23fff' font-family='sans-serif' font-weight='700'>A</text></svg>">
 <style>
 /* ===========================================================
    应用集 · 共享样式
    默认浅色（白天）主题，右上角可切深色。
    构建时整份内联进每个页面 —— 站点保持零外链、可离线打开。
+
+   配色参考 https://azlove2021.github.io/ander-studio-models/ 的青绿薄荷系：
+   背景 #f3f8f6、主色 #207a68、文字 #173e49、边框 #cddfd9，
+   连阴影都带绿调（#234f490a）—— 全站色相统一，所以看着"干净"。
    =========================================================== */
 
 :root{
-  --bg:#f5f6fb;
+  --bg:#f3f8f6;
   --surface:#ffffff;
-  --card:rgba(255,255,255,.74);
-  --card-hi:rgba(255,255,255,.94);
-  --line:rgba(18,21,40,.10);
-  --line-hi:rgba(18,21,40,.20);
-  --fg:#12152a;
-  --fg2:rgba(18,21,40,.68);
-  --fg3:rgba(18,21,40,.44);
-  --accent:#2563eb;
-  --accent-soft:rgba(37,99,235,.10);
-  --pink:#ec4899;
-  --ok:#10b981;
-  --g1:rgba(59,130,246,.18);
-  --g2:rgba(236,72,153,.14);
-  --g3:rgba(16,185,129,.12);
-  --grid:rgba(18,21,40,.032);
-  --shadow-sm:0 2px 10px -4px rgba(18,21,40,.10);
-  --shadow:0 16px 40px -18px rgba(18,21,40,.20);
-  --shadow-lg:0 28px 70px -30px rgba(18,21,40,.28);
+  --card:rgba(255,255,255,.86);
+  --card-hi:#ffffff;
+  --line:#cddfd9;
+  --line-hi:#a6c9bf;
+  --fg:#173e49;
+  --fg2:#577580;
+  --fg3:#8aa5ad;
+  --accent:#207a68;
+  --accent-d:#196452;
+  --accent-soft:#e6f4ee;
+  --lilac:#efe9f7;
+  --lilac-ink:#6b5a95;
+  --amber:#fbf1e2;
+  --amber-ink:#9a6b26;
+  --ok:#207a68;
+  --g1:rgba(32,122,104,.13);
+  --g2:rgba(58,134,163,.11);
+  --g3:rgba(122,163,96,.10);
+  --grid:rgba(23,62,73,.045);
+  --shadow-sm:0 4px 14px rgba(35,79,73,.06);
+  --shadow:0 10px 28px rgba(35,79,73,.07);
+  --shadow-lg:0 18px 46px rgba(35,79,73,.12);
   --radius:18px;
 }
 
 html[data-theme="dark"]{
-  --bg:#08080e;
-  --surface:#12121c;
-  --card:rgba(30,30,50,.62);
-  --card-hi:rgba(44,44,70,.82);
-  --line:rgba(255,255,255,.13);
-  --line-hi:rgba(255,255,255,.28);
-  --fg:#f6f7fb;
-  --fg2:rgba(235,235,245,.72);
-  --fg3:rgba(235,235,245,.46);
-  --accent:#7aa8ff;
-  --accent-soft:rgba(122,168,255,.16);
-  --pink:#f9a8d4;
-  --ok:#34d399;
-  --g1:rgba(91,207,250,.30);
-  --g2:rgba(245,171,185,.24);
-  --g3:rgba(167,139,250,.20);
-  --grid:rgba(255,255,255,.035);
-  --shadow-sm:0 2px 10px -4px rgba(0,0,0,.6);
-  --shadow:0 18px 44px -20px rgba(0,0,0,.85);
-  --shadow-lg:0 30px 80px -34px rgba(0,0,0,.95);
+  --bg:#0c1416;
+  --surface:#121e21;
+  --card:rgba(18,32,36,.74);
+  --card-hi:rgba(24,42,46,.9);
+  --line:rgba(146,196,186,.18);
+  --line-hi:rgba(146,196,186,.32);
+  --fg:#e6f2ef;
+  --fg2:rgba(230,242,239,.70);
+  --fg3:rgba(230,242,239,.45);
+  --accent:#5cc3a6;
+  --accent-d:#5cc3a6;
+  --accent-soft:rgba(92,195,166,.15);
+  --lilac:rgba(150,130,200,.16);
+  --lilac-ink:#b7a6e0;
+  --amber:rgba(200,150,70,.16);
+  --amber-ink:#e0b978;
+  --ok:#5cc3a6;
+  --g1:rgba(92,195,166,.16);
+  --g2:rgba(90,160,190,.14);
+  --g3:rgba(140,185,110,.12);
+  --grid:rgba(180,225,215,.04);
+  --shadow-sm:0 4px 14px rgba(0,0,0,.45);
+  --shadow:0 14px 34px rgba(0,0,0,.55);
+  --shadow-lg:0 24px 56px rgba(0,0,0,.7);
 }
 
 *{box-sizing:border-box}
@@ -78,8 +90,15 @@ body::before{
     radial-gradient(58% 48% at 6% -4%,var(--g1) 0%,transparent 68%),
     radial-gradient(52% 42% at 98% 6%,var(--g2) 0%,transparent 68%),
     radial-gradient(46% 40% at 50% 104%,var(--g3) 0%,transparent 70%),
-    var(--bg);
+    linear-gradient(135deg,#eef7f2 0%,#e4f2f6 48%,var(--bg) 100%);
   transition:background .4s ease;
+}
+html[data-theme="dark"] body::before{
+  background:
+    radial-gradient(58% 48% at 6% -4%,var(--g1) 0%,transparent 68%),
+    radial-gradient(52% 42% at 98% 6%,var(--g2) 0%,transparent 68%),
+    radial-gradient(46% 40% at 50% 104%,var(--g3) 0%,transparent 70%),
+    linear-gradient(180deg,#101a1c 0%,var(--bg) 100%);
 }
 body::after{
   content:""; position:fixed; inset:0; z-index:-2; pointer-events:none;
@@ -108,8 +127,8 @@ body::after{
 .brand-avatar{
   width:38px;height:38px;border-radius:11px;display:grid;place-items:center;
   font-weight:800;font-size:17px;color:#fff;letter-spacing:-.02em;
-  background:linear-gradient(140deg,#3b82f6,#8b5cf6 55%,#ec4899);
-  box-shadow:0 6px 18px -8px rgba(59,130,246,.7);
+  background:linear-gradient(140deg,#1e7361,#2b9c88 55%,#48b8a8);
+  box-shadow:0 6px 18px -8px rgba(32,122,104,.7);
 }
 .brand-text{display:flex;flex-direction:column;line-height:1.25}
 .brand-text b{font-size:15px;font-weight:650;letter-spacing:-.01em}
@@ -154,7 +173,7 @@ body::after{
 }
 .hero h1 em{
   font-style:normal;
-  background:linear-gradient(100deg,#2563eb,#8b5cf6 45%,#ec4899);
+  background:linear-gradient(100deg,#1d6f5f,#207a68 42%,#3f9d92);
   -webkit-background-clip:text;background-clip:text;color:transparent;
 }
 .hero p{margin:0 0 26px;font-size:16px;color:var(--fg2);max-width:44ch}
@@ -177,8 +196,8 @@ body::after{
 .idcard-face{
   width:56px;height:56px;border-radius:16px;display:grid;place-items:center;
   font-size:24px;font-weight:800;color:#fff;
-  background:linear-gradient(140deg,#3b82f6,#8b5cf6 55%,#ec4899);
-  box-shadow:0 10px 26px -12px rgba(99,102,241,.85);
+  background:linear-gradient(140deg,#1e7361,#2b9c88 55%,#48b8a8);
+  box-shadow:0 10px 26px -12px rgba(32,122,104,.85);
 }
 .idcard-head b{display:block;font-size:16px;font-weight:650}
 .idcard-head span{font-size:12.5px;color:var(--fg3)}
@@ -213,62 +232,49 @@ body::after{
   display:inline-flex;align-items:center;gap:4px}
 .sec-more:hover{gap:8px}
 
-/* ---------- 应用卡片 ---------- */
-.apps{display:grid;gap:15px;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));
+/* ---------- 应用卡片（参考 ander-studio-models：封面 + 标签 + 标题 + 英文 + 摘要） ---------- */
+.apps{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));
   margin-bottom:18px}
 .app{
-  display:flex;flex-direction:column;gap:0;padding:20px;text-decoration:none;color:inherit;
+  display:flex;flex-direction:column;text-decoration:none;color:inherit;
   border-radius:var(--radius);border:1px solid var(--line);background:var(--card);
   backdrop-filter:blur(22px) saturate(180%);
   -webkit-backdrop-filter:blur(22px) saturate(180%);
-  box-shadow:var(--shadow-sm);
-  transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s,border-color .3s,background .3s;
+  box-shadow:var(--shadow);overflow:hidden;
+  transition:transform .32s cubic-bezier(.16,1,.3,1),box-shadow .32s,border-color .32s;
 }
-.app:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--line-hi);
-  background:var(--card-hi)}
+.app:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg);border-color:var(--line-hi)}
 .app:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-.app-top{display:flex;align-items:center;gap:13px;margin-bottom:13px;flex:0 0 auto}
-.app-body{display:flex;flex-direction:column;min-width:0}
-.app-ic{
-  flex:0 0 44px;height:44px;border-radius:13px;display:grid;place-items:center;
-  color:var(--accent-d);background:var(--accent-soft-d);
-  border:1px solid color-mix(in srgb,var(--accent-d) 18%,transparent);
+.app-cover{
+  position:relative;aspect-ratio:16/9;overflow:hidden;
+  background:linear-gradient(135deg,#eef7f2,#e4f2f6);
+  border-bottom:1px solid var(--line);
 }
-html:not([data-theme="dark"]) .app-ic{
-  color:var(--accent);background:var(--accent-soft);
-  border-color:color-mix(in srgb,var(--accent) 18%,transparent);
+html[data-theme="dark"] .app-cover{background:linear-gradient(135deg,#152225,#1a2b2e)}
+.app-cover img{width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.app:hover .app-cover img{transform:scale(1.035)}
+.app-cover::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 55%,rgba(23,62,73,.10));
+  opacity:0;transition:opacity .32s;
 }
-.app-ic svg{width:21px;height:21px}
-.app-t{font-weight:660;font-size:16px;letter-spacing:-.012em;line-height:1.3}
-.app-sub{font-size:12.5px;font-weight:500;margin-top:2px;
-  color:var(--accent-d)}
-html:not([data-theme="dark"]) .app-sub{color:var(--accent)}
-.app-d{font-size:13px;color:var(--fg2);line-height:1.62;flex:1;
+.app:hover .app-cover::after{opacity:1}
+.app-body{display:flex;flex-direction:column;padding:15px 17px 17px;flex:1;min-width:0}
+.app-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:9px}
+.app-t{font-weight:650;font-size:16.5px;letter-spacing:-.015em;line-height:1.35}
+.app-en{font-size:11.5px;color:var(--fg3);margin-top:3px;letter-spacing:.01em}
+.app-d{font-size:13px;color:var(--fg2);line-height:1.62;margin-top:9px;flex:1;
   display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.app-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
 
-/* '更多应用'占位卡：把网格最后一行的空位填满 */
-.app-more{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:9px;padding:20px;text-align:center;text-decoration:none;color:inherit;
-  border-radius:var(--radius);border:1px dashed var(--line-hi);
-  background:color-mix(in srgb,var(--surface) 42%,transparent);
-  transition:.26s;
-}
-.app-more:hover{border-color:var(--accent);background:var(--accent-soft);transform:translateY(-3px)}
-.app-more-ic{
-  width:42px;height:42px;border-radius:12px;display:grid;place-items:center;
-  background:var(--accent-soft);color:var(--accent);
-}
-.app-more-ic svg{width:20px;height:20px}
-.app-more b{font-size:14.5px;font-weight:600}
-.app-more span{font-size:12px;color:var(--fg3);line-height:1.5}
+/* 标签：第一个主色，后两个用参考站的淡紫 / 淡橙 */
 .tag{
-  font-size:11px;color:var(--fg3);border:1px solid var(--line);
-  border-radius:999px;padding:1.5px 9px;white-space:nowrap;
-  background:color-mix(in srgb,var(--surface) 60%,transparent);
+  font-size:11px;color:var(--accent-d);background:var(--accent-soft);
+  border:1px solid transparent;border-radius:999px;padding:1.5px 9px;white-space:nowrap;
 }
-
+.tag.t2{color:var(--lilac-ink);background:var(--lilac)}
+.tag.t3{color:var(--amber-ink);background:var(--amber)}
+.tag.tn{color:var(--fg3);background:transparent;border-color:var(--line)}
 /* ---------- 文章列表 ---------- */
 /* 首页用两列，避免只有两三篇时右侧大片空白 */
 .posts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
@@ -493,7 +499,7 @@ html:not([data-theme="dark"]) .app-sub{color:var(--accent)}
 
   <section class="hero">
     <div>
-      <span class="hero-kicker"><i></i>持续更新中 · 最后更新 2026-10-28 23:46:43</span>
+      <span class="hero-kicker"><i></i>持续更新中 · 最后更新 2026-10-29 00:58:05</span>
       <h1>把课件做成<br><em>一个文件</em>的人</h1>
       <p>离线网页应用与教学随笔。每个应用都是单个 HTML，双击就用、断网也能跑，数据全留在你自己的浏览器里。</p>
       <div class="hero-btns">
@@ -546,76 +552,58 @@ html:not([data-theme="dark"]) .app-sub{color:var(--accent)}
     </div>
     <div class="apps">
       <a class="app" href="apps/photosynthesis/index.html" style="--accent:#1D9E75;--accent-soft:#E8F5F1;--accent-d:#B2DED0;--accent-soft-d:#0D2C27">
-        <div class="app-top">
-          <span class="app-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.5 15.5 6 22c6.5 1 12-3 13-9 .4-2.4-.2-4-2-5Z"/><path d="M9 22c1.5-4 4-7.5 8-10"/></svg></span>
-          <div>
-            <div class="app-t">光合作用与呼吸作用</div>
-            <div class="app-sub">总光合 / 净光合 · 交互式教学演示</div>
-          </div>
+        <div class="app-cover"><img src="covers/photosynthesis.webp" alt="光合作用与呼吸作用" loading="lazy" decoding="async"></div>
+        <div class="app-body">
+          <div class="app-tags"><span class="tag">高中生物</span><span class="tag t2">3D</span><span class="tag t3">交互</span><span class="tag tn">公开课</span></div>
+          <div class="app-t">光合作用与呼吸作用</div>
+          <div class="app-en">Photosynthesis &amp; Respiration</div>
+          <div class="app-d">一株植物上的交互式教学演示。把总光合、呼吸、净光合三条流量放到同一株植物、同一时刻、同一个密闭同化箱里，用可测量的方式讲清楚「净光合是测出来的，总光合是推出来的」。</div>
         </div>
-        <div class="app-d">一株植物上的交互式教学演示。把总光合、呼吸、净光合三条流量放到同一株植物、同一时刻、同一个密闭同化箱里，用可测量的方式讲清楚「净光合是测出来的，总光合是推出来的」。</div>
-        <div class="app-tags"><span class="tag">高中生物</span><span class="tag">3D</span><span class="tag">交互</span><span class="tag">公开课</span></div>
       </a>
       <a class="app" href="apps/beer-fermentation/index.html" style="--accent:#BA7517;--accent-soft:#F8F1E8;--accent-d:#E8D0B0;--accent-soft-d:#332210">
-        <div class="app-top">
-          <span class="app-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3h4M11 3v6l-5.5 9.5A2 2 0 0 0 7.2 21h9.6a2 2 0 0 0 1.7-2.5L13 9V3"/><path d="M8 15h8"/></svg></span>
-          <div>
-            <div class="app-t">啤酒发酵工厂</div>
-            <div class="app-sub">3D 生产流程课件</div>
-          </div>
+        <div class="app-cover"><img src="covers/beer-fermentation.webp" alt="啤酒发酵工厂" loading="lazy" decoding="async"></div>
+        <div class="app-body">
+          <div class="app-tags"><span class="tag">3D</span><span class="tag t2">工艺流程</span><span class="tag t3">课件</span></div>
+          <div class="app-t">啤酒发酵工厂</div>
+          <div class="app-en">Brewery Fermentation (3D)</div>
+          <div class="app-d">以等距 3D 场景讲清麦芽糖化、煮沸、发酵、过滤、灌装的完整工艺链，每一步可暂停、可剖切、可看实时数据。</div>
         </div>
-        <div class="app-d">以等距 3D 场景讲清麦芽糖化、煮沸、发酵、过滤、灌装的完整工艺链，每一步可暂停、可剖切、可看实时数据。</div>
-        <div class="app-tags"><span class="tag">3D</span><span class="tag">工艺流程</span><span class="tag">课件</span></div>
       </a>
       <a class="app" href="apps/teacher-workbench/index.html" style="--accent:#378ADD;--accent-soft:#EBF3FC;--accent-d:#BBD7F3;--accent-soft-d:#132740">
-        <div class="app-top">
-          <span class="app-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M12 17v4M8 21h8"/></svg></span>
-          <div>
-            <div class="app-t">班主任工作台</div>
-            <div class="app-sub">数据不出本机的班级管理台</div>
-          </div>
+        <div class="app-cover"><img src="covers/teacher-workbench.webp" alt="班主任工作台" loading="lazy" decoding="async"></div>
+        <div class="app-body">
+          <div class="app-tags"><span class="tag">班级管理</span><span class="tag t2">单文件应用</span><span class="tag t3">离线可用</span></div>
+          <div class="app-t">班主任工作台</div>
+          <div class="app-en">Class Teacher Workbench</div>
+          <div class="app-d">23 个模块覆盖学生、成绩、座位、课表、班委、班费、公告、家长联系、谈话、违纪、值日与安全。数据全部存在浏览器本地，不上传任何服务器。</div>
         </div>
-        <div class="app-d">23 个模块覆盖学生、成绩、座位、课表、班委、班费、公告、家长联系、谈话、违纪、值日与安全。数据全部存在浏览器本地，不上传任何服务器。</div>
-        <div class="app-tags"><span class="tag">班级管理</span><span class="tag">单文件应用</span><span class="tag">离线可用</span></div>
       </a>
       <a class="app" href="apps/gaokao-subject/index.html" style="--accent:#D4537E;--accent-soft:#FBEEF2;--accent-d:#F0C5D3;--accent-soft-d:#391A29">
-        <div class="app-top">
-          <span class="app-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5Z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v3H6.5A2.5 2.5 0 0 1 4 20.5Z"/></svg></span>
-          <div>
-            <div class="app-t">贵州新高考选科指南</div>
-            <div class="app-sub">3+1+2 选科 · 家长版</div>
-          </div>
+        <div class="app-cover"><img src="covers/gaokao-subject.webp" alt="贵州新高考选科指南" loading="lazy" decoding="async"></div>
+        <div class="app-body">
+          <div class="app-tags"><span class="tag">高考</span><span class="tag t2">选科</span><span class="tag t3">家长向</span></div>
+          <div class="app-t">贵州新高考选科指南</div>
+          <div class="app-en">Subject Selection Guide</div>
+          <div class="app-d">面向贵州新高考 3+1+2 的选科指南：专业覆盖、学科组合优势、可报院校范围逐条说清楚，附可打印长图。</div>
         </div>
-        <div class="app-d">面向贵州新高考 3+1+2 的选科指南：专业覆盖、学科组合优势、可报院校范围逐条说清楚，附可打印长图。</div>
-        <div class="app-tags"><span class="tag">高考</span><span class="tag">选科</span><span class="tag">家长向</span></div>
       </a>
       <a class="app" href="apps/iso-city/index.html" style="--accent:#5F5E5A;--accent-soft:#EFEFEE;--accent-d:#C9C8C7;--accent-soft-d:#1D1D20">
-        <div class="app-top">
-          <span class="app-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V9l4-3v15M14 21V11l4-3v13M5 13h4M14 15h4"/></svg></span>
-          <div>
-            <div class="app-t">ISO-CITY 98</div>
-            <div class="app-sub">复古等距城市建造沙盒</div>
-          </div>
+        <div class="app-cover"><img src="covers/iso-city.webp" alt="ISO-CITY 98" loading="lazy" decoding="async"></div>
+        <div class="app-body">
+          <div class="app-tags"><span class="tag">游戏</span><span class="tag t2">像素风</span><span class="tag t3">等距</span></div>
+          <div class="app-t">ISO-CITY 98</div>
+          <div class="app-en">Isometric City Builder</div>
+          <div class="app-d">1998 年 DOS 风格等距像素城市建造沙盒，完整预渲染单文件，浏览器直接开玩，支持存档与回放。</div>
         </div>
-        <div class="app-d">1998 年 DOS 风格等距像素城市建造沙盒，完整预渲染单文件，浏览器直接开玩，支持存档与回放。</div>
-        <div class="app-tags"><span class="tag">游戏</span><span class="tag">像素风</span><span class="tag">等距</span></div>
       </a>
       <a class="app" href="apps/dsh-replica/index.html" style="--accent:#0F6E56;--accent-soft:#E7F0EE;--accent-d:#ADCEC6;--accent-soft-d:#0A201F">
-        <div class="app-top">
-          <span class="app-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 17-5-5 5-5M15 7l5 5-5 5"/></svg></span>
-          <div>
-            <div class="app-t">DeepSeek Harness 复刻</div>
-            <div class="app-sub">DSH 产品形态网页复刻</div>
-          </div>
+        <div class="app-cover"><img src="covers/dsh-replica.webp" alt="DeepSeek Harness 复刻" loading="lazy" decoding="async"></div>
+        <div class="app-body">
+          <div class="app-tags"><span class="tag">复刻</span><span class="tag t2">研究</span><span class="tag t3">单文件</span></div>
+          <div class="app-t">DeepSeek Harness 复刻</div>
+          <div class="app-en">DeepSeek Harness Replica</div>
+          <div class="app-d">零依赖单文件网页，复刻 DeepSeek Harness 的产品形态与交互逻辑，用于研究与演示。</div>
         </div>
-        <div class="app-d">零依赖单文件网页，复刻 DeepSeek Harness 的产品形态与交互逻辑，用于研究与演示。</div>
-        <div class="app-tags"><span class="tag">复刻</span><span class="tag">研究</span><span class="tag">单文件</span></div>
       </a>
       <a class="app-more" href="https://github.com/azlove2021/azlove2021.github.io" target="_blank" rel="noopener">
         <span class="app-more-ic">
@@ -679,9 +667,9 @@ html:not([data-theme="dark"]) .app-sub{color:var(--accent)}
         <h2>最近更新</h2>
         <p>每次改动都记了时间戳，精确到秒</p>
       </div>
-      <span class="stamp-badge">最后更新 2026-10-28 23:46:43</span>
+      <span class="stamp-badge">最后更新 2026-10-29 00:58:05</span>
     </div>
-<div class="timeline"><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-28 23:46:43</span><span class="tl-what">更新 光合作用与呼吸作用、班主任工作台</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-28 23:42:45</span><span class="tl-what">内容调整</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-28 23:40:25</span><span class="tl-what">内容调整</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-28 23:36:07</span><span class="tl-what">新增文章《这张图怎么看 —— 光合 / 呼吸曲线读图指南》 · 修订 「净光合是测出来的，总光合是推出来的」、为什么我把课件做成单文件 HTML</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-28 23:32:41</span><span class="tl-what">内容调整 · 移除查分系统，新增文章发布清单与草稿机制</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-28 22:56:12</span><span class="tl-what">新增文章《「净光合是测出来的，总光合是推出来的」》 · 站点改版：加导航、文章栏目、更新记录</span></div></div>
+<div class="timeline"><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 00:58:05</span><span class="tl-what">更新 ISO-CITY 98 · 修订 这张图怎么看 —— 光合 / 呼吸曲线读图指南、「净光合是测出来的，总光合是推出来的」、为什么我把课件做成单文件 HTML</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-28 23:47:29</span><span class="tl-what">内容调整</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-28 23:46:43</span><span class="tl-what">更新 光合作用与呼吸作用、班主任工作台</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-28 23:42:45</span><span class="tl-what">内容调整</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-28 23:40:25</span><span class="tl-what">内容调整</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-28 23:36:07</span><span class="tl-what">新增文章《这张图怎么看 —— 光合 / 呼吸曲线读图指南》 · 修订 「净光合是测出来的，总光合是推出来的」、为什么我把课件做成单文件 HTML</span></div></div>
   </section>
 
   <section class="about" id="about">
@@ -703,7 +691,7 @@ html:not([data-theme="dark"]) .app-sub{color:var(--accent)}
 <footer class="foot">
   <div class="foot-in">
     <div class="foot-l">
-      共 6 个应用 · 生成于 2026-10-28<br>
+      共 6 个应用 · 生成于 2026-10-29<br>
       所有应用都是单个 HTML 文件，数据保存在浏览器本地，换设备或清缓存即重置。
     </div>
     <div class="foot-r">
@@ -733,6 +721,20 @@ html:not([data-theme="dark"]) .app-sub{color:var(--accent)}
     apply(next);
     try{ localStorage.setItem(KEY,next); }catch(e){}
   });
+})();
+(function(){
+  var MY = "20261029-005805";
+  if (!MY) return;
+  fetch('version.json?t=' + Date.now(), {cache: 'no-store'})
+    .then(function(r){ return r.json(); })
+    .then(function(v){
+      if (v && v.v && v.v !== MY) {
+        location.reload(true);          // 拿到的是旧缓存 → 强制刷
+      } else if (v && v.v) {
+        try { localStorage.setItem('portal-ver', v.v); } catch(e){}
+      }
+    })
+    .catch(function(){});               // 网络不通就算了，不打扰
 })();
 </script>
 </body>
