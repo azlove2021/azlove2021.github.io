@@ -242,11 +242,10 @@ footer a:hover{color:var(--fg);border-color:var(--line-hi)}
 
   var saved = null;
   try { saved = localStorage.getItem(KEY); } catch (e) {}
-  if (saved === 'light' || saved === 'dark') {
-    apply(saved);
-  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-    apply('light');
-  }
+  // 默认深色（与站点主视觉一致）；只有用户手动切过才沿用其选择。
+  // 刻意不跟随 prefers-color-scheme：深色是本页的设计主体，跟随系统会让
+  // 大多数浅色系统用户永远看不到原本想呈现的效果。
+  apply(saved === 'light' ? 'light' : 'dark');
 
   btn.addEventListener('click', function () {
     var next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
