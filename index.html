@@ -248,10 +248,9 @@ footer a:hover{color:var(--fg);border-color:var(--line-hi)}
 
   var saved = null;
   try { saved = localStorage.getItem(KEY); } catch (e) {}
-  // 默认深色（与站点主视觉一致）；只有用户手动切过才沿用其选择。
-  // 刻意不跟随 prefers-color-scheme：深色是本页的设计主体，跟随系统会让
-  // 大多数浅色系统用户永远看不到原本想呈现的效果。
-  apply(saved === 'light' ? 'light' : 'dark');
+  // 只有用户手动切过才覆盖。没切过就保持 HTML 上的初始值（默认 dark）。
+  // 这里不能无条件 apply('dark')，否则会把模板预设的浅色也一并盖掉。
+  if (saved === 'light' || saved === 'dark') apply(saved);
 
   btn.addEventListener('click', function () {
     var next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
