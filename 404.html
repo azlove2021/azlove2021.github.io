@@ -6,6 +6,11 @@
 <title>页面找不到 · 应用集</title>
 <meta name="description" content="这个地址没有对应的页面。">
 <meta name="theme-color" content="#f3f8f6">
+<!--
+  GitHub Pages 会在任意路径下返回这个 404 页（比如 /a/b/c/ 不存在时）。
+  相对链接会按那个路径解析，全成死链 —— 用 base href 把根目录钉死。
+-->
+<base href="/">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23207a68'/><text x='50' y='69' font-size='52' text-anchor='middle' fill='%23fff' font-family='sans-serif' font-weight='700'>A</text></svg>">
 <style>
 /* ===========================================================
@@ -531,7 +536,7 @@ html[data-theme="dark"] .app-cover{background:linear-gradient(135deg,#152225,#1a
   });
 })();
 (function(){
-  var MY = "20261029-010333";
+  var MY = "20261029-010732";
   if (!MY) return;
   fetch('version.json?t=' + Date.now(), {cache: 'no-store'})
     .then(function(r){ return r.json(); })
