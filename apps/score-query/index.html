@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="查分系统 —— 输入姓名即可查询账号、考号与班级。纯本地离线运行，数据不出本机。">
+<meta name="generator" content="Project_011_查分系统 / build.js">
+<title>查分系统</title>
+<style>
+/* ===========================================================
+   查分系统 · 样式
+   单文件离线应用，无任何外部依赖
+   =========================================================== */
+
+:root {
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei",
+    "PingFang SC", "Hiragino Sans GB", "Source Han Sans SC", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas,
+    "Liberation Mono", "Courier New", monospace;
+
+  --primary: #2b4acb;
+  --primary-hover: #2440b4;
+  --primary-soft: #eaefff;
+  --primary-ring: rgba(43, 74, 203, .18);
+
+  --bg: #eef1f9;
+  --bg-grad-a: #e6ecff;
+  --bg-grad-b: #f6f8fd;
+  --surface: #ffffff;
+  --surface-2: #f7f9fe;
+  --surface-3: #eef2fa;
+  --border: #e2e8f4;
+  --border-strong: #cfd8ea;
+
+  --text: #131a2b;
+  --text-2: #4a5671;
+  --text-3: #8a95ad;
+  --num: #0b1220;
+
+  --ok: #0f9d58;
+  --ok-soft: #e6f6ec;
+  --warn: #c4700a;
+  --warn-soft: #fdf3e3;
+  --danger: #c62828;
+
+  --radius: 18px;
+  --radius-sm: 11px;
+  --shadow-sm: 0 1px 2px rgba(19, 26, 43, .05);
+  --shadow: 0 8px 24px -12px rgba(19, 26, 43, .18), 0 2px 6px rgba(19, 26, 43, .04);
+  --shadow-lg: 0 24px 60px -28px rgba(19, 26, 43, .3), 0 4px 12px rgba(19, 26, 43, .06);
+}
+
+html[data-theme="dark"] {
+  --primary: #7b93ff;
+  --primary-hover: #93a8ff;
+  --primary-soft: #1c2542;
+  --primary-ring: rgba(123, 147, 255, .25);
+
+  --bg: #0b101c;
+  --bg-grad-a: #131c37;
+  --bg-grad-b: #0a0f1a;
+  --surface: #141b2c;
+  --surface-2: #1a2235;
+  --surface-3: #202a41;
+  --border: #26324c;
+  --border-strong: #354463;
+
+  --text: #e9eefb;
+  --text-2: #a9b6d1;
+  --text-3: #74829f;
+  --num: #ffffff;
+
+  --ok: #4ade80;
+  --ok-soft: #14321f;
+  --warn: #fbbf24;
+  --warn-soft: #33270c;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .4);
+  --shadow: 0 8px 24px -12px rgba(0, 0, 0, .6), 0 2px 6px rgba(0, 0, 0, .3);
+  --shadow-lg: 0 24px 60px -28px rgba(0, 0, 0, .8), 0 4px 12px rgba(0, 0, 0, .4);
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--text);
+  background: var(--bg);
+  background-image:
+    radial-gradient(1100px 520px at 12% -12%, var(--bg-grad-a), transparent 62%),
+    radial-gradient(900px 500px at 92% 0%, var(--bg-grad-a), transparent 55%),
+    linear-gradient(180deg, var(--bg-grad-b), var(--bg));
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.app {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 20px 40px;
+  padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+}
+
+.shell {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  flex: 1 0 auto;
+}
+
+/* ---------------- 顶栏 ---------------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 26px;
+}
+
+.brand { display: flex; align-items: center; gap: 13px; min-width: 0; }
+
+.logo {
+  width: 46px; height: 46px;
+  flex: 0 0 46px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: linear-gradient(145deg, var(--primary), #5b76ff);
+  box-shadow: 0 6px 16px -6px var(--primary-ring), inset 0 1px 0 rgba(255, 255, 255, .28);
+}
+.logo svg { width: 25px; height: 25px; display: block; }
+
+.brand h1 {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  line-height: 1.25;
+}
+.brand .tagline {
+  margin: 2px 0 0;
+  font-size: 12.5px;
+  color: var(--text-3);
+  letter-spacing: .2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar-actions { margin-left: auto; display: flex; gap: 8px; flex: 0 0 auto; }
+
+.icon-btn {
+  font: inherit;
+  font-size: 12.5px;
+  color: var(--text-2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 7px 11px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: var(--shadow-sm);
+  transition: background .16s, border-color .16s, color .16s, transform .1s;
+  white-space: nowrap;
+}
+.icon-btn:hover { border-color: var(--border-strong); color: var(--text); }
+.icon-btn:active { transform: translateY(1px); }
+.icon-btn svg { width: 15px; height: 15px; }
+.icon-btn[aria-pressed="true"] {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* ---------------- 搜索区 ---------------- */
+.search-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 22px 22px 18px;
+  position: relative;
+}
+.search-card::after {
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: var(--radius);
+  pointer-events: none;
+  box-shadow: 0 0 0 4px transparent;
+  transition: box-shadow .2s;
+}
+.search-card.is-focus::after { box-shadow: 0 0 0 4px var(--primary-ring); }
+
+.search-label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  color: var(--text-3);
+  margin-bottom: 9px;
+}
+
+.search-box { position: relative; display: flex; align-items: center; }
+
+.search-box .s-icon {
+  position: absolute;
+  left: 16px;
+  width: 20px; height: 20px;
+  color: var(--text-3);
+  pointer-events: none;
+  transition: color .18s;
+}
+.search-card.is-focus .s-icon { color: var(--primary); }
+
+#q {
+  width: 100%;
+  font: inherit;
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 96px 16px 48px;
+  outline: none;
+  transition: border-color .18s, background .18s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+#q::placeholder { color: var(--text-3); font-weight: 500; letter-spacing: .3px; }
+#q:focus { border-color: var(--primary); background: var(--surface); }
+/* 隐藏浏览器自带的 search 清空按钮，避免与本应用的清空按钮重复 */
+#q::-webkit-search-cancel-button,
+#q::-webkit-search-decoration,
+#q::-webkit-search-results-button,
+#q::-webkit-search-results-decoration { -webkit-appearance: none; appearance: none; display: none; }
+#q::-ms-clear { display: none; width: 0; height: 0; }
+
+.clear-btn {
+  position: absolute;
+  right: 12px;
+  width: 30px; height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--surface-3);
+  color: var(--text-2);
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+  display: none;
+  place-items: center;
+  padding: 0;
+}
+.clear-btn:hover { background: var(--border-strong); }
+.clear-btn.show { display: grid; }
+
+.search-hint {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin-top: 11px;
+  font-size: 12.5px;
+  color: var(--text-3);
+}
+.search-hint b { color: var(--text-2); font-weight: 600; }
+
+/* ---------------- 结果区 ---------------- */
+.results { margin-top: 20px; }
+
+.results-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 4px 12px;
+  font-size: 12.5px;
+  color: var(--text-3);
+  min-height: 20px;
+}
+.results-bar .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--primary); flex: 0 0 6px;
+}
+.results-bar .count { font-weight: 700; color: var(--text-2); font-variant-numeric: tabular-nums; }
+.results-bar .spacer { margin-left: auto; }
+
+.list { display: grid; gap: 14px; }
+
+/* --- 学生卡片 --- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  animation: rise .26s cubic-bezier(.2,.7,.3,1) both;
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--surface-2), var(--surface));
+}
+
+.avatar {
+  width: 50px; height: 50px;
+  flex: 0 0 50px;
+  border-radius: 15px;
+  display: grid;
+  place-items: center;
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--primary-soft);
+  border: 1px solid var(--border);
+  user-select: none;
+}
+
+.id-block { min-width: 0; flex: 1 1 auto; }
+
+.stu-name {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: .6px;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.stu-name mark {
+  background: linear-gradient(180deg, transparent 58%, #ffe27a 58%);
+  color: inherit;
+  padding: 0 1px;
+}
+html[data-theme="dark"] .stu-name mark {
+  background: linear-gradient(180deg, transparent 58%, rgba(250, 204, 21, .38) 58%);
+}
+
+.tags { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2.5px 9px;
+  border-radius: 999px;
+  background: var(--surface-3);
+  color: var(--text-2);
+  border: 1px solid var(--border);
+  letter-spacing: .3px;
+}
+.tag.primary { background: var(--primary-soft); color: var(--primary); border-color: transparent; }
+
+/* --- 字段行 --- */
+.fields { padding: 6px 20px 16px; }
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 0;
+  border-bottom: 1px dashed var(--border);
+}
+.field:last-child { border-bottom: 0; }
+
+.field .k {
+  flex: 0 0 62px;
+  font-size: 13px;
+  color: var(--text-3);
+  letter-spacing: .6px;
+}
+.field .v {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: 21px;
+  font-weight: 600;
+  color: var(--num);
+  letter-spacing: 1.4px;
+  font-variant-numeric: tabular-nums;
+  word-break: break-all;
+}
+.field .v.is-text { font-family: var(--font-sans); font-size: 17px; letter-spacing: .5px; }
+
+.copy-btn {
+  flex: 0 0 auto;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 7px 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.copy-btn svg { width: 14px; height: 14px; }
+.copy-btn:hover { background: var(--primary-soft); color: var(--primary); border-color: var(--primary); }
+.copy-btn.done { background: var(--ok-soft); color: var(--ok); border-color: transparent; }
+
+/* --- 空状态 / 提示 --- */
+.empty {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 44px 24px;
+  text-align: center;
+  animation: rise .26s cubic-bezier(.2,.7,.3,1) both;
+}
+.empty .icon {
+  width: 60px; height: 60px;
+  margin: 0 auto 16px;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  background: var(--surface-3);
+  color: var(--text-3);
+}
+.empty .icon svg { width: 30px; height: 30px; }
+.empty h2 { margin: 0 0 8px; font-size: 17px; font-weight: 700; }
+.empty p { margin: 0; font-size: 13.5px; color: var(--text-3); line-height: 1.7; }
+.empty p + p { margin-top: 4px; }
+.empty .q-text { color: var(--text); font-weight: 700; }
+
+.suggest {
+  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.suggest .sug-label {
+  width: 100%;
+  font-size: 12.5px;
+  color: var(--text-3);
+  margin-bottom: 2px;
+}
+.chip {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.chip:hover { background: var(--primary-soft); color: var(--primary); border-color: var(--primary); }
+
+/* 统计条 */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-top: 16px;
+}
+.stats .st {
+  background: var(--surface);
+  padding: 12px 10px;
+  text-align: center;
+}
+.stats .st .n {
+  font-family: var(--font-mono);
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.3;
+}
+.stats .st .l { font-size: 11.5px; color: var(--text-3); letter-spacing: .5px; }
+
+/* ---------------- 页脚 ---------------- */
+.footer {
+  width: 100%;
+  max-width: 760px;
+  margin: 30px auto 0;
+  font-size: 12px;
+  color: var(--text-3);
+  text-align: center;
+  line-height: 1.8;
+  flex: 0 0 auto;
+}
+.footer .sep { margin: 0 7px; opacity: .5; }
+.footer .lock {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  vertical-align: -2px;
+}
+.footer .lock svg { width: 12px; height: 12px; }
+
+/* ---------------- Toast ---------------- */
+.toast-wrap {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  pointer-events: none;
+  padding: 0 16px;
+  width: max-content;
+  max-width: 100%;
+}
+.toast {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(19, 26, 43, .94);
+  border-radius: 11px;
+  padding: 10px 18px;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: pop .22s cubic-bezier(.2,.7,.3,1) both;
+  backdrop-filter: blur(6px);
+}
+.toast svg { width: 16px; height: 16px; flex: 0 0 16px; }
+.toast.ok svg { color: #4ade80; }
+.toast.err { background: rgba(150, 26, 26, .95); }
+@keyframes pop {
+  from { opacity: 0; transform: translateY(10px) scale(.96); }
+  to   { opacity: 1; transform: none; }
+}
+.toast.out { animation: fadeout .2s ease forwards; }
+@keyframes fadeout { to { opacity: 0; transform: translateY(6px); } }
+
+/* ---------------- 响应式 ---------------- */
+@media (max-width: 620px) {
+  .app { padding: 18px 14px 28px; padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px)); }
+  .topbar { margin-bottom: 18px; gap: 10px; }
+  .logo { width: 40px; height: 40px; flex-basis: 40px; border-radius: 12px; }
+  .logo svg { width: 21px; height: 21px; }
+  .brand h1 { font-size: 18.5px; }
+  .brand .tagline { font-size: 11.5px; }
+  .icon-btn .bt { display: none; }
+  .icon-btn { padding: 8px 10px; }
+  .search-card { padding: 16px 15px 14px; border-radius: 16px; }
+  #q { font-size: 17px; padding: 14px 52px 14px 42px; border-radius: 12px; }
+  .search-box .s-icon { left: 13px; width: 18px; height: 18px; }
+  .field .k { flex-basis: 54px; font-size: 12.5px; }
+  .field .v { font-size: 18.5px; letter-spacing: 1px; }
+  .field .v.is-text { font-size: 15.5px; }
+  .copy-btn { padding: 7px 10px; font-size: 12px; }
+  .card-head { padding: 15px 15px; gap: 12px; }
+  .avatar { width: 44px; height: 44px; flex-basis: 44px; font-size: 19px; border-radius: 13px; }
+  .stu-name { font-size: 19px; }
+  .fields { padding: 4px 15px 12px; }
+  .empty { padding: 34px 18px; }
+  .footer { font-size: 11.5px; margin-top: 24px; }
+  .footer .opt { display: none; }
+}
+
+@media (max-width: 360px) {
+  .field .v { font-size: 16.5px; letter-spacing: .6px; }
+  .field .k { flex-basis: 46px; }
+}
+
+/* ---------------- 打印 ---------------- */
+@media print {
+  @page { size: A4; margin: 14mm; }
+  body { background: #fff; }
+  .app { padding: 0; }
+  .topbar-actions, .search-card, .results-bar, .footer, .toast-wrap, .copy-btn { display: none !important; }
+  .card { box-shadow: none; border-color: #bbb; break-inside: avoid; }
+  .card-head { background: #fff; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="shell">
+
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 5.5A1.5 1.5 0 015.5 4H10l2 2.5L14 4h4.5A1.5 1.5 0 0120 5.5v13A1.5 1.5 0 0118.5 20h-13A1.5 1.5 0 014 18.5z"/>
+            <path d="M8 11h8M8 15h5"/>
+          </svg>
+        </div>
+        <div>
+          <h1>查分系统</h1>
+          <p class="tagline" id="subtitle">姓名 / 账号 / 考号 查询</p>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="privacyBtn" type="button" aria-pressed="false" title="隐藏账号与考号的中间位，防止旁人看到">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>
+          </svg>
+          <span class="bt">隐私模式</span>
+        </button>
+        <button class="icon-btn" id="themeBtn" type="button" aria-pressed="false" title="切换深浅色主题">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/>
+          </svg>
+          <span class="bt">深色</span>
+        </button>
+      </div>
+    </header>
+
+    <section class="search-card" id="searchCard">
+      <label class="search-label" for="q">学生姓名</label>
+      <div class="search-box">
+        <svg class="s-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/>
+        </svg>
+        <input id="q" type="search" inputmode="search" autocomplete="off" autocorrect="off"
+               autocapitalize="off" spellcheck="false" placeholder="输入姓名查询，如：张同学"
+               aria-label="输入学生姓名查询" aria-describedby="hintText">
+        <button class="clear-btn" id="clearQ" type="button" aria-label="清空">&#215;</button>
+      </div>
+      <div class="search-hint" id="hintText">
+        <span>支持<b>姓名模糊匹配</b>（输入"小陈"可匹配含"陈"的姓名）</span>
+        <span>也可直接粘贴<b>完整账号</b>或<b>考号</b></span>
+        <span><b>回车</b>直接复制账号 · <b>Esc</b> 清空</span>
+      </div>
+    </section>
+
+    <section class="results" aria-live="polite">
+      <div class="results-bar" id="resultsBar"></div>
+      <div id="results"></div>
+    </section>
+
+  </div>
+
+  <footer class="footer">
+    <div id="footNote">正在加载名册…</div>
+    <div>
+      <span class="lock">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="10.5" width="16" height="10" rx="2.5"/><path d="M8 10.5V7a4 4 0 018 0v3.5"/>
+        </svg>
+        纯本地运行
+      </span>
+      <span class="sep">|</span>数据保存在本机，不联网、不上传
+      <span class="opt"><span class="sep">|</span>双击 HTML 即可使用</span>
+    </div>
+  </footer>
+</div>
+
+<script>window.__STUDENTS__ = {"meta":{"title":"查分系统（演示数据）","updated":"2026-10-28","source":"脱敏样本，非真实数据","sheets":[{"sheet":"13班","rows":57}],"classes":["高一13班"],"count":57,"demo":true},"students":[{"name":"学生01","grade":"高一","klass":"13班","account":"9010000000","examNo":"20141301"},{"name":"学生02","grade":"高一","klass":"13班","account":"9010000001","examNo":"20141302"},{"name":"学生03","grade":"高一","klass":"13班","account":"9010000002","examNo":"20141303"},{"name":"学生04","grade":"高一","klass":"13班","account":"9010000003","examNo":"20141304"},{"name":"学生05","grade":"高一","klass":"13班","account":"9010000004","examNo":"20141305"},{"name":"学生06","grade":"高一","klass":"13班","account":"9010000005","examNo":"20141306"},{"name":"学生07","grade":"高一","klass":"13班","account":"9010000006","examNo":"20141307"},{"name":"学生08","grade":"高一","klass":"13班","account":"9010000007","examNo":"20141308"},{"name":"学生09","grade":"高一","klass":"13班","account":"9010000008","examNo":"20141309"},{"name":"学生10","grade":"高一","klass":"13班","account":"9010000009","examNo":"20141310"},{"name":"学生11","grade":"高一","klass":"13班","account":"9010000010","examNo":"20141311"},{"name":"学生12","grade":"高一","klass":"13班","account":"9010000011","examNo":"20141312"},{"name":"学生13","grade":"高一","klass":"13班","account":"9010000012","examNo":"20141313"},{"name":"学生14","grade":"高一","klass":"13班","account":"9010000013","examNo":"20141314"},{"name":"学生15","grade":"高一","klass":"13班","account":"9010000014","examNo":"20141315"},{"name":"学生16","grade":"高一","klass":"13班","account":"9010000015","examNo":"20141316"},{"name":"学生17","grade":"高一","klass":"13班","account":"9010000016","examNo":"20141317"},{"name":"学生18","grade":"高一","klass":"13班","account":"9010000017","examNo":"20141318"},{"name":"学生19","grade":"高一","klass":"13班","account":"9010000018","examNo":"20141319"},{"name":"学生20","grade":"高一","klass":"13班","account":"9010000019","examNo":"20141320"},{"name":"学生21","grade":"高一","klass":"13班","account":"9010000020","examNo":"20141321"},{"name":"学生22","grade":"高一","klass":"13班","account":"9010000021","examNo":"20141322"},{"name":"学生23","grade":"高一","klass":"13班","account":"9010000022","examNo":"20141323"},{"name":"学生24","grade":"高一","klass":"13班","account":"9010000023","examNo":"20141324"},{"name":"学生25","grade":"高一","klass":"13班","account":"9010000024","examNo":"20141325"},{"name":"学生26","grade":"高一","klass":"13班","account":"9010000025","examNo":"20141326"},{"name":"学生27","grade":"高一","klass":"13班","account":"9010000026","examNo":"20141327"},{"name":"学生28","grade":"高一","klass":"13班","account":"9010000027","examNo":"20141328"},{"name":"学生29","grade":"高一","klass":"13班","account":"9010000028","examNo":"20141329"},{"name":"学生30","grade":"高一","klass":"13班","account":"9010000029","examNo":"20141330"},{"name":"学生31","grade":"高一","klass":"13班","account":"9010000030","examNo":"20141331"},{"name":"学生32","grade":"高一","klass":"13班","account":"9010000031","examNo":"20141332"},{"name":"学生33","grade":"高一","klass":"13班","account":"9010000032","examNo":"20141333"},{"name":"学生34","grade":"高一","klass":"13班","account":"9010000033","examNo":"20141334"},{"name":"学生35","grade":"高一","klass":"13班","account":"9010000034","examNo":"20141335"},{"name":"学生36","grade":"高一","klass":"13班","account":"9010000035","examNo":"20141336"},{"name":"学生37","grade":"高一","klass":"13班","account":"9010000036","examNo":"20141337"},{"name":"学生38","grade":"高一","klass":"13班","account":"9010000037","examNo":"20141338"},{"name":"学生39","grade":"高一","klass":"13班","account":"9010000038","examNo":"20141339"},{"name":"学生40","grade":"高一","klass":"13班","account":"9010000039","examNo":"20141340"},{"name":"学生41","grade":"高一","klass":"13班","account":"9010000040","examNo":"20141341"},{"name":"学生42","grade":"高一","klass":"13班","account":"9010000041","examNo":"20141342"},{"name":"学生43","grade":"高一","klass":"13班","account":"9010000042","examNo":"20141343"},{"name":"学生44","grade":"高一","klass":"13班","account":"9010000043","examNo":"20141344"},{"name":"学生45","grade":"高一","klass":"13班","account":"9010000044","examNo":"20141345"},{"name":"学生46","grade":"高一","klass":"13班","account":"9010000045","examNo":"20141346"},{"name":"学生47","grade":"高一","klass":"13班","account":"9010000046","examNo":"20141347"},{"name":"学生48","grade":"高一","klass":"13班","account":"9010000047","examNo":"20141348"},{"name":"学生49","grade":"高一","klass":"13班","account":"9010000048","examNo":"20141349"},{"name":"学生50","grade":"高一","klass":"13班","account":"9010000049","examNo":"20141350"},{"name":"学生51","grade":"高一","klass":"13班","account":"9010000050","examNo":"20141351"},{"name":"学生52","grade":"高一","klass":"13班","account":"9010000051","examNo":"20141352"},{"name":"学生53","grade":"高一","klass":"13班","account":"9010000052","examNo":"20141353"},{"name":"学生54","grade":"高一","klass":"13班","account":"9010000053","examNo":"20141354"},{"name":"学生55","grade":"高一","klass":"13班","account":"9010000054","examNo":"20141355"},{"name":"学生56","grade":"高一","klass":"13班","account":"9010000055","examNo":"20141356"},{"name":"学生57","grade":"高一","klass":"13班","account":"9010000056","examNo":"20141357"}]};</script>
+<script>
+/* ===========================================================
+   查分系统 · 应用逻辑
+   纯前端离线单文件：输入姓名 -> 查账号 / 考号 / 班级
+   无任何网络请求
+   =========================================================== */
+(function () {
+  'use strict';
+
+  /* ---------------- 数据装载 ---------------- */
+  var PAYLOAD = (window.__STUDENTS__ && typeof window.__STUDENTS__ === 'object') ? window.__STUDENTS__ : {};
+  var META = PAYLOAD.meta || {};
+  var RAW = Array.isArray(PAYLOAD.students) ? PAYLOAD.students : [];
+
+  function s(v) {
+    if (v === null || v === undefined) return '';
+    if (typeof v === 'string') return v.trim();
+    if (typeof v === 'number') return isFinite(v) ? String(v).replace(/\.0+$/, '') : '';
+    return String(v).trim();
+  }
+
+  var DATA = RAW.map(function (r, i) {
+    var rec = {
+      i: i,
+      name: s(r.name),
+      grade: s(r.grade),
+      klass: s(r.klass),
+      account: s(r.account),
+      examNo: s(r.examNo),
+      score: (r.score === 0 || r.score) ? s(r.score) : '',
+      total: (r.total === 0 || r.total) ? s(r.total) : ''
+    };
+    rec.classFull = (rec.grade + rec.klass) || '—';
+    rec._n = {
+      name: normalize(rec.name),
+      account: normalize(rec.account),
+      examNo: normalize(rec.examNo),
+      klass: normalize(rec.classFull)
+    };
+    return rec;
+  }).filter(function (r) { return r.name; });
+
+  /* ---------------- 工具 ---------------- */
+  // 全角转半角 + 去空白 + 小写，兼容中文输入法下打出的全角数字
+  function normalize(x) {
+    return String(x === null || x === undefined ? '' : x)
+      .replace(/[\uFF01-\uFF5E]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 0xFEE0); })
+      .replace(/[\u3000\u00A0]/g, ' ')
+      .toLowerCase();
+  }
+
+  function esc(x) {
+    return String(x === null || x === undefined ? '' : x)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function el(id) { return document.getElementById(id); }
+
+  // 编辑距离（用于"您是不是要找"）
+  function lev(a, b) {
+    a = String(a); b = String(b);
+    if (a === b) return 0;
+    var m = a.length, n = b.length;
+    if (!m) return n;
+    if (!n) return m;
+    var prev = new Array(n + 1), cur = new Array(n + 1), i, j;
+    for (j = 0; j <= n; j++) prev[j] = j;
+    for (i = 1; i <= m; i++) {
+      cur[0] = i;
+      for (j = 1; j <= n; j++) {
+        cur[j] = Math.min(
+          prev[j] + 1,
+          cur[j - 1] + 1,
+          prev[j - 1] + (a.charAt(i - 1) === b.charAt(j - 1) ? 0 : 1)
+        );
+      }
+      var t = prev; prev = cur; cur = t;
+    }
+    return prev[n];
+  }
+
+  /* ---------------- 检索 ---------------- */
+  // 优先级：姓名完全匹配 > 姓名前缀 > 姓名包含 > 账号完全 > 账号包含 > 考号完全 > 考号包含
+  function search(q) {
+    var nq = normalize(q).trim();
+    if (!nq) return [];
+    var out = [];
+    for (var i = 0; i < DATA.length; i++) {
+      var r = DATA[i], p = -1;
+      var n = r._n, L = nq.length;
+
+      if (n.name === nq) p = 0;
+      else if (n.name.indexOf(nq) === 0) p = 1;
+      else if (n.name.indexOf(nq) > -1) p = 2;
+      else if (n.account && n.account === nq) p = 3;
+      else if (n.account && n.account.indexOf(nq) > -1) p = 4;
+      else if (n.examNo && n.examNo === nq) p = 5;
+      else if (n.examNo && n.examNo.indexOf(nq) > -1) p = 6;
+      if (p < 0) continue;
+
+      // 同名次内：姓名越短越靠前，其次按原顺序
+      out.push({ r: r, p: p, len: r._n.name.length });
+    }
+    out.sort(function (a, b) {
+      return (a.p - b.p) || (a.len - b.len) || (a.r.i - b.r.i);
+    });
+    return out.map(function (x) { return x.r; });
+  }
+
+  // 未命中时给出近似姓名
+  function suggest(q, limit) {
+    var nq = normalize(q).trim();
+    if (!nq) return [];
+    var scored = [], i;
+    for (i = 0; i < DATA.length; i++) {
+      var nm = DATA[i]._n.name, d;
+      if (nm.indexOf(nq) > -1 || nq.indexOf(nm) > -1) d = 0;
+      else if (nq.length >= 2 && nm.charAt(0) === nq.charAt(0)) d = 1;      // 同姓氏
+      else if (nq.length >= 3 && nm.slice(-1) === nq.slice(-1)) d = 2;      // 同名尾字
+      else d = 3 + lev(nm, nq);
+      if (d <= (nq.length <= 2 ? 1 : 4)) scored.push({ n: DATA[i].name, d: d, i: DATA[i].i });
+    }
+    scored.sort(function (a, b) { return (a.d - b.d) || (a.n.length - b.n.length); });
+    var seen = {}, out = [];
+    for (i = 0; i < scored.length && out.length < (limit || 6); i++) {
+      if (seen[scored[i].n]) continue;
+      seen[scored[i].n] = 1;
+      out.push(scored[i].n);
+    }
+    return out;
+  }
+
+  /* ---------------- 隐私模式 ---------------- */
+  var PRIVACY = false;
+  function mask(v) {
+    var x = s(v);
+    if (!x) return '—';
+    var n = x.length;
+    if (n <= 3) return new Array(n + 1).join('•');
+    var keep = n >= 9 ? 3 : 2;
+    var tail = n >= 9 ? 2 : 1;
+    var mid = n - keep - tail;
+    if (mid < 2) { keep = Math.max(1, keep - 1); mid = n - keep - tail; }
+    if (mid < 1) return x;
+    return x.slice(0, keep) + new Array(mid + 1).join('•') + x.slice(n - tail);
+  }
+
+  /* ---------------- 复制 ---------------- */
+  function copyText(text) {
+    return new Promise(function (resolve, reject) {
+      function fallback() {
+        var ok = false;
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.setAttribute('readonly', 'readonly');
+          ta.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;border:0;padding:0;';
+          document.body.appendChild(ta);
+          ta.focus();
+          ta.select();
+          try { ta.setSelectionRange(0, text.length); } catch (e) { }
+          ok = document.execCommand('copy');
+          document.body.removeChild(ta);
+        } catch (e) { ok = false; }
+        ok ? resolve() : reject(new Error('copy-unsupported'));
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        try {
+          navigator.clipboard.writeText(text).then(resolve, fallback);
+        } catch (e) { fallback(); }
+      } else {
+        fallback();
+      }
+    });
+  }
+
+  /* ---------------- Toast ---------------- */
+  var toastWrap = null;
+  var ICON_OK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+  var ICON_WARN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>';
+
+  function toast(msg, kind) {
+    if (!toastWrap) {
+      toastWrap = document.createElement('div');
+      toastWrap.className = 'toast-wrap';
+      document.body.appendChild(toastWrap);
+    }
+    var t = document.createElement('div');
+    t.className = 'toast ' + (kind === 'err' ? 'err' : 'ok');
+    t.innerHTML = (kind === 'err' ? ICON_WARN : ICON_OK) + '<span>' + esc(msg) + '</span>';
+    toastWrap.appendChild(t);
+    setTimeout(function () {
+      t.className += ' out';
+      setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 240);
+    }, 1500);
+  }
+
+  /* ---------------- 渲染 ---------------- */
+  var resultsEl, barEl, qEl, searchCard, clearBtn;
+
+  function hl(name, q) {
+    var nq = normalize(q).trim();
+    var pos = normalize(name).indexOf(nq);
+    if (!nq || pos < 0) return esc(name);
+    // 按原始下标切片（全角/大小写转换不改变长度）
+    return esc(name.slice(0, pos)) + '<mark>' + esc(name.slice(pos, pos + nq.length)) + '</mark>' + esc(name.slice(pos + nq.length));
+  }
+
+  function fieldRow(label, value, opts) {
+    opts = opts || {};
+    var shown = PRIVACY && opts.private ? mask(value) : (value || '—');
+    var row = '<div class="field">' +
+      '<span class="k">' + esc(label) + '</span>' +
+      '<span class="v' + (opts.text ? ' is-text' : '') + '">' + esc(shown) + '</span>';
+    if (value && !(PRIVACY && opts.private)) {
+      row += '<button class="copy-btn" type="button" data-copy="' + esc(value) + '" data-label="' + esc(label) + '">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+        '<rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M6 15H5a2 2 0 01-2-2V5a2 2 0 012-2h8a2 2 0 012 2v1"/></svg>' +
+        '<span class="bt">复制</span></button>';
+    } else if (value && PRIVACY && opts.private) {
+      row += '<button class="copy-btn" type="button" data-reveal="1"' +
+        ' title="隐私模式下不可复制，请先关闭隐私模式">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+        '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19M1 1l22 22"/></svg>' +
+        '<span class="bt">隐藏</span></button>';
+    }
+    return row + '</div>';
+  }
+
+  function cardHtml(r, q) {
+    var head = '<div class="card-head">' +
+      '<div class="avatar">' + esc(r.name.slice(0, 1)) + '</div>' +
+      '<div class="id-block">' +
+      '<div class="stu-name">' + hl(r.name, q) + '</div>' +
+      '<div class="tags">' +
+      '<span class="tag primary">' + esc(r.classFull) + '</span>' +
+      (r.total ? '<span class="tag">总分 ' + esc(r.total) + '</span>' : '') +
+      '</div></div></div>';
+
+    var body = '';
+    body += fieldRow('班级', r.classFull, { text: true });
+    body += fieldRow('账号', r.account, { private: true });
+    body += fieldRow('考号', r.examNo, { private: true });
+    if (r.score) body += fieldRow('分数', r.score, { private: false });
+    if (r.total) body += fieldRow('总分', r.total, { private: false });
+
+    return '<article class="card" data-idx="' + r.i + '">' + head + '<div class="fields">' + body + '</div></article>';
+  }
+
+  function renderEmptyIdle() {
+    var st = [];
+    st.push('<div class="st"><div class="n">' + DATA.length + '</div><div class="l">学生数</div></div>');
+    st.push('<div class="st"><div class="n">' + ((META.classes && META.classes.length) || 1) + '</div><div class="l">班级数</div></div>');
+    st.push('<div class="st"><div class="n">离线</div><div class="l">运行方式</div></div>');
+
+    return '<div class="empty">' +
+      '<div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">' +
+      '<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></div>' +
+      '<h2>输入姓名开始查询</h2>' +
+      '<p>在输入框中输入学生姓名，即可查出<strong>账号</strong>、<strong>考号</strong>和<strong>班级</strong>。</p>' +
+      '<p>支持姓名模糊匹配，也可直接输入完整账号或考号。</p>' +
+      '<div class="stats">' + st.join('') + '</div>' +
+      '</div>';
+  }
+
+  function renderNotFound(q) {
+    var sug = suggest(q, 6);
+    var chips = '';
+    if (sug.length) {
+      chips = '<div class="suggest"><span class="sug-label">您是不是要找：</span>' +
+        sug.map(function (n) {
+          return '<button class="chip" type="button" data-name="' + esc(n) + '">' + esc(n) + '</button>';
+        }).join('') + '</div>';
+    }
+    return '<div class="empty">' +
+      '<div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">' +
+      '<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5M8.5 11h5"/></svg></div>' +
+      '<h2>没有找到「<span class="q-text">' + esc(q) + '</span>」</h2>' +
+      '<p>请检查姓名是否输入正确（注意是否有错别字）。</p>' +
+      '<p>本系统仅收录：' + esc((META.classes || []).join('、') || '—') + '</p>' +
+      chips +
+      '</div>';
+  }
+
+  function render() {
+    var q = qEl.value;
+    var nq = normalize(q).trim();
+    clearBtn.classList.toggle('show', !!q);
+
+    if (!nq) {
+      barEl.innerHTML = '';
+      resultsEl.innerHTML = renderEmptyIdle();
+      return;
+    }
+    if (!DATA.length) {
+      barEl.innerHTML = '';
+      resultsEl.innerHTML = '<div class="empty"><h2>暂无数据</h2><p>名册数据为空，请联系管理员重新导入。</p></div>';
+      return;
+    }
+
+    var list = search(q);
+    if (!list.length) {
+      barEl.innerHTML = '<span class="dot" style="background:var(--text-3)"></span><span>未匹配到记录</span>';
+      resultsEl.innerHTML = renderNotFound(q.trim());
+      return;
+    }
+
+    var msg = list.length > 1
+      ? '找到 <span class="count">' + list.length + '</span> 条同名记录，请确认是哪一位'
+      : '找到 <span class="count">1</span> 条记录';
+    barEl.innerHTML = '<span class="dot"></span><span>' + msg + '</span>' +
+      '<span class="spacer"></span><span>关键词：' + esc(q.trim()) + '</span>';
+
+    resultsEl.innerHTML = '<div class="list">' +
+      list.map(function (r) { return cardHtml(r, q.trim()); }).join('') + '</div>';
+  }
+
+  /* ---------------- 主题 ---------------- */
+  var THEME_KEY = 'score_query_theme_v1';
+
+  function storeGet(k) {
+    try { return localStorage.getItem(k); } catch (e) { return null; }
+  }
+  function storeSet(k, v) {
+    try { localStorage.setItem(k, v); } catch (e) { }
+  }
+
+  function applyTheme(t) {
+    document.documentElement.setAttribute('data-theme', t === 'dark' ? 'dark' : 'light');
+    var btn = el('themeBtn');
+    if (btn) {
+      btn.setAttribute('aria-pressed', t === 'dark' ? 'true' : 'false');
+      btn.querySelector('.bt').textContent = t === 'dark' ? '浅色' : '深色';
+      btn.title = t === 'dark' ? '切换到浅色主题' : '切换到深色主题';
+    }
+  }
+
+  function initTheme() {
+    var saved = storeGet(THEME_KEY);
+    var t = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    applyTheme(t);
+    el('themeBtn').addEventListener('click', function () {
+      var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      storeSet(THEME_KEY, next);
+    });
+  }
+
+  /* ---------------- 隐私模式 ---------------- */
+  function applyPrivacy(on) {
+    PRIVACY = !!on;
+    var btn = el('privacyBtn');
+    btn.setAttribute('aria-pressed', PRIVACY ? 'true' : 'false');
+    btn.querySelector('.bt').textContent = PRIVACY ? '隐私开' : '隐私模式';
+    btn.title = PRIVACY ? '当前已隐藏账号与考号，点击显示' : '隐藏账号与考号的中间位，防止旁人看到';
+    render();
+  }
+
+  /* ---------------- 初始化 ---------------- */
+  function init() {
+    qEl = el('q');
+    resultsEl = el('results');
+    barEl = el('resultsBar');
+    searchCard = el('searchCard');
+    clearBtn = el('clearQ');
+
+    initTheme();
+
+    // 元数据展示
+    var footNote = el('footNote');
+    if (footNote) {
+      var parts = [];
+      parts.push('共 ' + DATA.length + ' 条记录');
+      if (META.classes && META.classes.length) parts.push(META.classes.join('、'));
+      if (META.updated) parts.push('数据更新于 ' + META.updated);
+      footNote.textContent = parts.join(' · ');
+    }
+    el('subtitle').textContent = (META.classes && META.classes[0] ? META.classes[0] + ' · ' : '') + '姓名 / 账号 / 考号 查询';
+
+    // 输入即搜（轻量防抖，保证中文输入法组词时也实时反馈）
+    var timer = null;
+    qEl.addEventListener('input', function () {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(render, 90);
+    });
+    qEl.addEventListener('focus', function () { searchCard.classList.add('is-focus'); });
+    qEl.addEventListener('blur', function () { searchCard.classList.remove('is-focus'); });
+    qEl.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (timer) clearTimeout(timer);
+        render();
+        var list = search(qEl.value);
+        if (list.length === 1) {
+          copyText(list[0].account).then(function () {
+            toast('已复制 ' + list[0].name + ' 的账号', 'ok');
+          }, function () { toast('复制失败，请手动选中复制', 'err'); });
+        } else if (!list.length && normalize(qEl.value).trim()) {
+          toast('没有找到对应学生', 'err');
+        }
+      } else if (e.key === 'Escape') {
+        qEl.value = '';
+        render();
+        qEl.blur();
+      }
+    });
+
+    clearBtn.addEventListener('click', function () {
+      qEl.value = '';
+      render();
+      qEl.focus();
+    });
+
+    // 隐私模式切换
+    el('privacyBtn').addEventListener('click', function () { applyPrivacy(!PRIVACY); });
+    applyPrivacy(false);
+
+    // 事件委托：复制 / 重新查询 / 揭示提示
+    document.addEventListener('click', function (e) {
+      var t = e.target;
+      if (!t || typeof t.closest !== 'function') return;
+
+      var chip = t.closest('.chip[data-name]');
+      if (chip) {
+        qEl.value = chip.getAttribute('data-name');
+        qEl.focus();
+        render();
+        return;
+      }
+
+      var rv = t.closest('[data-reveal]');
+      if (rv) {
+        toast('隐私模式已开启，关闭后可复制', 'err');
+        return;
+      }
+
+      var btn = t.closest('.copy-btn[data-copy]');
+      if (!btn) return;
+      var val = btn.getAttribute('data-copy');
+      var label = btn.getAttribute('data-label') || '';
+      var labelSpan = btn.querySelector('.bt');
+      var original = labelSpan ? labelSpan.textContent : '复制';
+      copyText(val).then(function () {
+        toast('已复制' + (label ? ' ' + label : '') + '：' + val, 'ok');
+        if (labelSpan) {
+          btn.classList.add('done');
+          labelSpan.textContent = '已复制';
+          setTimeout(function () {
+            btn.classList.remove('done');
+            labelSpan.textContent = original;
+          }, 1400);
+        }
+      }, function () {
+        toast('复制失败，请手动选中复制', 'err');
+      });
+    });
+
+    render();
+    qEl.focus();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  // 暴露给自动化测试
+  window.App = {
+    data: DATA,
+    meta: META,
+    search: search,
+    suggest: suggest,
+    mask: mask,
+    normalize: normalize,
+    render: render,
+    version: '1.0.0'
+  };
+})();
+
+</script>
+</body>
+</html>
