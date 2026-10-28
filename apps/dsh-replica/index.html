@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DeepSeek Harness · 本地复刻版</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ======================= 星空背景（双视图共用） ======================= -->
+<canvas id="starCanvas"></canvas>
+
+<!-- ================================================================
+     VIEW 1 · 官网 Landing（黑色炫酷）
+     ================================================================ -->
+<div id="landingView" class="landing">
+
+  <!-- 导航 -->
+  <nav class="landing-nav">
+    <div class="nav-brand">
+      <span class="whale-logo sm"></span>
+      <span class="brand-name">DeepSeek <em>Harness</em></span>
+      <span class="brand-badge">开发者预览版</span>
+    </div>
+    <div class="nav-links">
+      <a href="#" data-goto="features">设计思路</a>
+      <a href="#" data-goto="modes">运行模式</a>
+      <a href="#" data-goto="start">开始使用</a>
+      <a href="https://github.com/deepseek-ai/deepseek-harness" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+    <button class="btn-glow" id="btnEnterApp">快速体验 →</button>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-badge">一切皆插件 · Everything is a Plugin</div>
+    <h1 class="hero-title">
+      <span class="grad">一切皆插件</span>
+    </h1>
+    <p class="hero-sub">Agent = Model + Harness</p>
+    <p class="hero-desc">模型、工具、技能、会话、沙箱、存储、循环、调度、UI……<br>所有 Agent 能力均由插件组合而成，可以自由替换和灵活重组。</p>
+
+    <div class="hero-command">
+      <span class="prompt">$</span>
+      <code>npx @deepseek-ai/dsh web</code>
+      <span class="copy-hint">复制</span>
+    </div>
+
+    <div class="hero-actions">
+      <button class="btn-glow big" id="btnHeroLaunch">打开 Web UI 体验 →</button>
+      <button class="btn-ghost big" data-goto="start">从源码安装</button>
+    </div>
+
+    <div class="hero-whale"></div>
+    <div class="hero-stats">
+      <div class="stat"><b>1M</b><span>上下文 Tokens</span></div>
+      <div class="stat"><b>★125k</b><span>GitHub Stars</span></div>
+      <div class="stat"><b>4</b><span>内置运行模式</span></div>
+      <div class="stat"><b>MIT</b><span>开放协议</span></div>
+    </div>
+  </header>
+
+  <!-- 特性：设计思路 -->
+  <section class="sec" id="features">
+    <h2 class="sec-title">设计思路</h2>
+    <p class="sec-desc">Harness 让 Agent 在真实场景中持续工作</p>
+    <div class="cards3">
+      <article class="gl-card">
+        <div class="gl-icon">◈</div>
+        <h3>Cordis 内核</h3>
+        <p>只负责插件的加载、卸载和依赖关系，不承载 Agent 的具体能力。</p>
+      </article>
+      <article class="gl-card">
+        <div class="gl-icon">▦</div>
+        <h3>插件提供能力</h3>
+        <p>模型、工具、技能、存储……所有能力均由插件提供，通过服务与事件彼此协作。</p>
+      </article>
+      <article class="gl-card">
+        <div class="gl-icon">⚙</div>
+        <h3>配置层自由组合</h3>
+        <p>无需改动源码，即可在配置层选择、替换或扩展任一能力。</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- 运行模式 -->
+  <section class="sec" id="modes">
+    <h2 class="sec-title">多种运行模式</h2>
+    <p class="sec-desc">同一模型，放进不同环境，做事方式不一样</p>
+    <div class="mode-grid">
+      <article class="mode-card hot" data-mode="standard">
+        <span class="mode-tag">推荐</span>
+        <h3>标准模式</h3>
+        <p>功能完整的编码 Agent：文件编辑、Shell、文件与网页检索、Skills、计划、目标、子代理和工作流。</p>
+      </article>
+      <article class="mode-card" data-mode="ptc">
+        <h3>PTC 模式</h3>
+        <p>具备标准模式全部能力，通过 Code Mode SDK 呈现工具，让模型用一个 TypeScript 程序组合多步操作。</p>
+      </article>
+      <article class="mode-card" data-mode="minimal">
+        <h3>极简模式</h3>
+        <p>仅提供持久 bash 与文件编辑器两种工具的极简 Agent，用于最小化环境下的模型基准测试。</p>
+      </article>
+      <article class="mode-card blue" data-mode="creator">
+        <h3>创造模式</h3>
+        <p>用于创建自定义 Agent preset：提供运行时检查、插件实验和 preset 创作指导，亲手拼出你的智能体。</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- 有迹可循 -->
+  <section class="sec sec-trace" id="trace">
+    <h2 class="sec-title">每一次运行，都有迹可循</h2>
+    <p class="sec-desc">对话是「说了什么」，轨迹是「到底怎么干的」。每一步请求、每个工具调用、每次 token 消耗，全部可见。</p>
+    <div class="trace-mock">
+      <div class="trace-lanes">
+        <div class="lane"><span class="lane-tag in">Input</span><div class="lane-bar" style="width:38%"></div><div class="lane-bar dk" style="width:22%"></div></div>
+        <div class="lane"><span class="lane-tag md">Model</span><div class="lane-bar blue" style="width:55%"></div><div class="lane-bar lt" style="width:30%"></div></div>
+        <div class="lane"><span class="lane-tag tl">Tools</span><div class="lane-bar grn" style="width:24%"></div><div class="lane-bar ylw" style="width:32%"></div><div class="lane-bar red" style="width:8%"></div></div>
+      </div>
+      <div class="trace-line">Turn 1 · USER → ASSISTANT(x2) → TOOL(bash) → SUBTOOL(run_code) → ASSISTANT</div>
+      <div class="trace-summary">Token 输入 8.1K · 输出 2.4K · 缓存命中 0% · LLM 1.9s · 76 tok/s</div>
+    </div>
+  </section>
+
+  <!-- 开始使用 -->
+  <section class="sec sec-start" id="start">
+    <h2 class="sec-title">快速体验或从源码安装</h2>
+    <div class="cmd-cards">
+      <div class="cmd-card">
+        <h3>快速体验</h3>
+        <p>安装 Node.js 后，通过一条命令启动 Web UI：</p>
+        <div class="code-box"><span class="prompt">$</span><code>npx @deepseek-ai/dsh web</code>
+          <button class="copy-btn" data-copy="npx @deepseek-ai/dsh web">复制</button>
+        </div>
+      </div>
+      <div class="cmd-card">
+        <h3>源码安装</h3>
+        <p>获取完整项目源码，按仓库说明完成安装：</p>
+        <div class="code-box"><span class="prompt">$</span><code>git clone https://github.com/deepseek-ai/deepseek-harness</code>
+          <button class="copy-btn" data-copy="git clone https://github.com/deepseek-ai/deepseek-harness">复制</button>
+        </div>
+      </div>
+    </div>
+    <div class="start-cta">
+      <button class="btn-glow big" id="btnFooterLaunch">本地演示版 · 立即打开 Web UI →</button>
+    </div>
+  </section>
+
+  <footer class="landing-footer">
+    <p>DeepSeek Harness · 本地复刻演示版（界面风格参考 DeepSeek 官方，非官方产品）</p>
+  </footer>
+</div>
+
+<!-- ================================================================
+     VIEW 2 · Harness 对话台（Web UI）
+     ================================================================ -->
+<div id="appView" class="app" style="display:none">
+
+  <!-- 用户会话操作浮层 -->
+  <div id="chatMenu" class="chat-menu" style="display:none"></div>
+
+  <!-- 顶栏 -->
+  <header class="app-topbar">
+    <button id="btnBackHome" class="tb-btn" title="返回官网">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M9.5 3.5 5 8l4.5 4.5"/></svg>
+    </button>
+    <button id="btnToggleSidebar" class="tb-btn" title="折叠侧边栏">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2.5 3.5h11M2.5 8h11M2.5 12.5h11"/></svg>
+    </button>
+    <div class="tb-brand"><span class="whale-logo xs"></span><span>HARNESS</span></div>
+
+    <div class="tb-tabs">
+      <button class="tb-tab active" data-tab="chat">对话</button>
+      <button class="tb-tab" data-tab="trace">轨迹 <span id="traceDot" class="tb-dot" style="display:none"></span></button>
+    </div>
+
+    <div class="tb-right">
+      <!-- 模型选择 -->
+      <div class="dd" id="ddModel">
+        <button class="dd-btn" id="btnModel">
+          <span id="modelName">DeepSeek-V4-Pro</span>
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg>
+        </button>
+        <div class="dd-menu" id="ddModelMenu">
+          <div class="dd-opt" data-val="deepseek-v4-pro"><span>DeepSeek-V4-Pro</span><span class="dd-desc">旗舰 · 推理最强</span><b class="dd-check">✓</b></div>
+          <div class="dd-opt" data-val="deepseek-v4-flash"><span>DeepSeek-V4-Flash</span><span class="dd-desc">快速 · 高性价比</span><b class="dd-check">✓</b></div>
+        </div>
+      </div>
+
+      <!-- 思考强度 -->
+      <div class="dd" id="ddThink">
+        <button class="dd-btn" id="btnThink"><span id="thinkName">思考 High</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg></button>
+        <div class="dd-menu" id="ddThinkMenu">
+          <div class="dd-opt" data-val="high"><span>High</span><span class="dd-desc">深度推理，耗时长</span><b class="dd-check">✓</b></div>
+          <div class="dd-opt" data-val="medium"><span>Medium</span><span class="dd-desc">平衡</span><b class="dd-check">✓</b></div>
+          <div class="dd-opt" data-val="low"><span>Low</span><span class="dd-desc">快速响应</span><b class="dd-check">✓</b></div>
+        </div>
+      </div>
+
+      <!-- 权限模式 -->
+      <div class="dd" id="ddPerm">
+        <button class="dd-btn" id="btnPerm"><span id="permName">Workspace Write</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg></button>
+        <div class="dd-menu" id="ddPermMenu">
+          <div class="dd-opt" data-val="readonly"><span>Read Only</span><span class="dd-desc">只读审查</span><b class="dd-check">✓</b></div>
+          <div class="dd-opt" data-val="workspace"><span>Workspace Write</span><span class="dd-desc">工作区可写（默认）</span><b class="dd-check">✓</b></div>
+          <div class="dd-opt" data-val="full"><span>Full access</span><span class="dd-desc">全部授权</span><b class="dd-check">✓</b></div>
+        </div>
+      </div>
+
+      <button class="tb-btn" id="btnSettings" title="模型参数设置">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="2.2"/><path d="M8 1.6v2M8 12.4v2M1.6 8h2M12.4 8h2M3.5 3.5l1.4 1.4M11.1 11.1l1.4 1.4M12.5 3.5l-1.4 1.4M4.9 11.1l-1.4 1.4"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- 主体 -->
+  <div class="app-body">
+
+    <!-- 侧边栏 -->
+    <aside id="sidebar" class="app-sidebar">
+      <div class="sb-top">
+        <button id="btnNewChat" class="sb-new">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>
+          新会话
+        </button>
+        <button class="sb-ws"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2.5 4h11M2.5 4v8a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V4"/><path d="M6.5 2.5h3"/></svg>工作区 · dshrun</button>
+      </div>
+      <div class="sb-search">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
+        <input id="searchInput" type="text" placeholder="搜索历史会话">
+      </div>
+      <nav id="chatList" class="sb-list"></nav>
+      <div class="sb-bottom">
+        <button id="btnClearAll" class="sb-item danger">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2.5 4h11M6.5 4V2.5h3V4M4 4l.8 9.5h6.4L12 4"/></svg>清空全部会话
+        </button>
+        <div class="sb-user">
+          <div class="avatar">深</div>
+          <div class="sb-user-meta"><div>本地智能体</div><div class="sub">Mock 模式 · CLI dsh</div></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 主内容 -->
+    <div class="app-main">
+      <!-- 对话视图 -->
+      <section id="viewChat" class="view-chat">
+        <div id="chatArea" class="chat-area"></div>
+        <div class="composer-wrap">
+          <div class="composer" id="composer">
+            <div class="composer-mode-bar">
+              <!-- 模式选择 -->
+              <div class="dd mode-dd" id="ddMode">
+                <button class="mode-btn" id="btnMode">
+                  <span id="modeName">标准模式</span>
+                  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg>
+                </button>
+                <div class="dd-menu mode-menu" id="ddModeMenu">
+                  <div class="mode-opt" data-val="standard"><b>标准模式</b><span>功能完整的编码 Agent</span><i>✓</i></div>
+                  <div class="mode-opt" data-val="ptc"><b>PTC 模式</b><span>代码化工具 · 多步编排</span><i>✓</i></div>
+                  <div class="mode-opt" data-val="minimal"><b>极简模式</b><span>双工具基准测试</span><i>✓</i></div>
+                  <div class="mode-opt" data-val="creator"><b>创造模式</b><span>自定义 Agent preset</span><i>✓</i></div>
+                </div>
+              </div>
+              <span class="mode-hint" id="modeHint">功能完整的编码 Agent</span>
+            </div>
+
+            <div class="composer-input-row">
+              <textarea id="messageInput" rows="1" placeholder="给智能体发消息" autocomplete="off"></textarea>
+              <button id="btnSend" class="send-btn" disabled>
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8l11-5.5-4 11-2.2-4.3L2.5 8Z"/><path d="M7.3 9.2L13.5 2.5"/></svg>
+              </button>
+              <button id="btnStop" class="stop-btn" style="display:none">
+                <svg viewBox="0 0 16 16" fill="currentColor"><rect x="4.5" y="4.5" width="7" height="7" rx="1.2"/></svg>
+              </button>
+            </div>
+            <div class="composer-foot"><span>输入 @ 引用文件或会话（演示）· 内容由 AI 生成，请仔细甄别</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 轨迹视图 -->
+      <section id="viewTrace" class="view-trace" style="display:none">
+        <div class="trace-toolbar">
+          <button id="traceDuration" class="ttb-btn" title="切换 等宽/实际耗时">⏱ Duration</button>
+          <button id="traceCollapseTurns" class="ttb-btn" title="折叠/展开轮次">⊟ Turns</button>
+          <button id="traceCollapseCalls" class="ttb-btn" title="折叠/展开工具调用">⊟ Calls</button>
+          <div class="ttb-search"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg><input id="traceSearch" type="text" placeholder="在轨迹中搜索"></div>
+          <span class="ttb-hint" id="traceHint"></span>
+        </div>
+        <div class="trace-canvas">
+          <div id="traceTimeline" class="trace-timeline"></div>
+          <div class="trace-layout">
+            <div id="traceTable" class="trace-table"></div>
+            <div id="traceInspector" class="trace-inspector">
+              <div class="ins-empty">选择一条记录查看详情<br>Summary / Payload / Result / Schema / Timing / Token 用量</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 底部状态栏 -->
+    <footer class="statusbar">
+      <span id="stModel">DeepSeek-V4-Pro</span>
+      <span class="sep">·</span>
+      <span id="stPerm">Workspace Write</span>
+      <span class="sep">·</span>
+      <span id="stStats">等待任务…</span>
+      <span class="grow"></span>
+      <span id="stHint" class="st-hint">本地 Mock 演示</span>
+    </footer>
+  </div>
+</div>
+
+<!-- ======================= 参数设置模态框 ======================= -->
+<div id="settingsModal" class="modal-mask" style="display:none">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>模型参数设置</h3>
+      <button class="tb-btn" id="btnCloseSettings"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="param-row">
+        <div class="param-info">
+          <div class="param-label"><span>温度 (temperature)</span><span class="param-value" id="tempValue">1.0</span></div>
+          <div class="param-desc">控制随机性：越高越发散，越低越确定</div>
+        </div>
+        <input type="range" id="tempSlider" min="0" max="2" step="0.1" value="1.0">
+        <div class="param-scale"><span>0 严谨</span><span>2 发散</span></div>
+      </div>
+      <div class="param-row">
+        <div class="param-info">
+          <div class="param-label"><span>最大输出长度 (max_tokens)</span><span class="param-value" id="maxTokensValue">8000</span></div>
+          <div class="param-desc">限制单次回复最多生成的 token 数</div>
+        </div>
+        <input type="range" id="maxTokensSlider" min="256" max="32768" step="256" value="8000">
+        <div class="param-scale"><span>256</span><span>32768</span></div>
+      </div>
+      <div class="param-row">
+        <div class="param-info">
+          <div class="param-label"><span>Top-p (核采样)</span><span class="param-value" id="topPValue">0.9</span></div>
+          <div class="param-desc">从累计概率达到该值的候选词中采样</div>
+        </div>
+        <input type="range" id="topPSlider" min="0" max="1" step="0.05" value="0.9">
+        <div class="param-scale"><span>0</span><span>1</span></div>
+      </div>
+
+      <div class="modal-divider"></div>
+      <div class="param-section-title">数据接口（预留真实 API）</div>
+      <div class="param-row">
+        <div class="param-info"><div class="param-label"><span>接入模式</span></div><div class="param-desc">默认 Mock 数据；填入 API Key 后切换真实 DeepSeek API</div></div>
+        <select id="apiModeSelect" class="form-select">
+          <option value="mock">Mock 模拟数据</option>
+          <option value="real">DeepSeek 官方 API</option>
+        </select>
+      </div>
+      <div id="apiKeyRow" class="param-row" style="display:none">
+        <div class="param-info"><div class="param-label"><span>API Key</span></div><div class="param-desc">仅保存在浏览器本地</div></div>
+        <input type="password" id="apiKeyInput" class="form-text" placeholder="sk-">
+      </div>
+      <div id="apiBaseRow" class="param-row" style="display:none">
+        <div class="param-info"><div class="param-label"><span>Base URL</span></div></div>
+        <input type="text" id="apiBaseInput" class="form-text" value="https://api.deepseek.com">
+      </div>
+      <div class="param-row">
+        <div class="param-info"><div class="param-label"><span>接口模式</span></div><div class="param-desc">流式逐字返回 / 一次返回全文</div></div>
+        <select id="streamModeSelect" class="form-select">
+          <option value="stream">流式 (stream)</option>
+          <option value="once">一次返回</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="btnResetParams">恢复默认</button>
+      <button class="btn btn-primary" id="btnSaveSettings">保存设置</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast"></div>
+
+<script src="js/mock.js"></script>
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

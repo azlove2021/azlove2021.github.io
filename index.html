@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>应用集 · azlove 的离线网页应用</title>
+<meta name="description" content="6 个纯静态、离线可用的网页应用。点开即用，数据留在本地。">
+<style>
+  :root{
+    --bg:#FBFAF7; --card:#FFFFFF; --line:#E7E4DC; --line2:#D6D2C7;
+    --fg:#2C2C2A; --fg2:#5F5E5A; --fg3:#888780;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--fg);
+    font:15px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  .wrap{max-width:980px;margin:0 auto;padding:56px 24px 72px}
+  header{border-bottom:1px solid var(--line);padding-bottom:28px;margin-bottom:34px}
+  h1{margin:0 0 10px;font-size:30px;font-weight:600;letter-spacing:-.02em}
+  .lede{margin:0;color:var(--fg2);font-size:15px;max-width:62ch}
+  .stats{margin-top:18px;color:var(--fg3);font-size:13px;display:flex;gap:18px;flex-wrap:wrap}
+  .stats b{color:var(--fg);font-weight:600}
+  h2{margin:0 0 16px;font-size:14px;font-weight:600;color:var(--fg3);
+     text-transform:uppercase;letter-spacing:.08em}
+  .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(290px,1fr))}
+  .card{
+    display:flex;gap:14px;padding:20px;border:1px solid var(--line);
+    border-radius:14px;background:var(--card);text-decoration:none;color:inherit;
+    transition:border-color .16s ease, transform .16s ease;
+  }
+  .card:hover{border-color:var(--line2);transform:translateY(-2px)}
+  .card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  .ic{flex:0 0 40px;height:40px;border-radius:11px;display:grid;place-items:center;
+     color:var(--accent);background:var(--accent-soft)}
+  .ic svg{width:21px;height:21px}
+  .body{min-width:0;display:flex;flex-direction:column;gap:5px}
+  .t{font-weight:600;font-size:16px}
+  .sub{font-size:13px;color:var(--accent)}
+  .d{font-size:13.5px;color:var(--fg2);line-height:1.6}
+  .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+  .tag{font-size:11.5px;color:var(--fg3);border:1px solid var(--line);
+       border-radius:999px;padding:1px 9px}
+  footer{margin-top:44px;padding-top:22px;border-top:1px solid var(--line);
+         color:var(--fg3);font-size:13px}
+  @media (max-width:640px){
+    .wrap{padding:34px 18px 52px}
+    h1{font-size:24px}
+    .grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>应用集</h1>
+      <p class="lede">纯静态网页应用合集。点开即用，断网也能跑；所有数据都留在你自己的浏览器里，不上传任何服务器。</p>
+      <div class="stats">
+        <span><b>6</b> 个应用</span>
+        <span>最近更新 <b>2026-10-28</b></span>
+        <span>零外链 · 零追踪 · 零注册</span>
+      </div>
+    </header>
+
+    <h2>全部应用</h2>
+    <div class="grid">
+      <a class="card" href="apps/photosynthesis/index.html" style="--accent:#1D9E75;--accent-soft:#E4F3EE">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.5 15.5 6 22c6.5 1 12-3 13-9 .4-2.4-.2-4-2-5Z"/><path d="M9 22c1.5-4 4-7.5 8-10"/></svg></span>
+        <span class="body">
+          <span class="t">光合作用与呼吸作用</span>
+          <span class="sub">总光合 / 净光合 · 交互式教学演示</span>
+          <span class="d">一株植物上的交互式教学演示。把总光合、呼吸、净光合三条流量放到同一株植物、同一时刻、同一个密闭同化箱里，用可测量的方式讲清楚「净光合是测出来的，总光合是推出来的」。</span>
+          <span class="meta"><span class="tag">高中生物</span><span class="tag">3D</span><span class="tag">交互</span><span class="tag">公开课</span></span>
+        </span>
+      </a>
+      <a class="card" href="apps/beer-fermentation/index.html" style="--accent:#BA7517;--accent-soft:#F7EEE3">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3h4M11 3v6l-5.5 9.5A2 2 0 0 0 7.2 21h9.6a2 2 0 0 0 1.7-2.5L13 9V3"/><path d="M8 15h8"/></svg></span>
+        <span class="body">
+          <span class="t">啤酒发酵工厂</span>
+          <span class="sub">3D 生产流程课件</span>
+          <span class="d">以等距 3D 场景讲清麦芽糖化、煮沸、发酵、过滤、灌装的完整工艺链，每一步可暂停、可剖切、可看实时数据。</span>
+          <span class="meta"><span class="tag">3D</span><span class="tag">工艺流程</span><span class="tag">课件</span></span>
+        </span>
+      </a>
+      <a class="card" href="apps/teacher-workbench/index.html" style="--accent:#378ADD;--accent-soft:#E7F1FB">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M12 17v4M8 21h8"/></svg></span>
+        <span class="body">
+          <span class="t">班主任工作台</span>
+          <span class="sub">数据不出本机的班级管理台</span>
+          <span class="d">23 个模块覆盖学生、成绩、座位、课表、班委、班费、公告、家长联系、谈话、违纪、值日与安全。数据全部存在浏览器本地，不上传任何服务器。</span>
+          <span class="meta"><span class="tag">班级管理</span><span class="tag">单文件应用</span><span class="tag">离线可用</span></span>
+        </span>
+      </a>
+      <a class="card" href="apps/gaokao-subject/index.html" style="--accent:#D4537E;--accent-soft:#FAEAF0">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5Z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v3H6.5A2.5 2.5 0 0 1 4 20.5Z"/></svg></span>
+        <span class="body">
+          <span class="t">贵州新高考选科指南</span>
+          <span class="sub">3+1+2 选科 · 家长版</span>
+          <span class="d">面向贵州新高考 3+1+2 的选科指南：专业覆盖、学科组合优势、可报院校范围逐条说清楚，附可打印长图。</span>
+          <span class="meta"><span class="tag">高考</span><span class="tag">选科</span><span class="tag">家长向</span></span>
+        </span>
+      </a>
+      <a class="card" href="apps/iso-city/index.html" style="--accent:#5F5E5A;--accent-soft:#ECECEB">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V9l4-3v15M14 21V11l4-3v13M5 13h4M14 15h4"/></svg></span>
+        <span class="body">
+          <span class="t">ISO-CITY 98</span>
+          <span class="sub">复古等距城市建造沙盒</span>
+          <span class="d">1998 年 DOS 风格等距像素城市建造沙盒，完整预渲染单文件，浏览器直接开玩，支持存档与回放。</span>
+          <span class="meta"><span class="tag">游戏</span><span class="tag">像素风</span><span class="tag">等距</span></span>
+        </span>
+      </a>
+      <a class="card" href="apps/dsh-replica/index.html" style="--accent:#0F6E56;--accent-soft:#E2EEEB">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m9 17-5-5 5-5M15 7l5 5-5 5"/></svg></span>
+        <span class="body">
+          <span class="t">DeepSeek Harness 复刻</span>
+          <span class="sub">DSH 产品形态网页复刻</span>
+          <span class="d">零依赖单文件网页，复刻 DeepSeek Harness 的产品形态与交互逻辑，用于研究与演示。</span>
+          <span class="meta"><span class="tag">复刻</span><span class="tag">研究</span><span class="tag">单文件</span></span>
+        </span>
+      </a>
+    </div>
+
+    <footer>
+      生成于 2026-10-28 · 源码与构建脚本在本地，每次更新由构建流水线自动完成。
+      应用数据保存在访问者浏览器本地（localStorage），换浏览器或清缓存即重置。
+    </footer>
+  </div>
+</body>
+</html>
