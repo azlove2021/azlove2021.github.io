@@ -1,0 +1,10 @@
+# 百度网盘同步产生的临时文件，别提交上去
+*.baiduyun.uploading.cfg
+*.baiduyun.*
+.baiduyun.*
+
+# 系统与编辑器杂项
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
