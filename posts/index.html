@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>文章 · azlove 的教学工具箱</title>
-<meta name="description" content="教学设计的思考与技术取舍，共 3 篇。">
+<title>文章 · azlove 的网页应用集</title>
+<meta name="description" content="做东西时的取舍与踩过的坑，共 3 篇。">
 <meta name="theme-color" content="#f5f6fb">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%233b82f6'/><stop offset='.55' stop-color='%238b5cf6'/><stop offset='1' stop-color='%23ec4899'/></linearGradient></defs><rect width='100' height='100' rx='24' fill='url(%23g)'/><text x='50' y='69' font-size='52' text-anchor='middle' fill='%23fff' font-family='sans-serif' font-weight='700'>A</text></svg>">
 <style>
@@ -275,6 +275,83 @@ html[data-theme="dark"] .app-cover{background:linear-gradient(135deg,#152225,#1a
 .tag.t2{color:var(--lilac-ink);background:var(--lilac)}
 .tag.t3{color:var(--amber-ink);background:var(--amber)}
 .tag.tn{color:var(--fg3);background:transparent;border-color:var(--line)}
+/* ---------- 分类标签栏（应用区的二级导航） ---------- */
+.catbar{
+  display:flex;flex-wrap:wrap;align-items:center;gap:8px;
+  margin:0 0 22px;padding:10px 12px;border-radius:14px;
+  background:var(--card);border:1px solid var(--line);
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  box-shadow:var(--shadow-sm);
+}
+.cat{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:7px 14px;border-radius:10px;cursor:pointer;
+  border:1px solid transparent;background:transparent;
+  font:inherit;font-size:13.5px;color:var(--fg2);
+  transition:.2s;
+}
+.cat:hover{background:var(--accent-soft);color:var(--accent-d)}
+.cat.on{
+  background:var(--accent);color:#fff;border-color:transparent;
+  box-shadow:0 4px 14px -6px color-mix(in srgb,var(--accent) 70%,transparent);
+}
+.cat-n{font-weight:500}
+.cat-c{
+  font-size:11px;line-height:1;padding:2px 6px;border-radius:999px;
+  background:color-mix(in srgb,var(--fg) 7%,transparent);
+  color:var(--fg3);font-variant-numeric:tabular-nums;
+}
+.cat.on .cat-c{background:rgba(255,255,255,.24);color:#fff}
+.cat-hint{
+  margin-left:auto;font-size:12px;color:var(--fg3);padding-right:6px;
+  white-space:nowrap;
+}
+
+/* ---------- 卡片编号角标 ---------- */
+.app{position:relative}
+.app-no{
+  position:absolute;top:10px;left:10px;z-index:2;
+  font-size:11px;font-weight:600;letter-spacing:.04em;
+  padding:2.5px 8px;border-radius:7px;
+  background:rgba(255,255,255,.86);color:var(--fg2);
+  border:1px solid rgba(23,62,73,.10);
+  backdrop-filter:blur(8px);
+  font-variant-numeric:tabular-nums;
+  transition:.24s;
+}
+html[data-theme="dark"] .app-no{
+  background:rgba(12,20,22,.72);color:var(--fg2);
+  border-color:rgba(255,255,255,.14);
+}
+.app:hover .app-no{background:var(--accent);color:#fff;border-color:transparent}
+
+/* ---------- 加载更多 ---------- */
+.more-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;margin:26px 0 8px}
+.more-link{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:12.5px;color:var(--fg3);text-decoration:none;
+  padding:4px 10px;border-radius:8px;transition:.2s;
+}
+.more-link:hover{color:var(--accent);background:var(--accent-soft)}
+.load-more{
+  padding:10px 26px;border-radius:11px;cursor:pointer;
+  border:1px solid var(--line);background:var(--card);color:var(--fg2);
+  font:inherit;font-size:13.5px;font-weight:500;
+  backdrop-filter:blur(16px);
+  transition:.22s;
+}
+.load-more:hover{
+  border-color:var(--accent);color:var(--accent);
+  background:var(--accent-soft);transform:translateY(-1px);
+}
+
+@media (max-width:640px){
+  .catbar{padding:8px 10px;gap:6px}
+  .cat{padding:6px 11px;font-size:13px}
+  .cat-hint{display:none}
+}
+
 /* ---------- 文章列表 ---------- */
 /* 首页用两列，避免只有两三篇时右侧大片空白 */
 .posts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
@@ -519,7 +596,7 @@ html[data-theme="dark"] .app-cover{background:linear-gradient(135deg,#152225,#1a
     <span class="hero-kicker"><i></i>共 3 篇 · 按时间排序</span>
     <h1 style="margin:0 0 12px;font-size:clamp(30px,3.6vw,40px);font-weight:800;letter-spacing:-.035em">文章</h1>
     <p style="margin:0;font-size:15.5px;color:var(--fg2);max-width:52ch">
-      教学设计的思考、做工具时的取舍，以及一些踩过的坑。
+      做东西时的取舍、技术上的选择，以及一些踩过的坑。
     </p>
   </section>
 
@@ -589,7 +666,7 @@ html[data-theme="dark"] .app-cover{background:linear-gradient(135deg,#152225,#1a
   });
 })();
 (function(){
-  var MY = "20261029-085858";
+  var MY = "20261029-204610";
   if (!MY) return;
   fetch('version.json?t=' + Date.now(), {cache: 'no-store'})
     .then(function(r){ return r.json(); })

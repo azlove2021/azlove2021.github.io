@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>应用集 · azlove 的教学工具箱</title>
-<meta name="description" content="9 个离线可用的网页应用 + 3 篇教学与技术随笔。点开即用，数据留在你自己的浏览器里。">
+<title>Vibe Coding · azlove 的网页应用集</title>
+<meta name="description" content="9 个用 AI 写出来的网页应用，业余时间做的。单文件、离线可用、点开即用，数据留在你自己的浏览器里。">
 <meta name="theme-color" content="#f5f6fb">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%231e7361'/><stop offset='.55' stop-color='%232b9c88'/><stop offset='1' stop-color='%2348b8a8'/></linearGradient></defs><rect width='100' height='100' rx='24' fill='url(%23g)'/><text x='50' y='69' font-size='52' text-anchor='middle' fill='%23fff' font-family='sans-serif' font-weight='700'>A</text></svg>">
 <style>
@@ -275,6 +275,83 @@ html[data-theme="dark"] .app-cover{background:linear-gradient(135deg,#152225,#1a
 .tag.t2{color:var(--lilac-ink);background:var(--lilac)}
 .tag.t3{color:var(--amber-ink);background:var(--amber)}
 .tag.tn{color:var(--fg3);background:transparent;border-color:var(--line)}
+/* ---------- 分类标签栏（应用区的二级导航） ---------- */
+.catbar{
+  display:flex;flex-wrap:wrap;align-items:center;gap:8px;
+  margin:0 0 22px;padding:10px 12px;border-radius:14px;
+  background:var(--card);border:1px solid var(--line);
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  box-shadow:var(--shadow-sm);
+}
+.cat{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:7px 14px;border-radius:10px;cursor:pointer;
+  border:1px solid transparent;background:transparent;
+  font:inherit;font-size:13.5px;color:var(--fg2);
+  transition:.2s;
+}
+.cat:hover{background:var(--accent-soft);color:var(--accent-d)}
+.cat.on{
+  background:var(--accent);color:#fff;border-color:transparent;
+  box-shadow:0 4px 14px -6px color-mix(in srgb,var(--accent) 70%,transparent);
+}
+.cat-n{font-weight:500}
+.cat-c{
+  font-size:11px;line-height:1;padding:2px 6px;border-radius:999px;
+  background:color-mix(in srgb,var(--fg) 7%,transparent);
+  color:var(--fg3);font-variant-numeric:tabular-nums;
+}
+.cat.on .cat-c{background:rgba(255,255,255,.24);color:#fff}
+.cat-hint{
+  margin-left:auto;font-size:12px;color:var(--fg3);padding-right:6px;
+  white-space:nowrap;
+}
+
+/* ---------- 卡片编号角标 ---------- */
+.app{position:relative}
+.app-no{
+  position:absolute;top:10px;left:10px;z-index:2;
+  font-size:11px;font-weight:600;letter-spacing:.04em;
+  padding:2.5px 8px;border-radius:7px;
+  background:rgba(255,255,255,.86);color:var(--fg2);
+  border:1px solid rgba(23,62,73,.10);
+  backdrop-filter:blur(8px);
+  font-variant-numeric:tabular-nums;
+  transition:.24s;
+}
+html[data-theme="dark"] .app-no{
+  background:rgba(12,20,22,.72);color:var(--fg2);
+  border-color:rgba(255,255,255,.14);
+}
+.app:hover .app-no{background:var(--accent);color:#fff;border-color:transparent}
+
+/* ---------- 加载更多 ---------- */
+.more-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;margin:26px 0 8px}
+.more-link{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:12.5px;color:var(--fg3);text-decoration:none;
+  padding:4px 10px;border-radius:8px;transition:.2s;
+}
+.more-link:hover{color:var(--accent);background:var(--accent-soft)}
+.load-more{
+  padding:10px 26px;border-radius:11px;cursor:pointer;
+  border:1px solid var(--line);background:var(--card);color:var(--fg2);
+  font:inherit;font-size:13.5px;font-weight:500;
+  backdrop-filter:blur(16px);
+  transition:.22s;
+}
+.load-more:hover{
+  border-color:var(--accent);color:var(--accent);
+  background:var(--accent-soft);transform:translateY(-1px);
+}
+
+@media (max-width:640px){
+  .catbar{padding:8px 10px;gap:6px}
+  .cat{padding:6px 11px;font-size:13px}
+  .cat-hint{display:none}
+}
+
 /* ---------- 文章列表 ---------- */
 /* 首页用两列，避免只有两三篇时右侧大片空白 */
 .posts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
@@ -518,9 +595,9 @@ html[data-theme="dark"] .app-cover{background:linear-gradient(135deg,#152225,#1a
 
   <section class="hero">
     <div>
-      <span class="hero-kicker"><i></i>持续更新中 · 最后更新 2026-10-29 08:58:58</span>
-      <h1>把课件做成<br><em>一个文件</em>的人</h1>
-      <p>离线网页应用与教学随笔。每个应用都是单个 HTML，双击就用、断网也能跑，数据全留在你自己的浏览器里。</p>
+      <span class="hero-kicker"><i></i>持续更新中 · 最后更新 2026-10-29 20:46:10</span>
+      <h1>Vibe Coding<br><em>做出来的东西</em></h1>
+      <p>业余时间用 AI 写的几十个小应用 —— 3D 课件、班级工具、游戏、模型库。每个都是单个 HTML，双击就用、断网也能跑。</p>
       <div class="hero-btns">
         <a class="btn btn-primary" href="#apps">
           浏览应用
@@ -540,7 +617,7 @@ html[data-theme="dark"] .app-cover{background:linear-gradient(135deg,#152225,#1a
         <div class="idcard-face">A</div>
         <div>
           <b>azlove</b>
-          <span>高中生物教师 · 爱折腾工具</span>
+          <span>Vibe Coding 爱好者 · 业余时间造轮子</span>
         </div>
       </div>
       <div class="stat-grid">
@@ -557,6 +634,17 @@ html[data-theme="dark"] .app-cover{background:linear-gradient(135deg,#152225,#1a
     </aside>
   </section>
 
+  <nav class="catbar" id="catbar" aria-label="应用分类">
+    <button class="cat on" data-cat="all">
+      <span class="cat-n">全部</span><span class="cat-c">9</span>
+    </button>
+    <button class="cat" data-cat="3d"><span class="cat-n">3D 可视化</span><span class="cat-c">4</span></button>
+    <button class="cat" data-cat="tool"><span class="cat-n">实用工具</span><span class="cat-c">2</span></button>
+    <button class="cat" data-cat="game"><span class="cat-n">游戏</span><span class="cat-c">1</span></button>
+    <button class="cat" data-cat="lib"><span class="cat-n">模型库</span><span class="cat-c">2</span></button>
+    <span class="cat-hint">点分类筛选 · 共 9 个</span>
+  </nav>
+
   <section class="sec" id="apps">
     <div class="sec-head">
       <div>
@@ -570,7 +658,8 @@ html[data-theme="dark"] .app-cover{background:linear-gradient(135deg,#152225,#1a
       </a>
     </div>
     <div class="apps">
-      <a class="app" href="apps/photosynthesis/index.html" style="--accent:#1D9E75;--accent-soft:#E8F5F1;--accent-d:#B2DED0;--accent-soft-d:#0D2C27">
+      <a class="app" href="apps/photosynthesis/index.html" style="--accent:#1D9E75;--accent-soft:#E8F5F1;--accent-d:#B2DED0;--accent-soft-d:#0D2C27" data-cat="3d" data-no="001">
+        <span class="app-no">001</span>
         <div class="app-cover"><img src="covers/photosynthesis.webp" alt="光合作用与呼吸作用" loading="lazy" decoding="async"></div>
         <div class="app-body">
           <div class="app-tags"><span class="tag">高中生物</span><span class="tag t2">3D</span><span class="tag t3">交互</span><span class="tag tn">公开课</span></div>
@@ -579,7 +668,8 @@ html[data-theme="dark"] .app-cover{background:linear-gradient(135deg,#152225,#1a
           <div class="app-d">一株植物上的交互式教学演示。把总光合、呼吸、净光合三条流量放到同一株植物、同一时刻、同一个密闭同化箱里，用可测量的方式讲清楚「净光合是测出来的，总光合是推出来的」。</div>
         </div>
       </a>
-      <a class="app" href="apps/beer-fermentation/index.html" style="--accent:#BA7517;--accent-soft:#F8F1E8;--accent-d:#E8D0B0;--accent-soft-d:#332210">
+      <a class="app" href="apps/beer-fermentation/index.html" style="--accent:#BA7517;--accent-soft:#F8F1E8;--accent-d:#E8D0B0;--accent-soft-d:#332210" data-cat="3d" data-no="002">
+        <span class="app-no">002</span>
         <div class="app-cover"><img src="covers/beer-fermentation.webp" alt="啤酒发酵工厂" loading="lazy" decoding="async"></div>
         <div class="app-body">
           <div class="app-tags"><span class="tag">3D</span><span class="tag t2">工艺流程</span><span class="tag t3">课件</span></div>
@@ -588,7 +678,8 @@ html[data-theme="dark"] .app-cover{background:linear-gradient(135deg,#152225,#1a
           <div class="app-d">以等距 3D 场景讲清麦芽糖化、煮沸、发酵、过滤、灌装的完整工艺链，每一步可暂停、可剖切、可看实时数据。</div>
         </div>
       </a>
-      <a class="app" href="apps/teacher-workbench/index.html" style="--accent:#378ADD;--accent-soft:#EBF3FC;--accent-d:#BBD7F3;--accent-soft-d:#132740">
+      <a class="app" href="apps/teacher-workbench/index.html" style="--accent:#378ADD;--accent-soft:#EBF3FC;--accent-d:#BBD7F3;--accent-soft-d:#132740" data-cat="tool" data-no="003">
+        <span class="app-no">003</span>
         <div class="app-cover"><img src="covers/teacher-workbench.webp" alt="班主任工作台" loading="lazy" decoding="async"></div>
         <div class="app-body">
           <div class="app-tags"><span class="tag">班级管理</span><span class="tag t2">单文件应用</span><span class="tag t3">离线可用</span></div>
@@ -597,7 +688,8 @@ html[data-theme="dark"] .app-cover{background:linear-gradient(135deg,#152225,#1a
           <div class="app-d">23 个模块覆盖学生、成绩、座位、课表、班委、班费、公告、家长联系、谈话、违纪、值日与安全。数据全部存在浏览器本地，不上传任何服务器。</div>
         </div>
       </a>
-      <a class="app" href="apps/gaokao-subject/index.html" style="--accent:#D4537E;--accent-soft:#FBEEF2;--accent-d:#F0C5D3;--accent-soft-d:#391A29">
+      <a class="app" href="apps/gaokao-subject/index.html" style="--accent:#D4537E;--accent-soft:#FBEEF2;--accent-d:#F0C5D3;--accent-soft-d:#391A29" data-cat="tool" data-no="004">
+        <span class="app-no">004</span>
         <div class="app-cover"><img src="covers/gaokao-subject.webp" alt="贵州新高考选科指南" loading="lazy" decoding="async"></div>
         <div class="app-body">
           <div class="app-tags"><span class="tag">高考</span><span class="tag t2">选科</span><span class="tag t3">家长向</span></div>
@@ -606,7 +698,8 @@ html[data-theme="dark"] .app-cover{background:linear-gradient(135deg,#152225,#1a
           <div class="app-d">面向贵州新高考 3+1+2 的选科指南：专业覆盖、学科组合优势、可报院校范围逐条说清楚，附可打印长图。</div>
         </div>
       </a>
-      <a class="app" href="apps/iso-city/index.html" style="--accent:#5F5E5A;--accent-soft:#EFEFEE;--accent-d:#C9C8C7;--accent-soft-d:#1D1D20">
+      <a class="app" href="apps/iso-city/index.html" style="--accent:#5F5E5A;--accent-soft:#EFEFEE;--accent-d:#C9C8C7;--accent-soft-d:#1D1D20" data-cat="game" data-no="005">
+        <span class="app-no">005</span>
         <div class="app-cover"><img src="covers/iso-city.webp" alt="ISO-CITY 98" loading="lazy" decoding="async"></div>
         <div class="app-body">
           <div class="app-tags"><span class="tag">游戏</span><span class="tag t2">像素风</span><span class="tag t3">等距</span></div>
@@ -615,7 +708,8 @@ html[data-theme="dark"] .app-cover{background:linear-gradient(135deg,#152225,#1a
           <div class="app-d">1998 年 DOS 风格等距像素城市建造沙盒，完整预渲染单文件，浏览器直接开玩，支持存档与回放。</div>
         </div>
       </a>
-      <a class="app" href="apps/dji-air-3s-exploded/index.html" style="--accent:#35A0C8;--accent-soft:#EBF6FA;--accent-d:#BADFEC;--accent-soft-d:#132C3B">
+      <a class="app" href="apps/dji-air-3s-exploded/index.html" style="--accent:#35A0C8;--accent-soft:#EBF6FA;--accent-d:#BADFEC;--accent-soft-d:#132C3B" data-cat="3d" data-no="006">
+        <span class="app-no">006</span>
         <div class="app-cover"><img src="covers/dji-air-3s-exploded.webp" alt="DJI Air 3S 三维拆解" loading="lazy" decoding="async"></div>
         <div class="app-body">
           <div class="app-tags"><span class="tag">3D</span><span class="tag t2">Three.js</span><span class="tag t3">交互</span><span class="tag tn">单文件</span></div>
@@ -624,7 +718,8 @@ html[data-theme="dark"] .app-cover{background:linear-gradient(135deg,#152225,#1a
           <div class="app-d">用 Three.js 全程序化构建的 DJI Air 3S 无人机拆解视图，点击部件即可沿拆解方向分离并查看参数，支持自由旋转缩放与发光高亮。</div>
         </div>
       </a>
-      <a class="app" href="apps/meiosis-3d-courseware/index.html" style="--accent:#C2185B;--accent-soft:#F9E8EF;--accent-d:#EAB0C7;--accent-soft-d:#350C20">
+      <a class="app" href="apps/meiosis-3d-courseware/index.html" style="--accent:#C2185B;--accent-soft:#F9E8EF;--accent-d:#EAB0C7;--accent-soft-d:#350C20" data-cat="3d" data-no="007">
+        <span class="app-no">007</span>
         <div class="app-cover"><img src="covers/meiosis-3d-courseware.webp" alt="S-01 减数分裂全流程" loading="lazy" decoding="async"></div>
         <div class="app-body">
           <div class="app-tags"><span class="tag">3D</span><span class="tag t2">遗传与进化</span><span class="tag t3">单文件</span><span class="tag tn">语音讲解</span></div>
@@ -633,7 +728,8 @@ html[data-theme="dark"] .app-cover{background:linear-gradient(135deg,#152225,#1a
           <div class="app-d">减数分裂全过程时间轴：白色鲜艳主题，three.js 单文件离线，含语音讲解与动画同步，与人教版 2019 选修教材逐阶段对应。</div>
         </div>
       </a>
-      <a class="app" href="/ander-studio-offline/index.html" style="--accent:#207A68;--accent-soft:#E9F2F0;--accent-d:#B3D2CC;--accent-soft-d:#0E2324">
+      <a class="app" href="/ander-studio-offline/index.html" style="--accent:#207A68;--accent-soft:#E9F2F0;--accent-d:#B3D2CC;--accent-soft-d:#0E2324" data-cat="lib" data-no="008">
+        <span class="app-no">008</span>
         <div class="app-cover"><img src="covers/ander-studio-offline.webp" alt="安德生物工作室" loading="lazy" decoding="async"></div>
         <div class="app-body">
           <div class="app-tags"><span class="tag">生物</span><span class="tag t2">题库</span><span class="tag t3">模型库</span></div>
@@ -642,7 +738,8 @@ html[data-theme="dark"] .app-cover{background:linear-gradient(135deg,#152225,#1a
           <div class="app-d">安德生物工作室离线镜像：29 个交互教学模型 + 938 道题库快照，零依赖本地服务。</div>
         </div>
       </a>
-      <a class="app" href="/ander-studio-models/index.html" style="--accent:#3D8B7D;--accent-soft:#ECF3F2;--accent-d:#BDD8D3;--accent-soft-d:#152729">
+      <a class="app" href="/ander-studio-models/index.html" style="--accent:#3D8B7D;--accent-soft:#ECF3F2;--accent-d:#BDD8D3;--accent-soft-d:#152729" data-cat="lib" data-no="009">
+        <span class="app-no">009</span>
         <div class="app-cover"><img src="covers/ander-studio-models.webp" alt="生物教学模型库" loading="lazy" decoding="async"></div>
         <div class="app-body">
           <div class="app-tags"><span class="tag">生物</span><span class="tag t2">3D</span><span class="tag t3">模型库</span></div>
@@ -651,15 +748,14 @@ html[data-theme="dark"] .app-cover{background:linear-gradient(135deg,#152225,#1a
           <div class="app-d">教学模型库：分子与细胞、遗传与进化各模块的交互式 3D/2D 模型，配套讲解与题库，全部本地下载、无需联网。</div>
         </div>
       </a>
-      <a class="app-more" href="https://github.com/azlove2021/azlove2021.github.io" target="_blank" rel="noopener">
-        <span class="app-more-ic">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
-               stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 5v14M5 12h14"/>
-          </svg>
-        </span>
-        <b>还有更多</b>
-        <span>源码都在 GitHub 上，<br>新的应用会陆续加进来</span>
+    </div>
+    <div class="more-wrap" id="moreWrap">
+      <button class="load-more" id="loadMore" type="button" style="display:none">加载更多</button>
+      <a class="more-link" href="https://github.com/azlove2021/azlove2021.github.io" target="_blank" rel="noopener">
+        更多源码在 GitHub
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M7 17 17 7M9 7h8v8"/></svg>
       </a>
     </div>
   </section>
@@ -668,7 +764,7 @@ html[data-theme="dark"] .app-cover{background:linear-gradient(135deg,#152225,#1a
     <div class="sec-head">
       <div>
         <h2>最近文章</h2>
-        <p>教学设计的思考，以及一些技术上的取舍</p>
+        <p>做东西时的取舍，以及一些踩过的坑</p>
       </div>
       <a class="sec-more" href="posts/">
         全部文章
@@ -713,22 +809,22 @@ html[data-theme="dark"] .app-cover{background:linear-gradient(135deg,#152225,#1a
         <h2>最近更新</h2>
         <p>每次改动都记了时间戳，精确到秒</p>
       </div>
-      <span class="stamp-badge">最后更新 2026-10-29 08:58:58</span>
+      <span class="stamp-badge">最后更新 2026-10-29 20:46:10</span>
     </div>
-<div class="timeline"><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 08:58:58</span><span class="tl-what">内容调整</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 08:52:53</span><span class="tl-what">内容调整</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 08:47:42</span><span class="tl-what">更新 S-01 减数分裂全流程</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 08:44:33</span><span class="tl-what">更新 S-01 减数分裂全流程</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 08:39:41</span><span class="tl-what">更新 S-01 减数分裂全流程</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 08:34:37</span><span class="tl-what">移除 DeepSeek Harness 复刻</span></div></div>
+<div class="timeline"><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 20:46:10</span><span class="tl-what">更新 S-01 减数分裂全流程 · 修订 这张图怎么看 —— 光合 / 呼吸曲线读图指南、「净光合是测出来的，总光合是推出来的」、为什么我把课件做成单文件 HTML</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 08:58:58</span><span class="tl-what">内容调整</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 08:52:53</span><span class="tl-what">内容调整</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 08:47:42</span><span class="tl-what">更新 S-01 减数分裂全流程</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 08:44:33</span><span class="tl-what">更新 S-01 减数分裂全流程</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 08:39:41</span><span class="tl-what">更新 S-01 减数分裂全流程</span></div></div>
   </section>
 
   <section class="about" id="about">
     <div>
       <h3>关于这个站</h3>
-      <p>我是高中生物老师，平时会给课堂做一些交互式的演示工具。做久了发现，最实用的形态不是在线平台，而是<strong>一个能双击打开的 HTML 文件</strong>——教室网络不稳定，投影电脑也不一定装了什么软件。</p>
-      <p>这里放的就是这些工具，以及做它们时的一些想法。</p>
+      <p>我是个 vibe coding 爱好者 —— 大部分代码是 AI 写的，我负责提需求、挑方向、调细节。做久了发现，最实用的形态不是在线平台，而是<strong>一个能双击打开的 HTML 文件</strong>：不用部署、不依赖网络、拷进 U 盘就能带走。</p>
+      <p>这里放的就是这些作品，以及做它们时的一些想法。都是业余时间折腾出来的，觉得有用就拿去用。</p>
     </div>
     <div class="about-list">
-      <div class="about-item"><i>1</i><span>所有应用都是单文件，断网可用，可拷进 U 盘带走</span></div>
+      <div class="about-item"><i>1</i><span>大部分是单文件，断网可用，可拷进 U 盘带走</span></div>
       <div class="about-item"><i>2</i><span>数据存在浏览器本地（localStorage），不上传任何服务器</span></div>
       <div class="about-item"><i>3</i><span>没有账号系统，没有统计脚本，没有广告</span></div>
-      <div class="about-item"><i>4</i><span>源码在 GitHub 上，欢迎提意见</span></div>
+      <div class="about-item"><i>4</i><span>源码都在 GitHub 上，欢迎提意见或自己改</span></div>
     </div>
   </section>
 
@@ -769,7 +865,7 @@ html[data-theme="dark"] .app-cover{background:linear-gradient(135deg,#152225,#1a
   });
 })();
 (function(){
-  var MY = "20261029-085858";
+  var MY = "20261029-204610";
   if (!MY) return;
   fetch('version.json?t=' + Date.now(), {cache: 'no-store'})
     .then(function(r){ return r.json(); })
@@ -781,6 +877,53 @@ html[data-theme="dark"] .app-cover{background:linear-gradient(135deg,#152225,#1a
       }
     })
     .catch(function(){});               // 网络不通就算了，不打扰
+})();
+(function(){
+  var bar = document.getElementById('catbar');
+  var grid = document.getElementById('apps');
+  if (!bar || !grid) return;
+  var btnMore = document.getElementById('loadMore');
+  var wrapMore = document.getElementById('moreWrap');
+  var cards = [].slice.call(grid.querySelectorAll('.app'));
+  var PAGE = 12;              // 一次显示 12 个，超出的点「加载更多」
+  var cur = 'all';
+  var shown = PAGE;
+
+  function render() {
+    var pool = cards.filter(function(c){
+      return cur === 'all' || c.getAttribute('data-cat') === cur;
+    });
+    cards.forEach(function(c){ c.style.display = 'none'; });
+    pool.slice(0, shown).forEach(function(c){ c.style.display = ''; });
+    [].forEach.call(bar.querySelectorAll('.cat'), function(b){
+      b.classList.toggle('on', b.getAttribute('data-cat') === cur);
+    });
+    if (btnMore) {
+      if (pool.length > shown) {
+        btnMore.style.display = '';
+        btnMore.textContent = '加载更多（还有 ' + (pool.length - shown) + ' 个）';
+      } else {
+        btnMore.style.display = 'none';
+      }
+    }
+  }
+
+  bar.addEventListener('click', function(e){
+    var b = e.target.closest('.cat');
+    if (!b) return;
+    cur = b.getAttribute('data-cat');
+    shown = PAGE;
+    render();
+  });
+
+  if (btnMore) {
+    btnMore.addEventListener('click', function(){
+      shown += PAGE;
+      render();
+    });
+  }
+
+  render();
 })();
 </script>
 </body>
