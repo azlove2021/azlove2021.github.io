@@ -352,6 +352,304 @@ html[data-theme="dark"] .app-no{
   .cat-hint{display:none}
 }
 
+/* ===========================================================
+   v8 视觉改造（参考 lab.tongjiang.app 的结构，不搬它的皮肤）
+     1. 深色 Hero —— 明暗对比做视觉锚点，用青绿的深色版
+     2. Bento 布局 —— 1 大 2 小，打破均匀网格
+     3. 学科色编码 —— 每个学科一个色，贯穿角标与分类点
+     4. 双维度分类 + 搜索
+   =========================================================== */
+
+/* ---------- 深色 Hero ---------- */
+.hero-dark{
+  position:relative;overflow:hidden;
+  background:linear-gradient(155deg,#081815 0%,#0c2620 42%,#103a31 100%);
+  color:#e8f4f0;
+}
+.hero-dark::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(58% 62% at 12% 0%,rgba(72,184,168,.20) 0%,transparent 66%),
+    radial-gradient(46% 50% at 92% 18%,rgba(46,139,87,.16) 0%,transparent 68%);
+}
+.hero-dark::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(146,196,186,.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(146,196,186,.055) 1px,transparent 1px);
+  background-size:52px 52px;
+  -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 30%,#000 8%,transparent 76%);
+  mask-image:radial-gradient(ellipse 80% 70% at 50% 30%,#000 8%,transparent 76%);
+}
+.hero-in{
+  position:relative;z-index:1;
+  max-width:1140px;margin:0 auto;padding:66px 26px 74px;
+  display:grid;grid-template-columns:1.25fr .95fr;gap:52px;align-items:center;
+}
+.hero-copy .hero-kicker{
+  background:rgba(146,196,186,.10);border-color:rgba(146,196,186,.22);
+  color:rgba(232,244,240,.80);backdrop-filter:blur(12px);
+}
+.hero-copy .hero-kicker i{background:#4fd1b0;box-shadow:0 0 0 3px rgba(79,209,176,.22)}
+.hero-copy h1{
+  margin:20px 0 16px;font-size:clamp(34px,4.4vw,52px);line-height:1.12;
+  font-weight:800;letter-spacing:-.04em;color:#f2fbf8;
+}
+.hero-copy h1 em{
+  font-style:normal;
+  background:linear-gradient(100deg,#5ee0bd,#48b8a8 48%,#8fd6c4);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero-copy p{
+  margin:0 0 26px;font-size:16px;line-height:1.68;
+  color:rgba(232,244,240,.74);max-width:46ch;
+}
+
+/* Hero 统计 */
+.hero-stats{display:flex;gap:26px;margin-bottom:28px;flex-wrap:wrap}
+.hs b{
+  display:block;font-size:25px;font-weight:750;letter-spacing:-.03em;
+  color:#f2fbf8;line-height:1.15;font-variant-numeric:tabular-nums;
+}
+.hs span{font-size:11.5px;color:rgba(232,244,240,.56);letter-spacing:.02em}
+
+/* Hero 按钮 */
+.btn-hero{
+  background:#3fae96;border-color:transparent;color:#04231c;
+  font-weight:650;padding:11px 22px;border-radius:12px;
+  box-shadow:0 10px 26px -12px rgba(63,174,150,.85);
+}
+.btn-hero:hover{background:#4dc4a9;color:#04231c;transform:translateY(-1px)}
+.btn-hero-ghost{
+  background:rgba(146,196,186,.10);border-color:rgba(146,196,186,.26);
+  color:#d6efe8;padding:11px 20px;border-radius:12px;
+}
+.btn-hero-ghost:hover{
+  background:rgba(146,196,186,.18);border-color:rgba(146,196,186,.42);
+  color:#eafaf5;
+}
+.hero-foot{margin-top:22px;font-size:12px;color:rgba(232,244,240,.44)}
+
+/* Hero 右侧：学科速览 */
+.hero-cards{
+  display:flex;flex-direction:column;gap:11px;
+  align-content:center;justify-content:center;
+}
+.hero-cards .subj-card{padding:15px 18px}
+.hero-cards .subj-card b{font-size:16px}
+.hero-cards .subj-card .subj-n{position:absolute;right:17px;bottom:15px;
+  font-size:12.5px;color:rgba(232,244,240,.66)}
+.hero-all{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;border-radius:15px;text-decoration:none;
+  background:rgba(63,174,150,.14);border:1px solid rgba(63,174,150,.34);
+  color:#8fe6cd;font-size:13.5px;font-weight:600;transition:.24s;
+}
+.hero-all:hover{background:rgba(63,174,150,.22);border-color:rgba(63,174,150,.55)}
+.hero-all span{font-size:12px;font-weight:400;color:rgba(232,244,240,.52)}
+.subj-card{
+  position:relative;display:flex;flex-direction:row;align-items:center;gap:12px;
+  padding:15px 18px;border-radius:15px;text-decoration:none;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(146,196,186,.20);
+  backdrop-filter:blur(16px);
+  transition:.26s cubic-bezier(.16,1,.3,1);
+}
+.subj-card:hover{
+  background:rgba(255,255,255,.10);
+  border-color:color-mix(in srgb,var(--c) 60%,transparent);
+  transform:translateY(-3px);
+}
+.subj-ic{
+  flex:0 0 auto;width:34px;height:34px;border-radius:10px;position:relative;
+  background:color-mix(in srgb,var(--c) 24%,transparent);
+  border:1px solid color-mix(in srgb,var(--c) 50%,transparent);
+}
+.subj-ic::after{
+  content:"";position:absolute;inset:10px;border-radius:3px;background:var(--c);
+}
+.subj-card b{font-size:15px;font-weight:650;color:#eafaf5;letter-spacing:-.01em}
+.subj-n{font-size:12px;color:rgba(232,244,240,.60);font-variant-numeric:tabular-nums}
+.subj-en{
+  position:absolute;top:15px;right:16px;
+  font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+  color:rgba(232,244,240,.34);
+}
+.subj-empty{
+  grid-column:span 2;padding:22px;border-radius:15px;text-align:center;
+  background:rgba(255,255,255,.045);border:1px dashed rgba(146,196,186,.24);
+}
+.subj-empty b{display:block;color:#d6efe8;font-size:14px;margin-bottom:5px}
+.subj-empty span{font-size:11.5px;color:rgba(232,244,240,.48)}
+
+/* ---------- Bento：1 大 2 小 ---------- */
+.bento{
+  display:grid;gap:16px;
+  grid-template-columns:2fr 1fr 1fr;   /* 大卡占 2 份，两张小卡各 1 份 */
+  /* 不用 stretch：三张卡宽度不同，强行等高会让小卡信息区撑出一片空白。
+     改成按内容高度、顶部对齐 —— 这本来就是 Bento 想要的错落感。 */
+  align-items:start;
+}
+.bn{
+  position:relative;display:flex;flex-direction:column;overflow:hidden;
+  text-decoration:none;border-radius:20px;border:1px solid var(--line);
+  background:var(--surface);box-shadow:var(--shadow);
+  transition:transform .34s cubic-bezier(.16,1,.3,1),box-shadow .34s,border-color .34s;
+}
+.bn:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--line-hi)}
+.bn-cover{
+  position:relative;flex:0 0 auto;aspect-ratio:16/9;
+  overflow:hidden;background:#0e1c1a;
+}
+.bn-cover::after{display:none}
+
+/* 信息区：白底，文字清晰（截图不适合压字） */
+.bn-info{
+  position:relative;flex:1 1 auto;
+  display:flex;flex-direction:column;justify-content:flex-start;
+  padding:14px 16px 16px;
+  background:var(--surface);color:var(--fg);
+}
+.bn-info h3{color:var(--fg);text-shadow:none}
+.bn-chapter{color:var(--fg3);text-shadow:none}
+
+/* 大卡字号放大 */
+.bn-big .bn-info{padding:18px 20px 20px}
+.bn-big .bn-info h3{font-size:20px;line-height:1.32}
+.bn-big .bn-chapter{font-size:12.5px;margin-top:7px}
+.bn-big .bn-go{margin-top:14px;font-size:13px}
+
+.bn-small .bn-info h3{font-size:14.5px;line-height:1.38}
+.bn-small .bn-chapter{font-size:11px;margin-top:4px}
+.bn-small .bn-go{margin-top:8px;font-size:11.5px}
+.bn-cover img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .6s cubic-bezier(.16,1,.3,1);
+}
+.bn:hover .bn-cover img{transform:scale(1.04)}
+.bn-cover::after{
+  content:"";position:absolute;inset:0;
+  /* 封面多半是浅色界面截图，遮罩要从 40% 就开始压，否则白底压不住字 */
+  background:linear-gradient(180deg,
+    rgba(6,20,17,0) 30%,
+    rgba(6,20,17,.55) 62%,
+    rgba(6,20,17,.88) 82%,
+    rgba(6,20,17,.96) 100%);
+}
+/* 学科角标（信息区里的那个小圆角标签） */
+.bn-subj{
+  display:inline-block;align-self:flex-start;
+  margin-bottom:8px;padding:2.5px 10px;border-radius:999px;
+  font-size:11px;font-weight:600;letter-spacing:.02em;
+  color:#fff;background:var(--c);
+}
+/* 标题与章节：白底深字 */
+.bn-info h3{
+  margin:0;font-weight:700;letter-spacing:-.024em;
+}
+.bn-chapter{margin:5px 0 0;font-size:11.5px;line-height:1.5}
+.bn-go{
+  display:inline-block;font-size:12px;font-weight:600;
+  color:var(--accent);opacity:0;transform:translateY(4px);
+  transition:.3s cubic-bezier(.16,1,.3,1);
+}
+.bn:hover .bn-go{opacity:1;transform:translateY(0)}
+
+/* ---------- 双维度分类栏 ---------- */
+.catbar{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+  margin:0 0 22px;padding:9px 11px;border-radius:14px;
+  background:var(--card);border:1px solid var(--line);
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  box-shadow:var(--shadow-sm);
+}
+.cat-modes{
+  display:inline-flex;gap:2px;padding:3px;border-radius:9px;
+  background:color-mix(in srgb,var(--fg) 6%,transparent);
+  flex:0 0 auto;
+}
+.mode{
+  padding:5px 12px;border-radius:7px;cursor:pointer;
+  border:0;background:transparent;color:var(--fg3);
+  font:inherit;font-size:12.5px;font-weight:500;transition:.2s;
+}
+.mode:hover{color:var(--fg2)}
+.mode.on{background:var(--surface);color:var(--accent-d);box-shadow:var(--shadow-sm);font-weight:600}
+.cat-list{flex:1;min-width:0}
+.cat-group{display:none;flex-wrap:wrap;gap:6px;align-items:center}
+.cat-group.on{display:flex}
+.cat{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 12px;border-radius:9px;cursor:pointer;
+  border:1px solid transparent;background:transparent;
+  font:inherit;font-size:13px;color:var(--fg2);transition:.2s;
+}
+.cat:hover{background:var(--accent-soft);color:var(--accent-d)}
+.cat.on{
+  background:var(--accent);color:#fff;
+  box-shadow:0 4px 14px -6px color-mix(in srgb,var(--accent) 70%,transparent);
+}
+.cat-dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex:0 0 auto}
+.cat.on .cat-dot{background:#fff !important}
+.cat-n{font-weight:500}
+.cat-c{
+  font-size:10.5px;line-height:1;padding:2px 5px;border-radius:999px;
+  background:color-mix(in srgb,var(--fg) 7%,transparent);
+  color:var(--fg3);font-variant-numeric:tabular-nums;
+}
+.cat.on .cat-c{background:rgba(255,255,255,.24);color:#fff}
+
+/* 搜索框 */
+.cat-search{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:7px 12px;border-radius:9px;flex:0 0 auto;
+  border:1px solid var(--line);background:var(--surface);
+  color:var(--fg3);transition:.2s;
+}
+.cat-search:focus-within{border-color:var(--accent);color:var(--accent)}
+.cat-search input{
+  border:0;outline:0;background:transparent;width:150px;
+  font:inherit;font-size:13px;color:var(--fg);
+}
+.cat-search input::placeholder{color:var(--fg3)}
+
+/* ---------- 卡片：学科角标 + 教材章节 ---------- */
+.app-subj{
+  position:absolute;top:10px;right:10px;z-index:2;
+  padding:2.5px 9px;border-radius:7px;
+  font-size:10.5px;font-weight:650;letter-spacing:.03em;
+  color:#fff;background:var(--c);
+  box-shadow:0 3px 10px -4px color-mix(in srgb,var(--c) 80%,transparent);
+}
+.app-chapter{
+  font-size:11.5px;color:var(--accent-d);margin-top:5px;
+  letter-spacing:.01em;line-height:1.45;
+}
+html[data-theme="dark"] .app-chapter{color:var(--accent)}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:1000px){
+  .hero-in{grid-template-columns:1fr;gap:34px;padding:48px 22px 54px}
+  .hero-cards{flex-direction:row;flex-wrap:wrap}
+  .hero-cards .subj-card{flex:1 1 150px}
+  .hero-all{flex:1 1 150px}
+  .bento{grid-template-columns:1fr 1fr}
+  .bn-big{grid-column:1 / -1}
+}
+@media (max-width:680px){
+  .hero-in{padding:38px 17px 44px}
+  .hero-copy h1{font-size:30px}
+  .hero-stats{gap:20px}
+  .hs b{font-size:21px}
+  .hero-cards{flex-direction:column}
+  .catbar{padding:8px;gap:8px}
+  .cat-search{width:100%}
+  .cat-search input{width:100%}
+  .cat-modes{width:100%}
+  .mode{flex:1;text-align:center}
+}
+
 /* ---------- 文章列表 ---------- */
 /* 首页用两列，避免只有两三篇时右侧大片空白 */
 .posts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
@@ -680,7 +978,7 @@ html[data-theme="dark"] .app-no{
   });
 })();
 (function(){
-  var MY = "20261029-204610";
+  var MY = "20261029-205810";
   if (!MY) return;
   fetch('version.json?t=' + Date.now(), {cache: 'no-store'})
     .then(function(r){ return r.json(); })

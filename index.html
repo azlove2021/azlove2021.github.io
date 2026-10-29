@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Vibe Coding · azlove 的网页应用集</title>
 <meta name="description" content="9 个用 AI 写出来的网页应用，业余时间做的。单文件、离线可用、点开即用，数据留在你自己的浏览器里。">
-<meta name="theme-color" content="#f5f6fb">
+<meta name="theme-color" content="#f3f8f6">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%231e7361'/><stop offset='.55' stop-color='%232b9c88'/><stop offset='1' stop-color='%2348b8a8'/></linearGradient></defs><rect width='100' height='100' rx='24' fill='url(%23g)'/><text x='50' y='69' font-size='52' text-anchor='middle' fill='%23fff' font-family='sans-serif' font-weight='700'>A</text></svg>">
 <style>
 /* ===========================================================
@@ -352,6 +352,304 @@ html[data-theme="dark"] .app-no{
   .cat-hint{display:none}
 }
 
+/* ===========================================================
+   v8 视觉改造（参考 lab.tongjiang.app 的结构，不搬它的皮肤）
+     1. 深色 Hero —— 明暗对比做视觉锚点，用青绿的深色版
+     2. Bento 布局 —— 1 大 2 小，打破均匀网格
+     3. 学科色编码 —— 每个学科一个色，贯穿角标与分类点
+     4. 双维度分类 + 搜索
+   =========================================================== */
+
+/* ---------- 深色 Hero ---------- */
+.hero-dark{
+  position:relative;overflow:hidden;
+  background:linear-gradient(155deg,#081815 0%,#0c2620 42%,#103a31 100%);
+  color:#e8f4f0;
+}
+.hero-dark::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(58% 62% at 12% 0%,rgba(72,184,168,.20) 0%,transparent 66%),
+    radial-gradient(46% 50% at 92% 18%,rgba(46,139,87,.16) 0%,transparent 68%);
+}
+.hero-dark::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(146,196,186,.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(146,196,186,.055) 1px,transparent 1px);
+  background-size:52px 52px;
+  -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 30%,#000 8%,transparent 76%);
+  mask-image:radial-gradient(ellipse 80% 70% at 50% 30%,#000 8%,transparent 76%);
+}
+.hero-in{
+  position:relative;z-index:1;
+  max-width:1140px;margin:0 auto;padding:66px 26px 74px;
+  display:grid;grid-template-columns:1.25fr .95fr;gap:52px;align-items:center;
+}
+.hero-copy .hero-kicker{
+  background:rgba(146,196,186,.10);border-color:rgba(146,196,186,.22);
+  color:rgba(232,244,240,.80);backdrop-filter:blur(12px);
+}
+.hero-copy .hero-kicker i{background:#4fd1b0;box-shadow:0 0 0 3px rgba(79,209,176,.22)}
+.hero-copy h1{
+  margin:20px 0 16px;font-size:clamp(34px,4.4vw,52px);line-height:1.12;
+  font-weight:800;letter-spacing:-.04em;color:#f2fbf8;
+}
+.hero-copy h1 em{
+  font-style:normal;
+  background:linear-gradient(100deg,#5ee0bd,#48b8a8 48%,#8fd6c4);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero-copy p{
+  margin:0 0 26px;font-size:16px;line-height:1.68;
+  color:rgba(232,244,240,.74);max-width:46ch;
+}
+
+/* Hero 统计 */
+.hero-stats{display:flex;gap:26px;margin-bottom:28px;flex-wrap:wrap}
+.hs b{
+  display:block;font-size:25px;font-weight:750;letter-spacing:-.03em;
+  color:#f2fbf8;line-height:1.15;font-variant-numeric:tabular-nums;
+}
+.hs span{font-size:11.5px;color:rgba(232,244,240,.56);letter-spacing:.02em}
+
+/* Hero 按钮 */
+.btn-hero{
+  background:#3fae96;border-color:transparent;color:#04231c;
+  font-weight:650;padding:11px 22px;border-radius:12px;
+  box-shadow:0 10px 26px -12px rgba(63,174,150,.85);
+}
+.btn-hero:hover{background:#4dc4a9;color:#04231c;transform:translateY(-1px)}
+.btn-hero-ghost{
+  background:rgba(146,196,186,.10);border-color:rgba(146,196,186,.26);
+  color:#d6efe8;padding:11px 20px;border-radius:12px;
+}
+.btn-hero-ghost:hover{
+  background:rgba(146,196,186,.18);border-color:rgba(146,196,186,.42);
+  color:#eafaf5;
+}
+.hero-foot{margin-top:22px;font-size:12px;color:rgba(232,244,240,.44)}
+
+/* Hero 右侧：学科速览 */
+.hero-cards{
+  display:flex;flex-direction:column;gap:11px;
+  align-content:center;justify-content:center;
+}
+.hero-cards .subj-card{padding:15px 18px}
+.hero-cards .subj-card b{font-size:16px}
+.hero-cards .subj-card .subj-n{position:absolute;right:17px;bottom:15px;
+  font-size:12.5px;color:rgba(232,244,240,.66)}
+.hero-all{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;border-radius:15px;text-decoration:none;
+  background:rgba(63,174,150,.14);border:1px solid rgba(63,174,150,.34);
+  color:#8fe6cd;font-size:13.5px;font-weight:600;transition:.24s;
+}
+.hero-all:hover{background:rgba(63,174,150,.22);border-color:rgba(63,174,150,.55)}
+.hero-all span{font-size:12px;font-weight:400;color:rgba(232,244,240,.52)}
+.subj-card{
+  position:relative;display:flex;flex-direction:row;align-items:center;gap:12px;
+  padding:15px 18px;border-radius:15px;text-decoration:none;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(146,196,186,.20);
+  backdrop-filter:blur(16px);
+  transition:.26s cubic-bezier(.16,1,.3,1);
+}
+.subj-card:hover{
+  background:rgba(255,255,255,.10);
+  border-color:color-mix(in srgb,var(--c) 60%,transparent);
+  transform:translateY(-3px);
+}
+.subj-ic{
+  flex:0 0 auto;width:34px;height:34px;border-radius:10px;position:relative;
+  background:color-mix(in srgb,var(--c) 24%,transparent);
+  border:1px solid color-mix(in srgb,var(--c) 50%,transparent);
+}
+.subj-ic::after{
+  content:"";position:absolute;inset:10px;border-radius:3px;background:var(--c);
+}
+.subj-card b{font-size:15px;font-weight:650;color:#eafaf5;letter-spacing:-.01em}
+.subj-n{font-size:12px;color:rgba(232,244,240,.60);font-variant-numeric:tabular-nums}
+.subj-en{
+  position:absolute;top:15px;right:16px;
+  font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+  color:rgba(232,244,240,.34);
+}
+.subj-empty{
+  grid-column:span 2;padding:22px;border-radius:15px;text-align:center;
+  background:rgba(255,255,255,.045);border:1px dashed rgba(146,196,186,.24);
+}
+.subj-empty b{display:block;color:#d6efe8;font-size:14px;margin-bottom:5px}
+.subj-empty span{font-size:11.5px;color:rgba(232,244,240,.48)}
+
+/* ---------- Bento：1 大 2 小 ---------- */
+.bento{
+  display:grid;gap:16px;
+  grid-template-columns:2fr 1fr 1fr;   /* 大卡占 2 份，两张小卡各 1 份 */
+  /* 不用 stretch：三张卡宽度不同，强行等高会让小卡信息区撑出一片空白。
+     改成按内容高度、顶部对齐 —— 这本来就是 Bento 想要的错落感。 */
+  align-items:start;
+}
+.bn{
+  position:relative;display:flex;flex-direction:column;overflow:hidden;
+  text-decoration:none;border-radius:20px;border:1px solid var(--line);
+  background:var(--surface);box-shadow:var(--shadow);
+  transition:transform .34s cubic-bezier(.16,1,.3,1),box-shadow .34s,border-color .34s;
+}
+.bn:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--line-hi)}
+.bn-cover{
+  position:relative;flex:0 0 auto;aspect-ratio:16/9;
+  overflow:hidden;background:#0e1c1a;
+}
+.bn-cover::after{display:none}
+
+/* 信息区：白底，文字清晰（截图不适合压字） */
+.bn-info{
+  position:relative;flex:1 1 auto;
+  display:flex;flex-direction:column;justify-content:flex-start;
+  padding:14px 16px 16px;
+  background:var(--surface);color:var(--fg);
+}
+.bn-info h3{color:var(--fg);text-shadow:none}
+.bn-chapter{color:var(--fg3);text-shadow:none}
+
+/* 大卡字号放大 */
+.bn-big .bn-info{padding:18px 20px 20px}
+.bn-big .bn-info h3{font-size:20px;line-height:1.32}
+.bn-big .bn-chapter{font-size:12.5px;margin-top:7px}
+.bn-big .bn-go{margin-top:14px;font-size:13px}
+
+.bn-small .bn-info h3{font-size:14.5px;line-height:1.38}
+.bn-small .bn-chapter{font-size:11px;margin-top:4px}
+.bn-small .bn-go{margin-top:8px;font-size:11.5px}
+.bn-cover img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .6s cubic-bezier(.16,1,.3,1);
+}
+.bn:hover .bn-cover img{transform:scale(1.04)}
+.bn-cover::after{
+  content:"";position:absolute;inset:0;
+  /* 封面多半是浅色界面截图，遮罩要从 40% 就开始压，否则白底压不住字 */
+  background:linear-gradient(180deg,
+    rgba(6,20,17,0) 30%,
+    rgba(6,20,17,.55) 62%,
+    rgba(6,20,17,.88) 82%,
+    rgba(6,20,17,.96) 100%);
+}
+/* 学科角标（信息区里的那个小圆角标签） */
+.bn-subj{
+  display:inline-block;align-self:flex-start;
+  margin-bottom:8px;padding:2.5px 10px;border-radius:999px;
+  font-size:11px;font-weight:600;letter-spacing:.02em;
+  color:#fff;background:var(--c);
+}
+/* 标题与章节：白底深字 */
+.bn-info h3{
+  margin:0;font-weight:700;letter-spacing:-.024em;
+}
+.bn-chapter{margin:5px 0 0;font-size:11.5px;line-height:1.5}
+.bn-go{
+  display:inline-block;font-size:12px;font-weight:600;
+  color:var(--accent);opacity:0;transform:translateY(4px);
+  transition:.3s cubic-bezier(.16,1,.3,1);
+}
+.bn:hover .bn-go{opacity:1;transform:translateY(0)}
+
+/* ---------- 双维度分类栏 ---------- */
+.catbar{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+  margin:0 0 22px;padding:9px 11px;border-radius:14px;
+  background:var(--card);border:1px solid var(--line);
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  box-shadow:var(--shadow-sm);
+}
+.cat-modes{
+  display:inline-flex;gap:2px;padding:3px;border-radius:9px;
+  background:color-mix(in srgb,var(--fg) 6%,transparent);
+  flex:0 0 auto;
+}
+.mode{
+  padding:5px 12px;border-radius:7px;cursor:pointer;
+  border:0;background:transparent;color:var(--fg3);
+  font:inherit;font-size:12.5px;font-weight:500;transition:.2s;
+}
+.mode:hover{color:var(--fg2)}
+.mode.on{background:var(--surface);color:var(--accent-d);box-shadow:var(--shadow-sm);font-weight:600}
+.cat-list{flex:1;min-width:0}
+.cat-group{display:none;flex-wrap:wrap;gap:6px;align-items:center}
+.cat-group.on{display:flex}
+.cat{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 12px;border-radius:9px;cursor:pointer;
+  border:1px solid transparent;background:transparent;
+  font:inherit;font-size:13px;color:var(--fg2);transition:.2s;
+}
+.cat:hover{background:var(--accent-soft);color:var(--accent-d)}
+.cat.on{
+  background:var(--accent);color:#fff;
+  box-shadow:0 4px 14px -6px color-mix(in srgb,var(--accent) 70%,transparent);
+}
+.cat-dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex:0 0 auto}
+.cat.on .cat-dot{background:#fff !important}
+.cat-n{font-weight:500}
+.cat-c{
+  font-size:10.5px;line-height:1;padding:2px 5px;border-radius:999px;
+  background:color-mix(in srgb,var(--fg) 7%,transparent);
+  color:var(--fg3);font-variant-numeric:tabular-nums;
+}
+.cat.on .cat-c{background:rgba(255,255,255,.24);color:#fff}
+
+/* 搜索框 */
+.cat-search{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:7px 12px;border-radius:9px;flex:0 0 auto;
+  border:1px solid var(--line);background:var(--surface);
+  color:var(--fg3);transition:.2s;
+}
+.cat-search:focus-within{border-color:var(--accent);color:var(--accent)}
+.cat-search input{
+  border:0;outline:0;background:transparent;width:150px;
+  font:inherit;font-size:13px;color:var(--fg);
+}
+.cat-search input::placeholder{color:var(--fg3)}
+
+/* ---------- 卡片：学科角标 + 教材章节 ---------- */
+.app-subj{
+  position:absolute;top:10px;right:10px;z-index:2;
+  padding:2.5px 9px;border-radius:7px;
+  font-size:10.5px;font-weight:650;letter-spacing:.03em;
+  color:#fff;background:var(--c);
+  box-shadow:0 3px 10px -4px color-mix(in srgb,var(--c) 80%,transparent);
+}
+.app-chapter{
+  font-size:11.5px;color:var(--accent-d);margin-top:5px;
+  letter-spacing:.01em;line-height:1.45;
+}
+html[data-theme="dark"] .app-chapter{color:var(--accent)}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:1000px){
+  .hero-in{grid-template-columns:1fr;gap:34px;padding:48px 22px 54px}
+  .hero-cards{flex-direction:row;flex-wrap:wrap}
+  .hero-cards .subj-card{flex:1 1 150px}
+  .hero-all{flex:1 1 150px}
+  .bento{grid-template-columns:1fr 1fr}
+  .bn-big{grid-column:1 / -1}
+}
+@media (max-width:680px){
+  .hero-in{padding:38px 17px 44px}
+  .hero-copy h1{font-size:30px}
+  .hero-stats{gap:20px}
+  .hs b{font-size:21px}
+  .hero-cards{flex-direction:column}
+  .catbar{padding:8px;gap:8px}
+  .cat-search{width:100%}
+  .cat-search input{width:100%}
+  .cat-modes{width:100%}
+  .mode{flex:1;text-align:center}
+}
+
 /* ---------- 文章列表 ---------- */
 /* 首页用两列，避免只有两三篇时右侧大片空白 */
 .posts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
@@ -591,164 +889,219 @@ html[data-theme="dark"] .app-no{
   </div>
 </header>
 
-<main class="wrap">
-
-  <section class="hero">
-    <div>
-      <span class="hero-kicker"><i></i>持续更新中 · 最后更新 2026-10-29 20:46:10</span>
+<section class="hero-dark">
+  <div class="hero-in">
+    <div class="hero-copy">
+      <span class="hero-kicker"><i></i>持续更新中 · 最后更新 2026-10-29 20:58:10</span>
       <h1>Vibe Coding<br><em>做出来的东西</em></h1>
       <p>业余时间用 AI 写的几十个小应用 —— 3D 课件、班级工具、游戏、模型库。每个都是单个 HTML，双击就用、断网也能跑。</p>
+
+      <div class="hero-stats">
+        <div class="hs"><b>9</b><span>个应用</span></div>
+        <div class="hs"><b>1</b><span>个学科</span></div>
+        <div class="hs"><b>3</b><span>篇文章</span></div>
+        <div class="hs"><b>100%</b><span>零外链</span></div>
+      </div>
+
       <div class="hero-btns">
-        <a class="btn btn-primary" href="#apps">
+        <a class="btn btn-hero" href="#apps">
           浏览应用
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
-        <a class="btn" href="posts/">
+        <a class="btn btn-hero-ghost" href="posts/">
           读文章
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
         </a>
       </div>
+
+      <div class="hero-foot">
+        <span>免注册 · 免安装 · 数据不出本机</span>
+      </div>
     </div>
 
-    <aside class="idcard">
-      <div class="idcard-head">
-        <div class="idcard-face">A</div>
-        <div>
-          <b>azlove</b>
-          <span>Vibe Coding 爱好者 · 业余时间造轮子</span>
-        </div>
-      </div>
-      <div class="stat-grid">
-        <div class="stat"><b>9</b><span>个离线应用</span></div>
-        <div class="stat"><b>3</b><span>篇文章</span></div>
-        <div class="stat"><b>100%</b><span>零外链</span></div>
-        <div class="stat"><b>0</b><span>个追踪脚本</span></div>
-      </div>
-      <div class="idcard-foot">
-        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>
-        免注册 · 免安装 · 数据不出本机
-      </div>
+    <aside class="hero-cards">
+      <a class="subj-card" href="#apps" data-jump="bio" style="--c:#2E8B57"><span class="subj-ic"></span><b>生物</b><span class="subj-n">5 个</span><span class="subj-en">Biology</span></a>
+      <a class="hero-all" href="#apps">查看全部 <span>9 个应用</span></a>
     </aside>
-  </section>
+  </div>
+</section>
 
-  <nav class="catbar" id="catbar" aria-label="应用分类">
-    <button class="cat on" data-cat="all">
-      <span class="cat-n">全部</span><span class="cat-c">9</span>
-    </button>
-    <button class="cat" data-cat="3d"><span class="cat-n">3D 可视化</span><span class="cat-c">4</span></button>
-    <button class="cat" data-cat="tool"><span class="cat-n">实用工具</span><span class="cat-c">2</span></button>
-    <button class="cat" data-cat="game"><span class="cat-n">游戏</span><span class="cat-c">1</span></button>
-    <button class="cat" data-cat="lib"><span class="cat-n">模型库</span><span class="cat-c">2</span></button>
-    <span class="cat-hint">点分类筛选 · 共 9 个</span>
-  </nav>
+<main class="wrap">
 
-  <section class="sec" id="apps">
+  <section class="sec" id="latest">
     <div class="sec-head">
       <div>
-        <h2>应用</h2>
-        <p>点开就能用，不需要安装任何东西</p>
+        <h2>最新上线</h2>
+        <p>最近加进来的三个</p>
       </div>
-      <a class="sec-more" href="posts/">
-        看文章
+      <a class="sec-more" href="#apps">
+        全部应用
         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
              stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
       </a>
     </div>
-    <div class="apps">
-      <a class="app" href="apps/photosynthesis/index.html" style="--accent:#1D9E75;--accent-soft:#E8F5F1;--accent-d:#B2DED0;--accent-soft-d:#0D2C27" data-cat="3d" data-no="001">
+    <div class="bento">
+      <a class="bn bn-big" href="/ander-studio-models/index.html" data-no="009"><div class="bn-cover"><img src="covers/ander-studio-models.webp" alt="生物教学模型库" loading="lazy" decoding="async"></div><div class="bn-info"><span class="bn-subj" style="--c:#2E8B57">生物</span><h3>生物教学模型库</h3><p class="bn-chapter">跨章节 · 3D / 2D 模型库</p><span class="bn-go">打开 →</span></div></a>
+      <a class="bn bn-small" href="/ander-studio-offline/index.html" data-no="008"><div class="bn-cover"><img src="covers/ander-studio-offline.webp" alt="安德生物工作室" loading="lazy" decoding="async"></div><div class="bn-info"><span class="bn-subj" style="--c:#2E8B57">生物</span><h3>安德生物工作室</h3><p class="bn-chapter">跨章节 · 29 个模型 + 题库</p><span class="bn-go">打开 →</span></div></a>
+      <a class="bn bn-small" href="apps/meiosis-3d-courseware/index.html" data-no="007"><div class="bn-cover"><img src="covers/meiosis-3d-courseware.webp" alt="S-01 减数分裂全流程" loading="lazy" decoding="async"></div><div class="bn-info"><span class="bn-subj" style="--c:#2E8B57">生物</span><h3>S-01 减数分裂全流程</h3><p class="bn-chapter">必修2 · 第2章 减数分裂</p><span class="bn-go">打开 →</span></div></a>
+    </div>
+  </section>
+
+  <section class="sec" id="apps" style="margin-top:48px">
+    <div class="sec-head">
+      <div>
+        <h2>全部应用</h2>
+        <p>按学科或类型筛选</p>
+      </div>
+    </div>
+
+    <nav class="catbar" id="catbar" aria-label="应用分类">
+      <div class="cat-modes">
+        <button class="mode on" data-mode="subject" type="button">按学科</button>
+        <button class="mode" data-mode="type" type="button">按类型</button>
+      </div>
+      <div class="cat-list" id="catList">
+      <div class="cat-group on" data-mode="subject">
+        <button class="cat on" data-k="all" type="button"><span class="cat-n">全部</span><span class="cat-c">9</span></button>
+        <button class="cat" data-k="bio" type="button"><i class="cat-dot" style="background:#2E8B57"></i><span class="cat-n">生物</span><span class="cat-c">5</span></button>
+      </div>
+      <div class="cat-group" data-mode="type">
+        <button class="cat on" data-k="all" type="button"><span class="cat-n">全部</span><span class="cat-c">9</span></button>
+        <button class="cat" data-k="3d" type="button"><span class="cat-n">3D 可视化</span><span class="cat-c">4</span></button>
+        <button class="cat" data-k="tool" type="button"><span class="cat-n">实用工具</span><span class="cat-c">2</span></button>
+        <button class="cat" data-k="game" type="button"><span class="cat-n">游戏</span><span class="cat-c">1</span></button>
+        <button class="cat" data-k="lib" type="button"><span class="cat-n">模型库</span><span class="cat-c">2</span></button>
+      </div>
+      </div>
+      <label class="cat-search">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="搜标题、描述或章节" autocomplete="off">
+      </label>
+    </nav>
+
+    <div class="apps" id="appsGrid">
+      <a class="app" href="apps/photosynthesis/index.html" style="--accent:#1D9E75;--accent-soft:#E8F5F1;--accent-d:#B2DED0;--accent-soft-d:#0D2C27" data-cat="3d" data-subject="bio" data-no="001"
+         data-k="光合作用与呼吸作用 必修1 · 第5章 光合作用 一株植物上的交互式教学演示。把总光合、呼吸、净光合三条流量放到同一株植物、同一时刻、同一个密闭同化箱里，用可测量的方式讲清楚「净光合是测出来的，总光合是推出来的」。">
         <span class="app-no">001</span>
+        <span class="app-subj" style="--c:#2E8B57">生物</span>
         <div class="app-cover"><img src="covers/photosynthesis.webp" alt="光合作用与呼吸作用" loading="lazy" decoding="async"></div>
         <div class="app-body">
           <div class="app-tags"><span class="tag">高中生物</span><span class="tag t2">3D</span><span class="tag t3">交互</span><span class="tag tn">公开课</span></div>
           <div class="app-t">光合作用与呼吸作用</div>
+          <div class="app-chapter">必修1 · 第5章 光合作用</div>
           <div class="app-en">Photosynthesis &amp; Respiration</div>
           <div class="app-d">一株植物上的交互式教学演示。把总光合、呼吸、净光合三条流量放到同一株植物、同一时刻、同一个密闭同化箱里，用可测量的方式讲清楚「净光合是测出来的，总光合是推出来的」。</div>
         </div>
       </a>
-      <a class="app" href="apps/beer-fermentation/index.html" style="--accent:#BA7517;--accent-soft:#F8F1E8;--accent-d:#E8D0B0;--accent-soft-d:#332210" data-cat="3d" data-no="002">
+      <a class="app" href="apps/beer-fermentation/index.html" style="--accent:#BA7517;--accent-soft:#F8F1E8;--accent-d:#E8D0B0;--accent-soft-d:#332210" data-cat="3d" data-subject="bio" data-no="002"
+         data-k="啤酒发酵工厂 选必3 · 第1章 发酵工程 以等距 3D 场景讲清麦芽糖化、煮沸、发酵、过滤、灌装的完整工艺链，每一步可暂停、可剖切、可看实时数据。">
         <span class="app-no">002</span>
+        <span class="app-subj" style="--c:#2E8B57">生物</span>
         <div class="app-cover"><img src="covers/beer-fermentation.webp" alt="啤酒发酵工厂" loading="lazy" decoding="async"></div>
         <div class="app-body">
           <div class="app-tags"><span class="tag">3D</span><span class="tag t2">工艺流程</span><span class="tag t3">课件</span></div>
           <div class="app-t">啤酒发酵工厂</div>
+          <div class="app-chapter">选必3 · 第1章 发酵工程</div>
           <div class="app-en">Brewery Fermentation (3D)</div>
           <div class="app-d">以等距 3D 场景讲清麦芽糖化、煮沸、发酵、过滤、灌装的完整工艺链，每一步可暂停、可剖切、可看实时数据。</div>
         </div>
       </a>
-      <a class="app" href="apps/teacher-workbench/index.html" style="--accent:#378ADD;--accent-soft:#EBF3FC;--accent-d:#BBD7F3;--accent-soft-d:#132740" data-cat="tool" data-no="003">
+      <a class="app" href="apps/teacher-workbench/index.html" style="--accent:#378ADD;--accent-soft:#EBF3FC;--accent-d:#BBD7F3;--accent-soft-d:#132740" data-cat="tool" data-subject="none" data-no="003"
+         data-k="班主任工作台 班级管理 · 23 个模块 23 个模块覆盖学生、成绩、座位、课表、班委、班费、公告、家长联系、谈话、违纪、值日与安全。数据全部存在浏览器本地，不上传任何服务器。">
         <span class="app-no">003</span>
+        
         <div class="app-cover"><img src="covers/teacher-workbench.webp" alt="班主任工作台" loading="lazy" decoding="async"></div>
         <div class="app-body">
           <div class="app-tags"><span class="tag">班级管理</span><span class="tag t2">单文件应用</span><span class="tag t3">离线可用</span></div>
           <div class="app-t">班主任工作台</div>
+          <div class="app-chapter">班级管理 · 23 个模块</div>
           <div class="app-en">Class Teacher Workbench</div>
           <div class="app-d">23 个模块覆盖学生、成绩、座位、课表、班委、班费、公告、家长联系、谈话、违纪、值日与安全。数据全部存在浏览器本地，不上传任何服务器。</div>
         </div>
       </a>
-      <a class="app" href="apps/gaokao-subject/index.html" style="--accent:#D4537E;--accent-soft:#FBEEF2;--accent-d:#F0C5D3;--accent-soft-d:#391A29" data-cat="tool" data-no="004">
+      <a class="app" href="apps/gaokao-subject/index.html" style="--accent:#D4537E;--accent-soft:#FBEEF2;--accent-d:#F0C5D3;--accent-soft-d:#391A29" data-cat="tool" data-subject="none" data-no="004"
+         data-k="贵州新高考选科指南 选科参考 · 3+1+2 面向贵州新高考 3+1+2 的选科指南：专业覆盖、学科组合优势、可报院校范围逐条说清楚，附可打印长图。">
         <span class="app-no">004</span>
+        
         <div class="app-cover"><img src="covers/gaokao-subject.webp" alt="贵州新高考选科指南" loading="lazy" decoding="async"></div>
         <div class="app-body">
           <div class="app-tags"><span class="tag">高考</span><span class="tag t2">选科</span><span class="tag t3">家长向</span></div>
           <div class="app-t">贵州新高考选科指南</div>
+          <div class="app-chapter">选科参考 · 3+1+2</div>
           <div class="app-en">Subject Selection Guide</div>
           <div class="app-d">面向贵州新高考 3+1+2 的选科指南：专业覆盖、学科组合优势、可报院校范围逐条说清楚，附可打印长图。</div>
         </div>
       </a>
-      <a class="app" href="apps/iso-city/index.html" style="--accent:#5F5E5A;--accent-soft:#EFEFEE;--accent-d:#C9C8C7;--accent-soft-d:#1D1D20" data-cat="game" data-no="005">
+      <a class="app" href="apps/iso-city/index.html" style="--accent:#5F5E5A;--accent-soft:#EFEFEE;--accent-d:#C9C8C7;--accent-soft-d:#1D1D20" data-cat="game" data-subject="none" data-no="005"
+         data-k="ISO-CITY 98 沙盒游戏 · 等距像素 1998 年 DOS 风格等距像素城市建造沙盒，完整预渲染单文件，浏览器直接开玩，支持存档与回放。">
         <span class="app-no">005</span>
+        
         <div class="app-cover"><img src="covers/iso-city.webp" alt="ISO-CITY 98" loading="lazy" decoding="async"></div>
         <div class="app-body">
           <div class="app-tags"><span class="tag">游戏</span><span class="tag t2">像素风</span><span class="tag t3">等距</span></div>
           <div class="app-t">ISO-CITY 98</div>
+          <div class="app-chapter">沙盒游戏 · 等距像素</div>
           <div class="app-en">Isometric City Builder</div>
           <div class="app-d">1998 年 DOS 风格等距像素城市建造沙盒，完整预渲染单文件，浏览器直接开玩，支持存档与回放。</div>
         </div>
       </a>
-      <a class="app" href="apps/dji-air-3s-exploded/index.html" style="--accent:#35A0C8;--accent-soft:#EBF6FA;--accent-d:#BADFEC;--accent-soft-d:#132C3B" data-cat="3d" data-no="006">
+      <a class="app" href="apps/dji-air-3s-exploded/index.html" style="--accent:#35A0C8;--accent-soft:#EBF6FA;--accent-d:#BADFEC;--accent-soft-d:#132C3B" data-cat="3d" data-subject="none" data-no="006"
+         data-k="DJI Air 3S 三维拆解 技术演示 · 程序化建模 用 Three.js 全程序化构建的 DJI Air 3S 无人机拆解视图，点击部件即可沿拆解方向分离并查看参数，支持自由旋转缩放与发光高亮。">
         <span class="app-no">006</span>
+        
         <div class="app-cover"><img src="covers/dji-air-3s-exploded.webp" alt="DJI Air 3S 三维拆解" loading="lazy" decoding="async"></div>
         <div class="app-body">
           <div class="app-tags"><span class="tag">3D</span><span class="tag t2">Three.js</span><span class="tag t3">交互</span><span class="tag tn">单文件</span></div>
           <div class="app-t">DJI Air 3S 三维拆解</div>
+          <div class="app-chapter">技术演示 · 程序化建模</div>
           <div class="app-en">DJI Air 3S Exploded View</div>
           <div class="app-d">用 Three.js 全程序化构建的 DJI Air 3S 无人机拆解视图，点击部件即可沿拆解方向分离并查看参数，支持自由旋转缩放与发光高亮。</div>
         </div>
       </a>
-      <a class="app" href="apps/meiosis-3d-courseware/index.html" style="--accent:#C2185B;--accent-soft:#F9E8EF;--accent-d:#EAB0C7;--accent-soft-d:#350C20" data-cat="3d" data-no="007">
+      <a class="app" href="apps/meiosis-3d-courseware/index.html" style="--accent:#C2185B;--accent-soft:#F9E8EF;--accent-d:#EAB0C7;--accent-soft-d:#350C20" data-cat="3d" data-subject="bio" data-no="007"
+         data-k="S-01 减数分裂全流程 必修2 · 第2章 减数分裂 减数分裂全过程时间轴：白色鲜艳主题，three.js 单文件离线，含语音讲解与动画同步，与人教版 2019 选修教材逐阶段对应。">
         <span class="app-no">007</span>
+        <span class="app-subj" style="--c:#2E8B57">生物</span>
         <div class="app-cover"><img src="covers/meiosis-3d-courseware.webp" alt="S-01 减数分裂全流程" loading="lazy" decoding="async"></div>
         <div class="app-body">
           <div class="app-tags"><span class="tag">3D</span><span class="tag t2">遗传与进化</span><span class="tag t3">单文件</span><span class="tag tn">语音讲解</span></div>
           <div class="app-t">S-01 减数分裂全流程</div>
+          <div class="app-chapter">必修2 · 第2章 减数分裂</div>
           <div class="app-en">Meiosis 3D Timeline</div>
           <div class="app-d">减数分裂全过程时间轴：白色鲜艳主题，three.js 单文件离线，含语音讲解与动画同步，与人教版 2019 选修教材逐阶段对应。</div>
         </div>
       </a>
-      <a class="app" href="/ander-studio-offline/index.html" style="--accent:#207A68;--accent-soft:#E9F2F0;--accent-d:#B3D2CC;--accent-soft-d:#0E2324" data-cat="lib" data-no="008">
+      <a class="app" href="/ander-studio-offline/index.html" style="--accent:#207A68;--accent-soft:#E9F2F0;--accent-d:#B3D2CC;--accent-soft-d:#0E2324" data-cat="lib" data-subject="bio" data-no="008"
+         data-k="安德生物工作室 跨章节 · 29 个模型 + 题库 安德生物工作室离线镜像：29 个交互教学模型 + 938 道题库快照，零依赖本地服务。">
         <span class="app-no">008</span>
+        <span class="app-subj" style="--c:#2E8B57">生物</span>
         <div class="app-cover"><img src="covers/ander-studio-offline.webp" alt="安德生物工作室" loading="lazy" decoding="async"></div>
         <div class="app-body">
           <div class="app-tags"><span class="tag">生物</span><span class="tag t2">题库</span><span class="tag t3">模型库</span></div>
           <div class="app-t">安德生物工作室</div>
+          <div class="app-chapter">跨章节 · 29 个模型 + 题库</div>
           <div class="app-en">Ander Studio Offline</div>
           <div class="app-d">安德生物工作室离线镜像：29 个交互教学模型 + 938 道题库快照，零依赖本地服务。</div>
         </div>
       </a>
-      <a class="app" href="/ander-studio-models/index.html" style="--accent:#3D8B7D;--accent-soft:#ECF3F2;--accent-d:#BDD8D3;--accent-soft-d:#152729" data-cat="lib" data-no="009">
+      <a class="app" href="/ander-studio-models/index.html" style="--accent:#3D8B7D;--accent-soft:#ECF3F2;--accent-d:#BDD8D3;--accent-soft-d:#152729" data-cat="lib" data-subject="bio" data-no="009"
+         data-k="生物教学模型库 跨章节 · 3D / 2D 模型库 教学模型库：分子与细胞、遗传与进化各模块的交互式 3D/2D 模型，配套讲解与题库，全部本地下载、无需联网。">
         <span class="app-no">009</span>
+        <span class="app-subj" style="--c:#2E8B57">生物</span>
         <div class="app-cover"><img src="covers/ander-studio-models.webp" alt="生物教学模型库" loading="lazy" decoding="async"></div>
         <div class="app-body">
           <div class="app-tags"><span class="tag">生物</span><span class="tag t2">3D</span><span class="tag t3">模型库</span></div>
           <div class="app-t">生物教学模型库</div>
+          <div class="app-chapter">跨章节 · 3D / 2D 模型库</div>
           <div class="app-en">Biology Model Library</div>
           <div class="app-d">教学模型库：分子与细胞、遗传与进化各模块的交互式 3D/2D 模型，配套讲解与题库，全部本地下载、无需联网。</div>
         </div>
       </a>
     </div>
+
     <div class="more-wrap" id="moreWrap">
       <button class="load-more" id="loadMore" type="button" style="display:none">加载更多</button>
       <a class="more-link" href="https://github.com/azlove2021/azlove2021.github.io" target="_blank" rel="noopener">
@@ -760,7 +1113,7 @@ html[data-theme="dark"] .app-no{
     </div>
   </section>
 
-  <section class="sec" id="posts" style="margin-top:44px">
+  <section class="sec" id="posts" style="margin-top:48px">
     <div class="sec-head">
       <div>
         <h2>最近文章</h2>
@@ -809,9 +1162,9 @@ html[data-theme="dark"] .app-no{
         <h2>最近更新</h2>
         <p>每次改动都记了时间戳，精确到秒</p>
       </div>
-      <span class="stamp-badge">最后更新 2026-10-29 20:46:10</span>
+      <span class="stamp-badge">最后更新 2026-10-29 20:58:10</span>
     </div>
-<div class="timeline"><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 20:46:10</span><span class="tl-what">更新 S-01 减数分裂全流程 · 修订 这张图怎么看 —— 光合 / 呼吸曲线读图指南、「净光合是测出来的，总光合是推出来的」、为什么我把课件做成单文件 HTML</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 08:58:58</span><span class="tl-what">内容调整</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 08:52:53</span><span class="tl-what">内容调整</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 08:47:42</span><span class="tl-what">更新 S-01 减数分裂全流程</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 08:44:33</span><span class="tl-what">更新 S-01 减数分裂全流程</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 08:39:41</span><span class="tl-what">更新 S-01 减数分裂全流程</span></div></div>
+<div class="timeline"><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 20:58:10</span><span class="tl-what">修订 这张图怎么看 —— 光合 / 呼吸曲线读图指南、「净光合是测出来的，总光合是推出来的」、为什么我把课件做成单文件 HTML</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 20:46:10</span><span class="tl-what">更新 S-01 减数分裂全流程 · 修订 这张图怎么看 —— 光合 / 呼吸曲线读图指南、「净光合是测出来的，总光合是推出来的」、为什么我把课件做成单文件 HTML</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 08:58:58</span><span class="tl-what">内容调整</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 08:52:53</span><span class="tl-what">内容调整</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 08:47:42</span><span class="tl-what">更新 S-01 减数分裂全流程</span></div><div class="tl-item"><span class="tl-dot"></span><span class="tl-time">2026-10-29 08:44:33</span><span class="tl-what">更新 S-01 减数分裂全流程</span></div></div>
   </section>
 
   <section class="about" id="about">
@@ -865,7 +1218,7 @@ html[data-theme="dark"] .app-no{
   });
 })();
 (function(){
-  var MY = "20261029-204610";
+  var MY = "20261029-205810";
   if (!MY) return;
   fetch('version.json?t=' + Date.now(), {cache: 'no-store'})
     .then(function(r){ return r.json(); })
@@ -880,24 +1233,42 @@ html[data-theme="dark"] .app-no{
 })();
 (function(){
   var bar = document.getElementById('catbar');
-  var grid = document.getElementById('apps');
+  var grid = document.getElementById('appsGrid');
   if (!bar || !grid) return;
   var btnMore = document.getElementById('loadMore');
-  var wrapMore = document.getElementById('moreWrap');
+  var q = document.getElementById('q');
   var cards = [].slice.call(grid.querySelectorAll('.app'));
-  var PAGE = 12;              // 一次显示 12 个，超出的点「加载更多」
+  var PAGE = 12;
+  var mode = 'subject';      // subject | type
   var cur = 'all';
+  var kw = '';
   var shown = PAGE;
 
+  function match(c) {
+    if (cur !== 'all') {
+      var v = mode === 'subject' ? c.getAttribute('data-subject')
+                                 : c.getAttribute('data-cat');
+      if (v !== cur) return false;
+    }
+    if (kw) {
+      var t = (c.getAttribute('data-k') || '') + ' ' + c.textContent;
+      if (t.toLowerCase().indexOf(kw) < 0) return false;
+    }
+    return true;
+  }
+
   function render() {
-    var pool = cards.filter(function(c){
-      return cur === 'all' || c.getAttribute('data-cat') === cur;
-    });
+    var pool = cards.filter(match);
     cards.forEach(function(c){ c.style.display = 'none'; });
     pool.slice(0, shown).forEach(function(c){ c.style.display = ''; });
+
+    // 当前维度下的选中态
     [].forEach.call(bar.querySelectorAll('.cat'), function(b){
-      b.classList.toggle('on', b.getAttribute('data-cat') === cur);
+      var g = b.closest('.cat-group');
+      var inMode = g && g.getAttribute('data-mode') === mode;
+      b.classList.toggle('on', inMode && b.getAttribute('data-k') === cur);
     });
+
     if (btnMore) {
       if (pool.length > shown) {
         btnMore.style.display = '';
@@ -908,20 +1279,65 @@ html[data-theme="dark"] .app-no{
     }
   }
 
+  // 维度切换
+  [].forEach.call(bar.querySelectorAll('.mode'), function(m){
+    m.addEventListener('click', function(){
+      mode = m.getAttribute('data-mode');
+      cur = 'all';
+      shown = PAGE;
+      [].forEach.call(bar.querySelectorAll('.mode'), function(x){
+        x.classList.toggle('on', x === m);
+      });
+      [].forEach.call(bar.querySelectorAll('.cat-group'), function(g){
+        g.classList.toggle('on', g.getAttribute('data-mode') === mode);
+      });
+      render();
+    });
+  });
+
+  // 分类点击
   bar.addEventListener('click', function(e){
     var b = e.target.closest('.cat');
     if (!b) return;
-    cur = b.getAttribute('data-cat');
+    cur = b.getAttribute('data-k');
     shown = PAGE;
     render();
   });
 
-  if (btnMore) {
-    btnMore.addEventListener('click', function(){
-      shown += PAGE;
-      render();
+  // 搜索
+  if (q) {
+    var t = null;
+    q.addEventListener('input', function(){
+      clearTimeout(t);
+      t = setTimeout(function(){
+        kw = q.value.trim().toLowerCase();
+        shown = PAGE;
+        render();
+      }, 180);
     });
   }
+
+  if (btnMore) {
+    btnMore.addEventListener('click', function(){ shown += PAGE; render(); });
+  }
+
+  // Hero 里的学科卡 → 跳到应用区并筛选
+  [].forEach.call(document.querySelectorAll('.subj-card'), function(s){
+    s.addEventListener('click', function(e){
+      var j = s.getAttribute('data-jump');
+      if (!j) return;
+      mode = 'subject';
+      cur = j;
+      shown = PAGE;
+      [].forEach.call(bar.querySelectorAll('.mode'), function(x){
+        x.classList.toggle('on', x.getAttribute('data-mode') === 'subject');
+      });
+      [].forEach.call(bar.querySelectorAll('.cat-group'), function(g){
+        g.classList.toggle('on', g.getAttribute('data-mode') === 'subject');
+      });
+      render();
+    });
+  });
 
   render();
 })();
